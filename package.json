@@ -1,0 +1,32 @@
+{
+    "name": "macro_pad",
+    "version": "1.0.0",
+    "description": "macro_pad",
+    "main": "main.js",
+    "scripts": {
+        "start": "electron .",
+        "install": "electron-rebuild"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:serialport/electron-serialport.git"
+    },
+    "author": "Xmow",
+    "license": "ISC",
+    "devDependencies": {
+        "electron": "^11.2.0",
+        "electron-rebuild": "^2.3.4"
+    },
+    "dependencies": {
+        "@popperjs/core": "^2.9.1",
+        "bootstrap": "^4.6.0",
+        "jquery": "^3.6.0",
+        "loudness": "^0.4.1",
+        "nircmd": "^2.0.0",
+        "popups": "^1.1.3",
+        "ps-list": "^7.2.0",
+        "ps-node": "^0.1.6",
+        "serialport": "^9.0.6",
+        "tableify": "^1.1.0"
+    }
+}

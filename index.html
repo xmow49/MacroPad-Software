@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, shrink-to-fit=no">
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="node_modules/popups/css/popupS.css">
+
+    <title>MacroPad</title>
+    <style>
+        
+    </style>
+</head>
+
+<body>
+
+    <body>
+        <div class="container">
+            <div class="column">
+                <div class="col-lg-12 text-center">
+                    <h1 class="mt-3">Macro Pad</h1>
+                </div>
+
+                <div>
+                    <h3 id="state">Déconnecté</h2>
+                </div>
+
+                <div>
+                    <input list="portsDatalist" id="inputPort">
+                    <button onclick="refresh_Button()">Actualiser</button>
+                    <datalist id="portsDatalist"></datalist>
+                </div>
+
+            </div>
+            <button onclick="connect()">Connecter</button>
+        </div>
+        <div>
+            <div class="row col-lg-12">
+                <div class="column">
+                    <h2>Encodeur 1:</h2>
+                    <select id="selectEncoder1" onchange="encoder1Selected()">
+                        <option value="">--Choisissez un logiciel--</option>
+                    </select>
+                    <input type="text" id="customEncoder1" hidden>
+                </div>
+                <div class="column">
+                    <h2>Encodeur 2:</h2>
+
+                    <select id="selectEncoder2" onchange="encoder2Selected()">
+                        <option value="">--Choisissez un logiciel--</option>
+                    </select>
+                    <input type="text" id="customEncoder2" hidden>
+                </div>
+                <div class="column">
+                    <h2>Encodeur 3:</h2>
+
+                    <select id="selectEncoder3" onchange="encoder3Selected()">
+                        <option value="">--Choisissez un logiciel--</option>
+                    </select>
+                    <input type="text" id="customEncoder3" hidden>
+                </div>
+                    <button onclick="updateSoftwaresList()">Actualiser</button>
+            </div>
+
+
+            <div class="column mt-4 text-center">
+                <div class="row">
+                    <button class="btn btn-primary" onclick="btn1()">Bouton 1</button>
+                    <button class="btn btn-primary">Bouton 2</button>
+                    <button class="btn btn-primary">Bouton 3</button>
+                </div>
+                <div class="row">
+                    <button class="btn btn-primary">Bouton 1</button>
+                    <button class="btn btn-primary">Bouton 2</button>
+                    <button class="btn btn-primary">Bouton 3</button>
+                </div>
+                <div class="row">
+                    <button class="btn btn-primary">Bouton 1</button>
+                    <button class="btn btn-primary">Bouton 2</button>
+                    <button class="btn btn-primary">Bouton 3</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </body>
+
+
+    <script src="./renderer.js"></script>
+    <script src="dist/popupS.min.js"></script>
+    <script>
+        window.jquery = window.$ = require('jquery');
+        require('bootstrap');
+    </script>
+
+</html>
