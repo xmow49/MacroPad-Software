@@ -1,3 +1,4 @@
+const electron = require("electron");
 const serialport = require('serialport')
 const tableify = require('tableify')
 const loudness = require('loudness')
@@ -162,9 +163,20 @@ function encoder1Selected() {
 
 
 function btn1() {
+  document.addEventListener('keydown', (e) => {
+    console.log(e.code);
+    console.log(e.ctrlKey);
+    document.getElementById("key").innerHTML = e.code;
+  });
+
 
   popupS.modal({
-    content: '<div class="dropper-form aligned"><div class="dropper-form-group"><label for="f2-email">Email</label><input type="email" name="" id="f2-email"></div><div class="dropper-form-group"><label for="f2-password">Password</label></div><div class="dropper-form-controls"><label><input type="checkbox" name=""><span class="dropper-checkbox checkbox-sub-blue"></span>Remember Me </label><button type="submit" class="dropper-button primary button-purple">Submit</button></div></div>'
+    content: `<div class="dropper-form aligned">
+                <div class="dropper-form-group" data-children-count="1">
+                  <h3>Selection des touches:</h3>
+                  <h4 id="key"></h4>
+                </div>
+              </div>`
   });
-}
 
+}
