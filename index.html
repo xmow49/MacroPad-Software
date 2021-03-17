@@ -4,13 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, shrink-to-fit=no">
-    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="node_modules/popups/css/popupS.css">
-
+    <link href="style.css" rel="stylesheet">
     <title>MacroPad</title>
-    <style>
-        
-    </style>
 </head>
 
 <body>
@@ -35,7 +31,7 @@
             </div>
             <button onclick="connect()">Connecter</button>
         </div>
-        <div>
+        <div class="container text-center">
             <div class="row col-lg-12">
                 <div class="column">
                     <h2>Encodeur 1:</h2>
@@ -87,10 +83,9 @@
 
 
     <script src="./renderer.js"></script>
-    <script src="dist/popupS.min.js"></script>
+    <script src="./node_modules/popups/dist/popupS.js"></script>
     <script>
         window.jquery = window.$ = require('jquery');
-        require('bootstrap');
     </script>
 
 </html>
