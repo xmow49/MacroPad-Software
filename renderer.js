@@ -167,13 +167,23 @@ function btn1() {
     console.log(e.code);
     console.log(e.ctrlKey);
     document.getElementById("key").innerHTML = e.code;
+    document.getElementById("ctrl").innerHTML = e.ctrlKey;
+    document.getElementById("alt").innerHTML = e.altKey;
   });
-
+  document.addEventListener('keyup', (e) => {
+    console.log(e.code);
+    console.log(e.ctrlKey);
+    document.getElementById("key").innerHTML = e.code;
+    document.getElementById("ctrl").innerHTML = e.ctrlKey;
+    document.getElementById("alt").innerHTML = e.altKey;
+  });
 
   popupS.modal({
     content: `<div class="dropper-form aligned">
                 <div class="dropper-form-group" data-children-count="1">
                   <h3>Selection des touches:</h3>
+                  <h4 id="ctrl"></h4>
+                  <h4 id="alt"></h4>
                   <h4 id="key"></h4>
                 </div>
               </div>`
