@@ -78,8 +78,8 @@ function updateSoftwaresList() {
     softwares = data.split(' ');
     softwares.forEach(a => addSoftwareToList(a));
   });
-
 }
+updateSoftwaresList();
 
 function refresh_port() {
   const serialPort = require('serialport');
@@ -149,33 +149,23 @@ function serialMessageRecevied(data) {
 }
 
 
-
-
-function encoder1Selected() {
-  var selectedItem = document.getElementById("selectEncoder1").value;
-  if (selectedItem == "Custom") {
-    document.getElementById("customEncoder1").hidden = false;
-  } else {
-    document.getElementById("customEncoder1").hidden = true;
-  }
-
-}
-
-
 function btn1() {
   document.addEventListener('keydown', (e) => {
-    console.log(e.code);
-    console.log(e.ctrlKey);
-    document.getElementById("key").innerHTML = e.code;
-    document.getElementById("ctrl").innerHTML = e.ctrlKey;
-    document.getElementById("alt").innerHTML = e.altKey;
-  });
-  document.addEventListener('keyup', (e) => {
-    console.log(e.code);
-    console.log(e.ctrlKey);
-    document.getElementById("key").innerHTML = e.code;
-    document.getElementById("ctrl").innerHTML = e.ctrlKey;
-    document.getElementById("alt").innerHTML = e.altKey;
+    document.getElementById("key").innerHTML = "";
+    if (e.key == "Control" || e.key == "Alt" || e.key == "AltGraph" || e.key == "Shift") { }
+    else {
+      var txt = "";
+      if (e.ctrlKey)
+        txt = "CTRL + "
+      if (e.altKey)
+        txt += "ALT + "
+      if (e.shiftKey)
+        txt += "SHIFT + "
+
+      txt += e.key.toUpperCase();
+      document.getElementById("key").innerHTML = txt;
+    }
+
   });
 
   popupS.modal({
@@ -190,3 +180,4 @@ function btn1() {
   });
 
 }
+

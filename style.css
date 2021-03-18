@@ -16,8 +16,37 @@ h3{
     width: 100px; 
 }
 
-.buttonColumn {
-    display: grid;
-    grid: auto-flow / 1fr 1fr 1fr;
+
+
+.button-key{
+    width: 100px;
+    height: 100px;
+    border-radius: 15px
+
 }
-  
+.encoder{
+    width: 100px;
+    height: 100px;
+    border-radius: 100px
+
+}
+.button-grid{
+    width: 300px;
+    height: auto;
+    margin: 10%;
+    display: grid;
+    grid-template-columns: repeat(3, auto);
+    justify-content: right;
+}
+
+
+:not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+    -webkit-user-select: none;
+    user-select: none;
+    cursor: default;
+}
+input, button, textarea, :focus {
+    outline: none;
+}
