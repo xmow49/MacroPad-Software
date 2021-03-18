@@ -1,4 +1,19 @@
+h1 {
+    text-align:center;
+    font-family: 'Product Sans';
+}
 
-.container{
-    background-color: white;
+h3{
+    font-family: 'Product Sans';
+}
+
+.connect-div{
+    margin-left: 2%;
+}
+
+
+
+.center-div {
+    margin: 0 auto;
+    width: 100px; 
 }
