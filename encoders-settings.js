@@ -104,6 +104,7 @@ document.addEventListener("keydown", encoderKeyPress);
                       <h3>Merci d'entrer une combinaison de touches.</h3>
                       <br>
                       `
+                      
         });
       }
       //-------------Key OK----------------------
