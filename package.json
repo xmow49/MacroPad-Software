@@ -18,6 +18,7 @@
         "electron-rebuild": "^2.3.4"
     },
     "dependencies": {
+        "easymidi": "^2.0.2",
         "jquery": "^3.6.0",
         "loudness": "^0.4.1",
         "popups": "^1.1.3",
