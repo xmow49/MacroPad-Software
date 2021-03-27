@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "easymidi": "^2.0.2",
+        "hotkeys-js": "^3.8.3",
         "jquery": "^3.6.0",
         "loudness": "^0.4.1",
         "popups": "^1.1.3",

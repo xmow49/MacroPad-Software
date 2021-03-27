@@ -11,6 +11,9 @@ h3{
     font-family: 'Product Sans';
     font-size: 20px;
 }
+.popupS-content{
+    width: 500px;
+}
 
 .connect-div{
     margin-left: 2%;

@@ -1,3 +1,5 @@
+
+
 function keyPress(e) {
   if (popupState == 0) {
 
@@ -164,9 +166,9 @@ function key(Nkey) {
           }
         }
         console.log(value);
-        msgToSend = "set key " + Nkey + " " + value;
+        var msgToSend = "set key " + Nkey + " " + value;
         console.log(msgToSend);
-        sendToSerial(msgToSend);
+        port.write(msgToSend);
         popupState = 0;
       }
 

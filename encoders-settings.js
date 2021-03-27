@@ -41,12 +41,13 @@ function systemActionPopup(Nencoder) {
   popupS.window({
     mode: 'confirm',
     labelOk: 'Enregistrer',
-    labelCancel: 'Annuler',
+    labelCancel: 'Précédent',
     title: 'Selection de l\'action  de l\'encoder n°' + (Nencoder + 1),
     content: `<div class="dropper-form aligned">
 
                 <div id="system-control">
-                  <h3>Selection de l'action:</h3>
+                  <h4>Choisissez une action</h4>
+                  <p>Les actions ci-dessous peuvent fonctionner sans le logiciel.</p>
                   <input type="radio" id="volume-control" name="system-action" value="SystemVolumeControl" onclick="onChangeKeyType(this)" checked>
                   <label for="volume-control">Contrôle du volume Système</label>
                   <br>
@@ -65,17 +66,56 @@ function systemActionPopup(Nencoder) {
         }
       }
       msgToSend = "set encoder " + Nencoder + " " + value;
+      port.write(msgToSend);
     },
-
     onClose: function () {
-
+      encoder(Nencoder)
     }
 
   });
 }
+function encoderKeyPress(oEvent) {
+  
+  document.getElementById("encoder-key-combination").innerHTML = getStrKey(oEvent);
+}
+
 
 function keyEncoderPopup(Nencoder) {
+document.addEventListener("keydown", encoderKeyPress);
+  popupS.window({
+    mode: 'confirm',
+    labelOk: 'Enregistrer',
+    labelCancel: 'Précédent',
+    title: 'Selection de l\'action',
+    content: `<div class="dropper-form aligned">
+                <div id="key-div">
+                  <h3>Selection des touches:</h3>
+                  <h4 id="encoder-key-combination">Appuyer sur une touche</h4>
+                </div>
+              </div>`,
+    onSubmit: function (val) {
+      var txt = document.getElementsByName("system").values;
+      console.log(txt);
+      //-------------No Value----------------------
+      if (txt == "Appuyer sur une touche") {
+        popupS.alert({
+          title: 'Erreur',
+          content: `
+                      <h3>Merci d'entrer une combinaison de touches.</h3>
+                      <br>
+                      `
+        });
+      }
+      //-------------Key OK----------------------
+      else {
 
+      }
+
+    },
+    onClose: function () {
+      document.removeEventListener("keydown", encoderKeyPress);
+    }
+  });
 }
 
 function softwareVolumePopup(Nencoder) {
@@ -129,6 +169,7 @@ function encoder(Nencoder) {
         midiPopup(Nencoder);
     },
     onClose: function () {
+      document.body.removeEventListener('keydown', encoderKeyPress);
     }
   });
 

@@ -7,6 +7,33 @@ var popupS = require('popups');
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
 
+function getStrKey(oEvent) {
+  var txt = "";
+  console.log(oEvent.key);
+  if (oEvent.key == "Control" || oEvent.key == "Alt" || oEvent.key == "AltGraph" || oEvent.key == "Shift") {}
+  if (oEvent.key == "Control") {
+    txt = "CTRL";
+  }
+  if (oEvent.key == "AltGraph") {
+    txt = "ALT GR";
+  }
+  
+  else {
+    if (oEvent.ctrlKey)
+      txt = "CTRL + "
+    if (oEvent.altKey)
+      txt = "ALT + "
+    if (oEvent.shiftKey)
+      txt = "SHIFT + "
+
+    txt += oEvent.key.toUpperCase();
+  }
+
+
+
+  return txt;
+}
+
 function changeVolume(software, value) {
   exec("volume_control\\VolumeMixerControl changeVolume " + software + " " + value, (error, data, getter) => {
     /*if (error) {
@@ -28,12 +55,10 @@ function getSoftwaresNames() {
   });
 }
 
-var msgToSend = "";
-
 function connect() {
   var selectedPort = document.getElementById("selectPort").value;
   if (selectedPort.length >= 3) { // if com selected
-    const port = new SerialPort(selectedPort, function (err) {
+    port = SerialPort(selectedPort, function (err) {
       if (err) {
         return document.getElementById('state').innerHTML = "Erreur: " + err.message;
       } else {
@@ -46,26 +71,13 @@ function connect() {
     port.on('data', function (data) {
       serialMessageRecevied(data);
     })
-    if (msgToSend != "") {
-      port.write(msgToSend);
-      console.log(msgToSend);
-      msgToSend = "";
-    }
   } else {
     //no selected
   }
 
 }
 
-
-const port = new SerialPort("COM11", function (err) {
-  if (err) {
-    return document.getElementById('state').innerHTML = "Erreur: " + err.message;
-  } else {
-    return document.getElementById('state').innerHTML = "Connecté";
-  }
-  baudRate: 9600;
-});
+port = new SerialPort("com");
 
 
 const parser = new Readline();
@@ -74,11 +86,8 @@ port.on('data', function (data) {
   serialMessageRecevied(data);
 })
 
-function sendToSerial(msg) {
-  port.write(msg);
-}
 
-function tests(){
+function tests() {
   document.addEventListener('keydown', e => keyPress(e));
 }
 function serialMessageRecevied(data) {
