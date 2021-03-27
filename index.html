@@ -49,23 +49,23 @@
 
 
         <div class="button-grid">
-            <button class="encoder"></button>
-            <button class="encoder"></button>
-            <button class="encoder"></button>
+            <button class="encoder" onclick="encoder(0)"></button>
+            <button class="encoder" onclick="encoder(1)"></button>
+            <button class="encoder" onclick="encoder(3)"></button>
 
-            <button class="button-key" onclick="key1()"></button>
-            <button class="button-key"></button>
-            <button class="button-key"></button>
+            <button class="button-key" onclick="key(0)"></button>
+            <button class="button-key" onclick="key(1)"></button>
+            <button class="button-key" onclick="key(2)"></button>
 
-            <button class="button-key"></button>
-            <button class="button-key"></button>
-            <button class="button-key"></button>
+            <button class="button-key" onclick="key(3)"></button>
+            <button class="button-key" onclick="key(4)"></button>
+            <button class="button-key" onclick="key(5)"></button>
         </div>
 </body>
 
 
 <script src="./renderer.js"></script>
-<script type="module" src="./encoders-settings.js"></script>
+<script src="./encoders-settings.js"></script>
 <script src="./buttons-settings.js"></script>
 <script src="./node_modules/popups/dist/popupS.js"></script>
 

@@ -7,7 +7,6 @@ var popupS = require('popups');
 const SerialPort = require('serialport')
 const Readline = require('@serialport/parser-readline')
 
-
 function changeVolume(software, value) {
   exec("volume_control\\VolumeMixerControl changeVolume " + software + " " + value, (error, data, getter) => {
     /*if (error) {
@@ -47,7 +46,7 @@ function connect() {
     port.on('data', function (data) {
       serialMessageRecevied(data);
     })
-    if(msgToSend != ""){
+    if (msgToSend != "") {
       port.write(msgToSend);
       console.log(msgToSend);
       msgToSend = "";
@@ -59,31 +58,29 @@ function connect() {
 }
 
 
+const port = new SerialPort("COM11", function (err) {
+  if (err) {
+    return document.getElementById('state').innerHTML = "Erreur: " + err.message;
+  } else {
+    return document.getElementById('state').innerHTML = "Connecté";
+  }
+  baudRate: 9600;
+});
 
 
-  const port = new SerialPort("COM11", function (err) {
-    if (err) {
-      return document.getElementById('state').innerHTML = "Erreur: " + err.message;
-    } else {
-      return document.getElementById('state').innerHTML = "Connecté";
-    }
-    baudRate: 9600;
-  });
+const parser = new Readline();
+port.pipe(parser);
+port.on('data', function (data) {
+  serialMessageRecevied(data);
+})
 
-
-  const parser = new Readline();
-  port.pipe(parser);
-  port.on('data', function (data) {
-    serialMessageRecevied(data);
-  })
-
-function sendToSerial(msg){
+function sendToSerial(msg) {
   port.write(msg);
 }
 
-
-
-
+function tests(){
+  document.addEventListener('keydown', e => keyPress(e));
+}
 function serialMessageRecevied(data) {
   var stringData = data.toString();
   stringData.trim();

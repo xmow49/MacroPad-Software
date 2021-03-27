@@ -1,5 +1,7 @@
-function key1() {
-  document.addEventListener('keydown', (e) => {
+function keyPress(e) {
+  if (popupState == 0) {
+
+  } else {
     document.getElementById("key-combination").innerHTML = "";
     if (e.key == "Control" || e.key == "Alt" || e.key == "AltGraph" || e.key == "Shift") { }
     else {
@@ -14,8 +16,44 @@ function key1() {
       txt += e.key.toUpperCase();
       document.getElementById("key-combination").innerHTML = txt;
     }
-  });
+  }
 
+}
+var popupState = 0;
+function listAllEventListeners() {
+  const allElements = Array.prototype.slice.call(document.querySelectorAll('*'));
+  allElements.push(document);
+  allElements.push(window);
+
+  const types = [];
+
+  for (let ev in window) {
+    if (/^on/.test(ev)) types[types.length] = ev;
+  }
+
+  let elements = [];
+  for (let i = 0; i < allElements.length; i++) {
+    const currentElement = allElements[i];
+    for (let j = 0; j < types.length; j++) {
+      if (typeof currentElement[types[j]] === 'function') {
+        elements.push({
+          "node": currentElement,
+          "type": types[j],
+          "func": currentElement[types[j]].toString(),
+        });
+      }
+    }
+  }
+
+  return elements.sort(function (a, b) {
+    return a.type.localeCompare(b.type);
+  });
+}
+
+function key(Nkey) {
+  popupState = 1;
+
+  document.addEventListener('keydown', e => keyPress(e));
   popupS.window({
     mode: 'confirm',
     labelOk: 'Enregistrer',
@@ -110,7 +148,7 @@ function key1() {
                       <br>
                       `
           });
-        } 
+        }
         //-------------Key OK----------------------
         else {
 
@@ -120,19 +158,21 @@ function key1() {
       else {
         var radio = document.getElementsByName('system');
         var value;
-        for(var i = 0; i < radio.length; i++){
-            if(radio[i].checked){
-              value = radio[i].value;
-            }
+        for (var i = 0; i < radio.length; i++) {
+          if (radio[i].checked) {
+            value = radio[i].value;
+          }
         }
         console.log(value);
-        msgToSend = "set key 0 " + value;
+        msgToSend = "set key " + Nkey + " " + value;
         console.log(msgToSend);
         sendToSerial(msgToSend);
+        popupState = 0;
       }
 
     },
     onClose: function () {
+      popupState = 0;
     }
   });
 
