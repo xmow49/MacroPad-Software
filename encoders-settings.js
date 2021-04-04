@@ -65,7 +65,7 @@ function systemActionPopup(Nencoder) {
           value = radio[i].value;
         }
       }
-      msgToSend = "set encoder " + Nencoder + " " + value;
+      var msgToSend = "set encoder " + Nencoder + " " + value;
       port.write(msgToSend);
     },
     onClose: function () {
@@ -75,13 +75,12 @@ function systemActionPopup(Nencoder) {
   });
 }
 function encoderKeyPress(oEvent) {
-  
   document.getElementById("encoder-key-combination").innerHTML = getStrKey(oEvent);
 }
 
 
 function keyEncoderPopup(Nencoder) {
-document.addEventListener("keydown", encoderKeyPress);
+  document.addEventListener("keydown", encoderKeyPress);
   popupS.window({
     mode: 'confirm',
     labelOk: 'Enregistrer',
@@ -94,24 +93,30 @@ document.addEventListener("keydown", encoderKeyPress);
                 </div>
               </div>`,
     onSubmit: function (val) {
-      var txt = document.getElementsByName("system").values;
+      var txt = document.getElementById("encoder-key-combination").innerHTML;
       console.log(txt);
       //-------------No Value----------------------
       if (txt == "Appuyer sur une touche") {
         popupS.alert({
           title: 'Erreur',
+          labelOk: 'Retour',
           content: `
-                      <h3>Merci d'entrer une combinaison de touches.</h3>
+                      <h4>Merci d'appuyer sur une ou plusieurs touches.</h4>
                       <br>
-                      `
-                      
+                      `,
+          onClose: function () {
+            keyEncoderPopup(Nencoder);
+          },
+          onSubmit: function (val) {
+            keyEncoderPopup(Nencoder);
+          }
         });
       }
       //-------------Key OK----------------------
       else {
-
+        var msgToSend = "set encoder " + Nencoder + " " + value;
+        port.write(msgToSend);
       }
-
     },
     onClose: function () {
       document.removeEventListener("keydown", encoderKeyPress);
@@ -244,6 +249,3 @@ function updateSoftwaresList() {
 }
 
 updateSoftwaresList();
-
-
-

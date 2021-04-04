@@ -15,14 +15,15 @@
             <h1 class="mt-3">Macro Pad</h1>
         </div>
 
-
-        <div class="connect-div">
-            <h3 id="state">Déconnecté</h2>
-                <select id="selectPort"></select>
-                <button onclick="refresh_Button()">Actualiser</button>
-                <br>
-                <button onclick="connect()">Connecter</button>
+        <div>
+            <h3 id="connection-status">MacroPad Déconnecté</h3>
+            <p id="debug-port"></p>
         </div>
+
+        <div>
+            <h2 id="current-music" class="current-music"></h2>  
+        </div>
+
 
         <div class="encoder-grid">
             <div class="encoder-item">
@@ -61,8 +62,9 @@
             <button class="button-key" onclick="key(4)"></button>
             <button class="button-key" onclick="testmidi()"></button>
         </div>
-        <button onclick="start()">start</button>
-        <button onclick="stop()">stop</button>
+
+        <div id="error"></div>
+        <div id="ports"></div>
 </body>
 
 

@@ -1,61 +1,11 @@
 
 
-function keyPress(e) {
-  if (popupState == 0) {
-
-  } else {
-    document.getElementById("key-combination").innerHTML = "";
-    if (e.key == "Control" || e.key == "Alt" || e.key == "AltGraph" || e.key == "Shift") { }
-    else {
-      var txt = "";
-      if (e.ctrlKey)
-        txt = "CTRL + "
-      if (e.altKey)
-        txt += "ALT + "
-      if (e.shiftKey)
-        txt += "SHIFT + "
-
-      txt += e.key.toUpperCase();
-      document.getElementById("key-combination").innerHTML = txt;
-    }
-  }
-
-}
-var popupState = 0;
-function listAllEventListeners() {
-  const allElements = Array.prototype.slice.call(document.querySelectorAll('*'));
-  allElements.push(document);
-  allElements.push(window);
-
-  const types = [];
-
-  for (let ev in window) {
-    if (/^on/.test(ev)) types[types.length] = ev;
-  }
-
-  let elements = [];
-  for (let i = 0; i < allElements.length; i++) {
-    const currentElement = allElements[i];
-    for (let j = 0; j < types.length; j++) {
-      if (typeof currentElement[types[j]] === 'function') {
-        elements.push({
-          "node": currentElement,
-          "type": types[j],
-          "func": currentElement[types[j]].toString(),
-        });
-      }
-    }
-  }
-
-  return elements.sort(function (a, b) {
-    return a.type.localeCompare(b.type);
-  });
+function keyPress(oEvent) {
+  document.getElementById("key-combination").innerHTML = getStrKey(oEvent);
 }
 
 function key(Nkey) {
-  popupState = 1;
-
-  document.addEventListener('keydown', e => keyPress(e));
+  document.addEventListener("keydown", keyPress);
   popupS.window({
     mode: 'confirm',
     labelOk: 'Enregistrer',
@@ -84,7 +34,7 @@ function key(Nkey) {
                   <input type="radio" id="vol-up" name="system" value="MediaVolumeUP" onclick="onChangeKeyType(this)">
                   <label for="vol-up">Volume +</label>
                   <br>
-                  <input type="radio" id="" name="system" value="MediaVolumeDOWN" onclick="onChangeKeyType(this)">
+                  <input type="radio" id="vol-down" name="system" value="MediaVolumeDOWN" onclick="onChangeKeyType(this)">
                   <label for="vol-down">Volume -</label>
                   <br>
                   <input type="radio" id="mute" name="system" value="MediaVolumeMute" onclick="onChangeKeyType(this)">
@@ -153,7 +103,7 @@ function key(Nkey) {
         }
         //-------------Key OK----------------------
         else {
-
+          
         }
       }
       //-----------------System------------------
@@ -166,15 +116,15 @@ function key(Nkey) {
           }
         }
         console.log(value);
-        var msgToSend = "set key " + Nkey + " " + value;
+        var msgToSend = "set key " + Nkey + " action " + value;
         console.log(msgToSend);
         port.write(msgToSend);
-        popupState = 0;
+        document.removeEventListener("keydown", keyPress);
       }
 
     },
     onClose: function () {
-      popupState = 0;
+      document.removeEventListener("keydown", keyPress);
     }
   });
 
@@ -200,8 +150,8 @@ function onChangeKeyType(keymedia) {
     document.getElementById("key-div").hidden = true;
     document.getElementById("system-div").hidden = false;
   }
-  else if(currentValue == "software-vol"){
-    
+  else if (currentValue == "software-vol") {
+
   }
 
 }

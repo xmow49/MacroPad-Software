@@ -6,12 +6,12 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v5.0": {
-      "ConsoleApp2/1.0.0": {
+      "VolumeMixerControl/1.0.0": {
         "dependencies": {
           "CSCore": "1.2.1.2"
         },
         "runtime": {
-          "ConsoleApp2.dll": {}
+          "VolumeMixerControl.dll": {}
         }
       },
       "CSCore/1.2.1.2": {
@@ -25,7 +25,7 @@
     }
   },
   "libraries": {
-    "ConsoleApp2/1.0.0": {
+    "VolumeMixerControl/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
