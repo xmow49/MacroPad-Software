@@ -1,3 +1,4 @@
+
 var clockwiseOption = 0;
 var clockwiseValue = 0;
 
@@ -6,7 +7,6 @@ var anticlockwiseValue = 0;
 
 var clickOption = 0;
 var clickValue = 0;
-
 
 
 function onChangeEncoderAction(radio) {
@@ -67,6 +67,12 @@ function systemActionPopup(Nencoder) {
       }
       var msgToSend = "set encoder " + Nencoder + " " + value;
       port.write(msgToSend);
+
+      settings.set('profile1.encoder' + Nencoder + '.value', value);
+      setTimeout(function () {
+        settings.set('profile1.encoder' + Nencoder + '.action', "system-vol");
+      }, 100);
+
     },
     onClose: function () {
       encoder(Nencoder)
@@ -119,17 +125,13 @@ function keyEncoderPopup(Nencoder) {
       }
     },
     onClose: function () {
+      encoder(Nencoder);
       document.removeEventListener("keydown", encoderKeyPress);
     }
   });
 }
 
-function softwareVolumePopup(Nencoder) {
-
-}
-
 function midiPopup(Nencoder) {
-
 }
 
 function encoder(Nencoder) {
@@ -169,7 +171,7 @@ function encoder(Nencoder) {
         systemActionPopup(Nencoder);
       else if (value == "encoder-keys")
         keyEncoderPopup(Nencoder);
-      else if (value == "software-vols")
+      else if (value == "software-vol")
         softwareVolumePopup(Nencoder);
       else if (value == "midi")
         midiPopup(Nencoder);
@@ -180,66 +182,65 @@ function encoder(Nencoder) {
   });
 
 
-
-
-
-
-
-
-
-
 }
 
 
+function softwareVolumePopup(Nencoder) {
+  popupS.window({
+    mode: 'confirm',
+    labelOk: 'Enregistrer',
+    labelCancel: 'Précédent',
+    title: 'Selection de l\'action  de l\'encoder n°' + (Nencoder + 1),
+    content: `<div class="dropper-form aligned">
+                <div class="encoder-item">
+                  <h2>Choisissez le logiciel</h2>
+                  <select id="selectEncoder">
+                      <option value="">--Choisissez un logiciel--</option>
+                  </select>
+                </div>
+              </div>`,
+    onSubmit: function (val) {
+      var select = document.getElementById('selectEncoder').value;
+      settings.set('profile1.encoder' + Nencoder + '.value', select);
+      setTimeout(function () {
+        settings.set('profile1.encoder' + Nencoder + '.action', "software-vol");
+      }, 100);
+    },
+    onClose: function () {
+      encoder(Nencoder)
+    }
+  });
 
+  setTimeout(function () {
+    updateSoftwaresList();
+  }, 100);
+
+}
 
 
 
 function clearSoftwaresLists() {
-  var selectEncoder1 = document.getElementById("selectEncoder1");
-  var selectEncoder2 = document.getElementById("selectEncoder2");
-  var selectEncoder3 = document.getElementById("selectEncoder3");
-  var listlength = selectEncoder1.length;
+  var selectEncoder = document.getElementById("selectEncoder");
+  var listlength = selectEncoder.length;
   console.log(listlength);
   for (var i = 0; i < listlength; i++) {
-    selectEncoder1.remove(0);
-    selectEncoder2.remove(0);
-    selectEncoder3.remove(0);
+    selectEncoder.remove(0);
   }
 
-  var selectEncoder1 = document.getElementById("selectEncoder1");
-  var option1 = document.createElement("option");
-  option1.text = "--Choisissez un logiciel--";
-  selectEncoder1.add(option1);
-
-  var selectEncoder2 = document.getElementById("selectEncoder2");
-  var option2 = document.createElement("option");
-  option2.text = "--Choisissez un logiciel--";
-  selectEncoder2.add(option2);
-
-  var selectEncoder3 = document.getElementById("selectEncoder3");
-  var option3 = document.createElement("option");
-  option3.text = "--Choisissez un logiciel--";
-  selectEncoder3.add(option3);
+  var selectEncoder = document.getElementById("selectEncoder");
+  var option = document.createElement("option");
+  option.text = "--Choisissez un logiciel--";
+  selectEncoder.add(option);
 }
 
 function addSoftwareToList(software) {
 
-  var selectEncoder1 = document.getElementById("selectEncoder1");
-  var option1 = document.createElement("option");
-  option1.text = software;
-  selectEncoder1.add(option1);
-
-  var selectEncoder2 = document.getElementById("selectEncoder2");
-  var option2 = document.createElement("option");
-  option2.text = software;
-  selectEncoder2.add(option2);
-
-  var selectEncoder3 = document.getElementById("selectEncoder3");
-  var option3 = document.createElement("option");
-  option3.text = software;
-  selectEncoder3.add(option3);
+  var selectEncoder = document.getElementById("selectEncoder");
+  var option = document.createElement("option");
+  option.text = software;
+  selectEncoder.add(option);
 }
+
 function updateSoftwaresList() {
   clearSoftwaresLists();
   exec("volume_control\\VolumeMixerControl getSoftwaresNames", (error, data, getter) => {
@@ -247,5 +248,3 @@ function updateSoftwaresList() {
     softwares.forEach(a => addSoftwareToList(a));
   });
 }
-
-updateSoftwaresList();

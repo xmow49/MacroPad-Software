@@ -1,12 +1,67 @@
-const electron = require("electron");
-const serialport = require('serialport')
-const tableify = require('tableify')
-const loudness = require('loudness')
+const os = require('os');
+const settings = require('electron-settings');
+const { app } = require('@electron/remote');
+
+const serialport = require('serialport');
+const tableify = require('tableify');
+const loudness = require('loudness');
 const { exec } = require("child_process");
 var popupS = require('popups');
-const SerialPort = require('serialport')
+const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 const { Console } = require("console");
+
+
+
+settings.configure({
+  fileName: 'config.json',
+  prettify: true
+});
+
+const obj = settings.getSync();
+
+/*settings.set('profile1', {
+  name: 'Le profile de TOTO',
+  color: [0, 179, 230],
+  encoder0:{
+    action: 0,
+    value: "spotify"
+  },
+  encoder1:{
+    action: 0,
+    value: "spotify"
+  },
+  encoder2:{
+    action: 0,
+    value: "spotify"
+  },
+  key0:{
+    action: 0,
+    value: "1"
+  },
+  key1:{
+    action: 0,
+    value: "2"
+  },
+  key2:{
+    action: 0,
+    value: "3"
+  },
+  key3:{
+    action: 0,
+    value: "4"
+  },
+  key4:{
+    action: 0,
+    value: "5"
+  },
+  key5:{
+    action: 0,
+    value: "6"
+  }
+
+});*/
+
 
 function getStrKey(oEvent) {
   var txt = "";
@@ -46,15 +101,6 @@ function getStrKey(oEvent) {
 
 function changeVolume(software, value) {
   exec("volume_control\\VolumeMixerControl changeVolume " + software + " " + value, (error, data, getter) => {
-    /*if (error) {
-      console.log("error", error.message);
-      return;
-    }
-    if (getter) {
-      console.log("data", data);
-      return;
-    }*/
-    //console.log("data",data);
   });
 }
 
@@ -74,6 +120,7 @@ function setMusicName(software) {
 }
 
 setMusicName("spotify");
+
 var refreshMusic = window.setInterval(function () {
   setMusicName("spotify");
 }, 10000);
@@ -252,3 +299,8 @@ async function listSerialPorts() {
     document.getElementById('ports').innerHTML = tableHTML
   })
 }
+
+
+const value = settings.getSync();
+
+console.log(value);

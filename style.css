@@ -63,3 +63,7 @@ h3{
 input, button, textarea, :focus {
     outline: none;
 }
+
+.popupS-overlay{
+    background: none;
+}

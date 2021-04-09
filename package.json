@@ -1,7 +1,7 @@
 {
-    "name": "macro_pad",
+    "name": "macropad",
     "version": "1.0.0",
-    "description": "macro_pad",
+    "description": "So",
     "main": "main.js",
     "scripts": {
         "start": "electron .",
@@ -18,8 +18,11 @@
         "electron-rebuild": "^2.3.4"
     },
     "dependencies": {
+        "@electron/remote": "^1.1.0",
         "active-window": "^0.1.0",
         "easymidi": "^2.0.2",
+        "electron-json-storage": "^4.4.0",
+        "electron-settings": "^4.0.2",
         "hotkeys-js": "^3.8.3",
         "jquery": "^3.6.0",
         "loudness": "^0.4.1",

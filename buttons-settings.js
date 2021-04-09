@@ -87,7 +87,6 @@ function key(Nkey) {
                 </div>
               </div>`,
     onSubmit: function (val) {
-      //---------KEY
       if (document.getElementById('key').checked) {
         var txt = document.getElementsByName("system").values;
         console.log(txt);
@@ -103,7 +102,11 @@ function key(Nkey) {
         }
         //-------------Key OK----------------------
         else {
-          
+          var key = document.getElementById('key-combination').textContent;
+          settings.set('profile1.key' + Nkey + '.value', key);
+          setTimeout(function () {
+            settings.set('profile1.key' + Nkey + '.action', "keys-combination");
+          }, 100);
         }
       }
       //-----------------System------------------
@@ -117,8 +120,15 @@ function key(Nkey) {
         }
         console.log(value);
         var msgToSend = "set key " + Nkey + " action " + value;
+
+        settings.set('profile1.key' + Nkey + '.value', value);
+        setTimeout(function () {
+          settings.set('profile1.key' + Nkey + '.action', "system-action");
+        }, 100);
+
         console.log(msgToSend);
         port.write(msgToSend);
+
         document.removeEventListener("keydown", keyPress);
       }
 
