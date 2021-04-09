@@ -80,8 +80,6 @@ var refreshMusic = window.setInterval(function () {
 
 
 
-
-
 var testedPorts = 0;
 var listPorts = [];
 var connected = false;
@@ -135,7 +133,7 @@ function autoConnect() {
         autoConnect();
       }, 1000);
       startAutoConnect();
-    }, 2000);
+    }, 60000);
 
   } else {
     document.getElementById("debug-port").textContent = "Timeout! Essai de " + listPorts[testedPorts];
@@ -235,26 +233,6 @@ function addPortToList(port) {
   selectPort.add(option);
 }
 
-/*function updatePortList() {
-  clearPortLists();
-  SerialPort.list().then(function (ports) {
-    ports.forEach(function (port) {
-      var listPorts = Object.values(port);
-      addPortToList(listPorts[0])
-      //console.log(listPorts[0])
-    })
-  })
-}
-updatePortList();
-
-function refresh_Button() {
-  updatePortList();
-}
-
-/*var intervalId = window.setInterval(function () {
-  updatePortList();
-}, 10000);*/
-
 
 async function listSerialPorts() {
   await serialport.list().then((ports, err) => {
@@ -274,5 +252,3 @@ async function listSerialPorts() {
     document.getElementById('ports').innerHTML = tableHTML
   })
 }
-
-listSerialPorts();
