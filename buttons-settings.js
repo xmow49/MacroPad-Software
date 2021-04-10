@@ -1,11 +1,58 @@
+var listKey = [];
+var pressed={};
 
+Array.prototype.remove = function() {
+  var what, a = arguments, L = a.length, ax;
+  while (L && this.length) {
+      what = a[--L];
+      while ((ax = this.indexOf(what)) !== -1) {
+          this.splice(ax, 1);
+      }
+  }
+  return this;
+};
 
-function keyPress(oEvent) {
-  document.getElementById("key-combination").innerHTML = getStrKey(oEvent);
+function keyDown(oEvent) {
+  if(!listKey.includes(getAsciiKey(oEvent))){
+    //If key isnt in the list 
+    listKey.push(getAsciiKey(oEvent));
+    console.log("add: " + getAsciiKey(oEvent))
+  }
+
+  if (Object.values(pressed).indexOf(true) > -1) { // If key pressed
+    if(pressed[getAsciiKey(oEvent)] == true){
+    }else{
+      console.log(getAsciiKey(oEvent));
+    }
+
+  }else{
+    if(listKey.length == 1){
+
+    }else{
+      pressed={};
+      listKey = [];
+    }
+
+  }
+  document.getElementById("key-combination").innerHTML = listKey;
+  
+  pressed[oEvent.which] = true;
+  console.log(listKey);
 }
 
+function keyUp(oEvent) {
+  document.getElementById("key-combination").innerHTML = listKey;
+  pressed[oEvent.which] = false;
+  //listKey.remove(oEvent.which);
+  console.log(listKey);
+}
+
+
+
 function key(Nkey) {
-  document.addEventListener("keydown", keyPress);
+  document.addEventListener("keydown", keyDown);
+  document.addEventListener("keyup", keyUp);
+
   popupS.window({
     mode: 'confirm',
     labelOk: 'Enregistrer',
@@ -129,12 +176,12 @@ function key(Nkey) {
         console.log(msgToSend);
         port.write(msgToSend);
 
-        document.removeEventListener("keydown", keyPress);
+        document.removeEventListener("keydown", keyDown);
       }
 
     },
     onClose: function () {
-      document.removeEventListener("keydown", keyPress);
+      document.removeEventListener("keydown", keyDown);
     }
   });
 

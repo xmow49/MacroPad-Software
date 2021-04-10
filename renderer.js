@@ -65,8 +65,6 @@ const obj = settings.getSync();
 
 function getStrKey(oEvent) {
   var txt = "";
-  console.log(oEvent.which);
-
   if (oEvent.key == "Control") {
     txt = "CTRL";
   }
@@ -97,6 +95,10 @@ function getStrKey(oEvent) {
 
   }
   return txt;
+}
+
+function getAsciiKey(oEvent) {
+  return oEvent.which;
 }
 
 function changeVolume(software, value) {
