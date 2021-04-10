@@ -1,55 +1,53 @@
 var listKey = [];
-var pressed={};
+var strListKey = [];
+var pressed = {};
 
-Array.prototype.remove = function() {
+Array.prototype.remove = function () {
   var what, a = arguments, L = a.length, ax;
   while (L && this.length) {
-      what = a[--L];
-      while ((ax = this.indexOf(what)) !== -1) {
-          this.splice(ax, 1);
-      }
+    what = a[--L];
+    while ((ax = this.indexOf(what)) !== -1) {
+      this.splice(ax, 1);
+    }
   }
   return this;
 };
 
+var keyText = "";
 function keyDown(oEvent) {
-  if(!listKey.includes(getAsciiKey(oEvent))){
-    //If key isnt in the list 
-    listKey.push(getAsciiKey(oEvent));
-    console.log("add: " + getAsciiKey(oEvent))
+  //---------------Unfocus all button to avoid space and enter action-------------
+  document.getElementById("clear-keys").blur();
+  document.getElementById("key").blur();
+  document.getElementById("popupS-button-ok").blur();
+  document.getElementById("popupS-button-cancel").blur();
+  //-----------------------------------------------------------------------------
+
+  if (!listKey.includes(getAsciiKey(oEvent))) { //If key isnt in the list (often the first key press)
+    listKey.push(getAsciiKey(oEvent)); //Add the key to the list
+    strListKey.push(oEvent.code);
   }
 
-  if (Object.values(pressed).indexOf(true) > -1) { // If key pressed
-    if(pressed[getAsciiKey(oEvent)] == true){
-    }else{
-      console.log(getAsciiKey(oEvent));
-    }
-
-  }else{
-    if(listKey.length == 1){
-
-    }else{
-      pressed={};
-      listKey = [];
-    }
-
-  }
-  document.getElementById("key-combination").innerHTML = listKey;
+  keyText += "+ " + oEvent.code;
   
-  pressed[oEvent.which] = true;
-  console.log(listKey);
+  document.getElementById("key-combination").innerHTML = strListKey; //Display List
+  pressed[oEvent.which] = true; //Add key to pressed State
 }
 
 function keyUp(oEvent) {
-  document.getElementById("key-combination").innerHTML = listKey;
-  pressed[oEvent.which] = false;
-  //listKey.remove(oEvent.which);
-  console.log(listKey);
+   //Display List
+  pressed[oEvent.which] = false; //Add key to release State
+}
+
+function clearKeys() {
+  pressed = {};
+  listKey = [];
+  strListKey = [];
+  keyText = "";
+  document.getElementById("key-combination").innerHTML = "Appuyer sur une touche";
 }
 
 
-
-function key(Nkey) {
+function setKey(Nkey) {
   document.addEventListener("keydown", keyDown);
   document.addEventListener("keyup", keyUp);
 
@@ -68,7 +66,8 @@ function key(Nkey) {
 
                 <div id="key-div">
                   <h3>Selection des touches:</h3>
-                  <h4 id="key-combination">Appuyer sur une touche</h4>
+                  <h4 class="key-combination" id="key-combination">Appuyer sur une touche</h4>
+                  <button id="clear-keys" onClick="clearKeys()">Effacer</button>
                 </div>
 
 
@@ -134,83 +133,98 @@ function key(Nkey) {
                 </div>
               </div>`,
     onSubmit: function (val) {
-      if (document.getElementById('key').checked) {
-        var txt = document.getElementsByName("system").values;
-        console.log(txt);
-        //-------------No Value----------------------
+      //--------------------------------------KEYS COMBINATION--------------------------------------------
+      if (document.getElementById('key').checked) {//If keys selected
+        var txt = document.getElementById("key-combination").textContent; //Get text value
+        //----------If no value: Error Message-------------
         if (txt == "Appuyer sur une touche") {
           popupS.alert({
             title: 'Erreur',
             content: `
                       <h3>Merci d'entrer une combinaison de touches.</h3>
                       <br>
-                      `
+                      `,
+            onSubmit: function (val) {
+              setKey(Nkey);
+            }
           });
         }
-        //-------------Key OK----------------------
+        //-------------If Keys OK----------------------
         else {
-          var key = document.getElementById('key-combination').textContent;
-          settings.set('profile1.key' + Nkey + '.value', key);
-          setTimeout(function () {
-            settings.set('profile1.key' + Nkey + '.action', "keys-combination");
-          }, 100);
+          settings.set('profile1.key' + Nkey + '.value', txt); //Save to config
+          setTimeout(function () { settings.set('profile1.key' + Nkey + '.action', "keys-combination"); }, 100);
         }
       }
-      //-----------------System------------------
+
+      //--------------------------------------SYSTEM ACTION--------------------------------------------
       else {
-        var radio = document.getElementsByName('system');
+        var radio = document.getElementsByName('system'); //get the radio list
         var value;
-        for (var i = 0; i < radio.length; i++) {
+        for (var i = 0; i < radio.length; i++) {//find the selected value
           if (radio[i].checked) {
             value = radio[i].value;
           }
         }
-        console.log(value);
-        var msgToSend = "set key " + Nkey + " action " + value;
 
-        settings.set('profile1.key' + Nkey + '.value', value);
-        setTimeout(function () {
-          settings.set('profile1.key' + Nkey + '.action', "system-action");
-        }, 100);
+        if (value == null) { //If no found: error message
+          popupS.alert({
+            title: 'Erreur',
+            content: `
+                      <h3>Merci de choisir une action.</h3>
+                      <br>
+                      `,
+            onSubmit: function (val) {
+              setKey(Nkey);
+            }
+          });
 
-        console.log(msgToSend);
-        port.write(msgToSend);
+        } else {//If action has been selected:
+          //-----------------SEND TO SERIAL-------------------------
+          var msgToSend = "set key " + Nkey + " action " + value;
+          console.log(msgToSend);
+          port.write(msgToSend);
 
-        document.removeEventListener("keydown", keyDown);
+          //-----------------Save To config-------------------------
+          settings.set('profile1.key' + Nkey + '.value', value);
+          setTimeout(function () {
+            settings.set('profile1.key' + Nkey + '.action', "system-action");
+          }, 100);
+
+          document.removeEventListener("keydown", keyDown); //Remove event listener
+        }
       }
-
     },
     onClose: function () {
-      document.removeEventListener("keydown", keyDown);
+      document.removeEventListener("keydown", keyDown); //Remove event listener
     }
   });
-
 }
 
 function selectSystem() {
-  console.log("system")
+  //console.log("System Action");
+  //-------Display System Action Menu------------------
+  document.getElementById("key-div").hidden = true;
+  document.getElementById("system-div").hidden = false;
+  //---------------------------------------------------
 }
 
-function selectKey() {
-  console.log("key")
+function selectKeys() {
+  //console.log("Keys");
+  //-------Display Keys Action Menu------------------
+  document.getElementById("key-div").hidden = false;
+  document.getElementById("system-div").hidden = true;
+  //---------------------------------------------------
+  clearKeys(); //Clear the older values
 }
 
 function onChangeKeyType(keymedia) {
-  var currentValue = keymedia.value;
-  console.log(keymedia.value);
-
-  if (currentValue == "keys") {
-    document.getElementById("key-div").hidden = false;
-    document.getElementById("system-div").hidden = true;
-
-  } else if (currentValue == "system") {
-    document.getElementById("key-div").hidden = true;
-    document.getElementById("system-div").hidden = false;
+  var selected = keymedia.value; //radio seleced value
+  if (selected == "keys") {
+    selectKeys(); //Keys menu
   }
-  else if (currentValue == "software-vol") {
-
+  else if (selected == "system") {
+    selectSystem(); //System action menu
   }
-
 }
 
 

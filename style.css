@@ -12,14 +12,6 @@ h3{
     font-family: 'Product Sans';
 }
 
-.popupS-title{
-    font-family: 'Product Sans';
-    font-size: 20px;
-}
-.popupS-content{
-    width: 500px;
-}
-
 .connect-div{
     margin-left: 2%;
 }
@@ -30,6 +22,19 @@ h3{
 }
 
 
+button {
+    display: inline-block;
+    background-color: #008CBA;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    padding: 10px 10px;
+    text-decoration: none;
+    font-size: 30px;
+    margin: 2px;
+    width: 110px;
+    cursor: pointer;
+  }
 
 .button-key{
     width: 100px;
@@ -44,14 +49,23 @@ h3{
 
 }
 .button-grid{
-    width: 300px;
+    width: auto;
     height: auto;
-    margin: 10%;
+    
     display: grid;
     grid-template-columns: repeat(3, auto);
-    justify-content: right;
+    justify-content: center;
+
+    margin: 0 auto;
+    width: 100px; 
 }
 
+.popup{
+    right: 50;
+}
+.popupS-layer{
+    /*margin-left: 2px;*/
+}
 
 :not(input):not(textarea),
 :not(input):not(textarea)::after,
@@ -59,11 +73,36 @@ h3{
     -webkit-user-select: none;
     user-select: none;
     cursor: default;
+    width: auto;
+
+
 }
 input, button, textarea, :focus {
     outline: none;
+    
 }
 
 .popupS-overlay{
     background: none;
+}
+
+.popupS-content{
+    width: 400px;
+}
+
+.popupS-title{
+    font-family: 'Product Sans';
+    font-size: 20px;
+}
+
+.key-combination{
+    border: solid;
+    border-color: black;
+    border-radius: 10px;
+    border-radius: 10px;
+    width: auto;
+    height: 30px;
+
+    text-align: center;
+    
 }
