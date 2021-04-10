@@ -37,6 +37,56 @@ function onChangeEncoderAction(radio) {
 
 }
 
+
+function encoder(Nencoder) {
+  popupS.window({
+    mode: 'confirm',
+    labelOk: 'Suivant',
+    labelCancel: 'Annuler',
+    title: 'Selection de l\'action  de l\'encoder n°' + (Nencoder + 1),
+    content: `<div class="dropper-form aligned">
+
+                <div>
+                  <input type="radio" id="system-vol" name="keys-vol-software-midi" value="system-vol" onclick="onChangeKeyType(this)"checked>
+                  <label for="system-vol">Action sur le Système</label>
+                  <br>
+                  <input type="radio" id="keys" name="keys-vol-software-midi" value="encoder-keys" onclick="onChangeKeyType(this)">
+                  <label for="keys">Combinaison de Touches</label>
+                  <br>
+                  <input type="radio" id="software-vol" name="keys-vol-software-midi" value="software-vol" onclick="onChangeKeyType(this)">
+                  <label for="software-vol">Volume d'un logiciel</label>
+                  <br>
+                  <input type="radio" id="midi" name="keys-vol-software-midi" value="midi" onclick="onChangeKeyType(this)">
+                  <label for="midi">Midi</label>
+                  <br>
+                </div>
+                <br>
+              </div>`,
+    onSubmit: function (val) {
+      var slect = document.getElementsByName('keys-vol-software-midi');
+      var value;
+      for (var i = 0; i < slect.length; i++) {
+        if (slect[i].checked) {
+          value = slect[i].value;
+        }
+      }
+      console.log(value);
+      if (value == "system-vol")
+        systemActionPopup(Nencoder);
+      else if (value == "encoder-keys")
+        keyEncoderPopup(Nencoder);
+      else if (value == "software-vol")
+        softwareVolumePopup(Nencoder);
+      else if (value == "midi")
+        midiPopup(Nencoder);
+    },
+    onClose: function () {
+      document.body.removeEventListener('keydown', encoderKeyPress);
+    }
+  });
+
+
+}
 function systemActionPopup(Nencoder) {
   popupS.window({
     mode: 'confirm',
@@ -133,57 +183,6 @@ function keyEncoderPopup(Nencoder) {
 
 function midiPopup(Nencoder) {
 }
-
-function encoder(Nencoder) {
-  popupS.window({
-    mode: 'confirm',
-    labelOk: 'Suivant',
-    labelCancel: 'Annuler',
-    title: 'Selection de l\'action  de l\'encoder n°' + (Nencoder + 1),
-    content: `<div class="dropper-form aligned">
-
-                <div>
-                  <input type="radio" id="system-vol" name="keys-vol-software-midi" value="system-vol" onclick="onChangeKeyType(this)"checked>
-                  <label for="system-vol">Action sur le Système</label>
-                  <br>
-                  <input type="radio" id="keys" name="keys-vol-software-midi" value="encoder-keys" onclick="onChangeKeyType(this)">
-                  <label for="keys">Combinaison de Touches</label>
-                  <br>
-                  <input type="radio" id="software-vol" name="keys-vol-software-midi" value="software-vol" onclick="onChangeKeyType(this)">
-                  <label for="software-vol">Volume d'un logiciel</label>
-                  <br>
-                  <input type="radio" id="midi" name="keys-vol-software-midi" value="midi" onclick="onChangeKeyType(this)">
-                  <label for="midi">Midi</label>
-                  <br>
-                </div>
-                <br>
-              </div>`,
-    onSubmit: function (val) {
-      var slect = document.getElementsByName('keys-vol-software-midi');
-      var value;
-      for (var i = 0; i < slect.length; i++) {
-        if (slect[i].checked) {
-          value = slect[i].value;
-        }
-      }
-      console.log(value);
-      if (value == "system-vol")
-        systemActionPopup(Nencoder);
-      else if (value == "encoder-keys")
-        keyEncoderPopup(Nencoder);
-      else if (value == "software-vol")
-        softwareVolumePopup(Nencoder);
-      else if (value == "midi")
-        midiPopup(Nencoder);
-    },
-    onClose: function () {
-      document.body.removeEventListener('keydown', encoderKeyPress);
-    }
-  });
-
-
-}
-
 
 function softwareVolumePopup(Nencoder) {
   popupS.window({
