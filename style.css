@@ -1,26 +1,30 @@
 h1 {
-    text-align:center;
+    text-align: center;
     font-family: 'Product Sans';
 }
 
 .current-music {
-    text-align:center;
+    text-align: center;
     font-family: 'Product Sans';
 }
 
-h3{
+h3 {
     font-family: 'Product Sans';
 }
 
-.connect-div{
+.connect-div {
     margin-left: 2%;
 }
 
 .center-div {
     margin: 0 auto;
-    width: 100px; 
+    width: 100px;
 }
 
+.icon-connect {
+    max-width: 5%;
+    height: auto;
+}
 
 button {
     display: inline-block;
@@ -34,38 +38,40 @@ button {
     margin: 2px;
     width: 110px;
     cursor: pointer;
-  }
+}
 
-.button-key{
+.button-key {
     width: 100px;
     height: 100px;
     border-radius: 15px
-
 }
-.encoder{
+
+.encoder {
     width: 100px;
     height: 100px;
     border-radius: 100px
-
 }
-.button-grid{
+
+.button-grid {
     width: auto;
     height: auto;
-    
     display: grid;
     grid-template-columns: repeat(3, auto);
     justify-content: center;
-
     margin: 0 auto;
-    width: 100px; 
+    width: 100px;
 }
 
-.popup{
+.popup {
     right: 50;
 }
-.popupS-layer{
+
+.popupS-layer {
     /*margin-left: 2px;*/
 }
+
+
+/*---------Disable Select text and drag element-------------*/
 
 :not(input):not(textarea),
 :not(input):not(textarea)::after,
@@ -74,35 +80,46 @@ button {
     user-select: none;
     cursor: default;
     width: auto;
-
-
 }
-input, button, textarea, :focus {
+
+input,
+button,
+textarea,
+ :focus {
     outline: none;
-    
 }
 
-.popupS-overlay{
+*,
+*::after,
+*::before {
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+    cursor: default;
+}
+
+
+/*-------------------------------------------------------------*/
+
+.popupS-overlay {
     background: none;
 }
 
-.popupS-content{
+.popupS-content {
     width: 400px;
 }
 
-.popupS-title{
+.popupS-title {
     font-family: 'Product Sans';
     font-size: 20px;
 }
 
-.key-combination{
+.key-combination {
     border: solid;
     border-color: black;
     border-radius: 10px;
     border-radius: 10px;
     width: auto;
     height: 30px;
-
     text-align: center;
-    
 }

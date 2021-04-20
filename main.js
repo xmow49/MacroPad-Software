@@ -16,6 +16,9 @@ function createWindow() {
         //width: 1280,
         width: 1537,
         height: 720,
+        minWidth: 1280,
+        minHeight: 720,
+
         webPreferences: {
             nodeIntegration: true,
             preload: path.join(__dirname, 'preload.js'),
@@ -46,7 +49,7 @@ function createWindow() {
     })
 }
 
-app.allowRendererProcessReuse=false
+app.allowRendererProcessReuse = false
 
 app.on('ready', createWindow)
 
@@ -60,4 +63,3 @@ app.on('activate', function() {
         createWindow()
     }
 })
-

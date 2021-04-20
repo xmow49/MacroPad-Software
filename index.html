@@ -6,22 +6,32 @@
     <meta name="viewport" content="width=device-width, shrink-to-fit=no">
     <link rel="stylesheet" href="node_modules/popups/css/popupS.css">
     <link href="style.css" rel="stylesheet">
+    <link href="side-bar.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>MacroPad</title>
 </head>
 
 <body style="background-color: white;">
-    <div>
-        <div class="">
+
+    <div id="mainMenu" class="sidebar">
+        <div><a href="#" onClick="toggleSidebar()"><span><i class="material-icons">menu</i></a><br></div>
+        <div class="home-menu"><a href="#"><span><i class="material-icons">home</i><span class="icon-text">Home Page</span></a><br></div>
+        <div class="profile-menu"><a href="profile.html"><span><i class="material-icons">edit</i><span class="icon-text">Profiles</span></a><br></div>
+        <div class="settings-menu"><a href="settings.html"><i class="material-icons">settings</i><span class="icon-text"></span>Settings</span></a><br></div>
+    </div>
+    <div id="main">
+        <div>
             <h1 class="mt-3">Macro Pad</h1>
         </div>
 
         <div>
+            <img src="assets/img/usb-disconnected.png" class="icon-connect">
             <h3 id="connection-status">MacroPad Déconnecté</h3>
             <p id="debug-port"></p>
         </div>
 
         <div>
-            <h2 id="current-music" class="current-music"></h2>  
+            <h2 id="current-music" class="current-music"></h2>
         </div>
 
 
@@ -42,9 +52,9 @@
 
         <div id="error"></div>
         <div id="ports"></div>
+    </div>
 </body>
-
-
+<script src="./sidebar.js"></script>
 <script src="./renderer.js"></script>
 <script src="./encoders-settings.js"></script>
 <script src="./buttons-settings.js"></script>
