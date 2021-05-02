@@ -101,14 +101,23 @@ function changeVolume(software, value) {
     exec("volume_control\\VolumeMixerControl changeVolume " + software + " " + value, (error, data, getter) => {});
 }
 
+var musicName = "no";
+
 function setMusicName(software) {
     var name;
     exec("volume_control\\VolumeMixerControl getMusicSoftware " + software, (error, data, getter) => {
-        document.getElementById("current-music").innerHTML = "Musique: " + data;
+        if (data.includes(musicName)) {
+
+        } else {
+            musicName = data;
+            document.getElementById("current-music").innerHTML = "Musique: " + data;
+            data.replace(/[\n\r]/g, '');
+            port.write('set-text "' + data);
+        }
     });
 }
 
-setMusicName("spotify");
+
 
 var refreshMusic = window.setInterval(function() {
     setMusicName("spotify");
@@ -244,7 +253,7 @@ function tests() {
 function serialMessageRecevied(data) {
     var stringData = data.toString();
     stringData.trim();
-    console.log(stringData);
+    //console.log(stringData);
 
     var value = settings.getSync("profile1.encoder0.value");
     var action = settings.getSync("profile1.encoder0.action");
