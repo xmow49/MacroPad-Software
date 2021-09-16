@@ -61,18 +61,18 @@ settings.configure({
 });*/
 
 
-function getStrKey(oEvent) {
+function getStrKey(oEvent) { //Convert Key text to Text to display it
     var txt = "";
-    if (oEvent.key == "Control") {
+    if (oEvent.key == "Control") { //Change Control text
         txt = "CTRL";
     }
-    if (oEvent.key == "AltGraph") {
+    if (oEvent.key == "AltGraph") { //Change AltGraph text
         txt = "ALT GR";
     }
-    if (oEvent.key == "Alt") {
+    if (oEvent.key == "Alt") { //Change Alt text
         txt = "ALT";
     }
-    if (oEvent.key == "Shift") {
+    if (oEvent.key == "Shift") { //Change Shift text
         txt = "SHIFT";
     }
     if (oEvent.key == "Control" || oEvent.key == "Alt" || oEvent.key == "AltGraph" || oEvent.key == "Shift") {} else {
@@ -93,11 +93,7 @@ function getStrKey(oEvent) {
     return txt;
 }
 
-function getAsciiKey(oEvent) {
-    return oEvent.which;
-}
-
-function changeVolume(software, value) {
+function changeVolume(software, value) { //Change volume of an software 
     exec("volume_control\\VolumeMixerControl changeVolume " + software + " " + value, (error, data, getter) => {});
 }
 
@@ -158,16 +154,18 @@ function responsesFromPort(data) {
             serialMessageRecevied(data);
         })
 
+
         document.getElementById("connection-status").textContent = "MacroPad Connecté"
     }
 }
 
 function autoConnect() {
-    if (testedPorts >= listPorts.length) {
+    if (testedPorts >= listPorts.length) { //if all port are tested and no work.
         console.log("Cant connect to MacroPad!");
         clearInterval(autoCheck);
-        document.getElementById("debug-port").textContent = "Erreur, Impossible de se connecter au MacroPad!";
+        document.getElementById("debug-port").textContent = "Erreur, Impossible de se connecter au MacroPad!"; //error message
 
+        //reset all value and retry in 60s
         setTimeout(function() {
             testedPorts = 0;
             listPorts = [];
@@ -179,28 +177,24 @@ function autoConnect() {
             startAutoConnect();
         }, 60000);
 
-    } else {
-        document.getElementById("debug-port").textContent = "Timeout! Essai de " + listPorts[testedPorts];
-
-        console.log(listPorts[testedPorts]);
-        port = SerialPort(listPorts[testedPorts], function(err) {
-            if (err) {
+    } else { // testing ports
+        document.getElementById("debug-port").textContent = "Timeout! Essai de " + listPorts[testedPorts]; //trying Text
+        port = SerialPort(listPorts[testedPorts], function(err) { //test to connect
+            if (err) { //if no work
                 console.log("ERROR TO CONNECT");
-                testedPorts++;
-            } else {
+            } else { //if connected
                 console.log("Connection ok");
-                testedPorts++;
-                port.on('data', function(data) {
-                    responsesFromPort(data);
+                port.on('data', function(data) { //Add listener for recevied message from serial
+                    responsesFromPort(data); //and send it to this function to check the ping 
                 })
-
-                setTimeout(function() {
-                    console.log("sendPing");
+                setTimeout(function() { //wait 1s and send a ping to the macropad
+                    //console.log("sendPing");
                     port.write("ping");
                 }, 1000);
             }
             baudRate: 9600;
         });
+        testedPorts++; //to check the next port
     }
 }
 
@@ -208,57 +202,32 @@ var autoCheck;
 
 function startAutoConnect() {
     autoCheck = window.setInterval(function() {
-        //console.log("TIMEOUT: trying: " + listPorts[testedPorts]);
+        console.log("TIMEOUT: trying: " + listPorts[testedPorts]);
         autoConnect();
     }, 5000);
 }
 
-listPort();
-setTimeout(function() {
+
+
+setTimeout(function() { //When Start, Auto connect to macropad
     autoConnect();
 }, 1000);
+
 startAutoConnect();
 
 
 
-
-function connect() {
-    var selectedPort = document.getElementById("selectPort").value;
-    if (selectedPort.length >= 3) { // if com selected
-        port = SerialPort(selectedPort, function(err) {
-            if (err) {
-                return document.getElementById('state').innerHTML = "Erreur: " + err.message;
-            } else {
-                return document.getElementById('state').innerHTML = "Connecté";
-            }
-            baudRate: 9600;
-        });
-        const parser = new Readline();
-        port.pipe(parser);
-        port.on('data', function(data) {
-            serialMessageRecevied(data);
-        })
-        port.write("ping");
-    } else {
-        //no selected
-    }
-
-}
+function serialMessageRecevied(data) { //When serial mesage recevied
+    var stringData = data.toString(); //convert it to string
+    stringData.trim(); // remove \n and blank
+    console.log(stringData); //Debug
 
 
-function tests() {
-    document.addEventListener('keydown', e => keyPress(e));
-}
-
-function serialMessageRecevied(data) {
-    var stringData = data.toString();
-    stringData.trim();
-    //console.log(stringData);
-
+    //Get Config
     var value = settings.getSync("profile1.encoder0.value");
     var action = settings.getSync("profile1.encoder0.action");
 
-    if (action == "software-vol") {
+    if (action == "software-vol") { //if software volume, when encoder, change volume
         if (stringData.includes("Encoder1:UP")) {
             changeVolume(value, 5)
         } else if (stringData.includes("Encoder1:DOWN")) {
@@ -270,43 +239,6 @@ function serialMessageRecevied(data) {
 
 }
 
-function clearPortLists() {
-    var selectPort = document.getElementById("selectPort");
-    var listlength = selectPort.length;
-    console.log(listlength);
-    for (var i = 0; i < listlength; i++) {
-        selectPort.remove(0);
-    }
-}
 
-function addPortToList(port) {
-    var selectPort = document.getElementById("selectPort");
-    var option = document.createElement("option");
-    option.text = port;
-    selectPort.add(option);
-}
-
-
-async function listSerialPorts() {
-    await serialport.list().then((ports, err) => {
-        if (err) {
-            document.getElementById('error').textContent = err.message
-            return
-        } else {
-            document.getElementById('error').textContent = ''
-        }
-        console.log('ports', ports);
-
-        if (ports.length === 0) {
-            document.getElementById('error').textContent = 'No ports discovered'
-        }
-
-        tableHTML = tableify(ports)
-        document.getElementById('ports').innerHTML = tableHTML
-    })
-}
-
-
-const value = settings.getSync();
-
-console.log(value);
+// const value = settings.getSync();
+// console.log(value);
