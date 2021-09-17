@@ -11,7 +11,9 @@ const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 const { Console } = require("console");
 
-
+function getAsciiKey(oEvent) {
+    return oEvent.which;
+}
 
 settings.configure({
     fileName: 'config.json',
@@ -60,6 +62,12 @@ settings.configure({
 
 });*/
 
+
+function setToMacropad(cmdName, keyEncoderId, modeId, value1, value2 = "", value3 = "") {
+    var msgToSend = cmdName + " " + keyEncoderId + " " + modeId + " " + value1 + " " + value2 + " " + value3;
+    console.log("SEND TO MACROPAD: " + msgToSend);
+    port.write(msgToSend);
+}
 
 function getStrKey(oEvent) { //Convert Key text to Text to display it
     var txt = "";
@@ -147,6 +155,8 @@ function responsesFromPort(data) {
         clearInterval(autoCheck);
         connected = true;
         document.getElementById("debug-port").textContent = "";
+
+        document.getElementById('icon-connect').src = "assets/img/usb-connected.png";
 
         const parser = new Readline();
         port.pipe(parser);

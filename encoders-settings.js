@@ -126,9 +126,7 @@ function systemActionPopup(Nencoder) {
                     break;
             }
 
-            var msgToSend = "set-encoder " + Nencoder + " 0 " + value;
-            console.log("SEND TO MACROPAD: " + msgToSend);
-            port.write(msgToSend);
+            setToMacropad("set-encoder", Nencoder, "0", value); //Send to macropad set-encoder command with the encoderID, Mode 0(System Action), and value
 
             settings.set('profile1.encoder' + Nencoder + '.value', value);
             setTimeout(function() {
@@ -145,7 +143,9 @@ function systemActionPopup(Nencoder) {
 
 function encoderKeyPress(oEvent) {
     document.getElementById("encoder-key-combination").innerHTML = getStrKey(oEvent);
-    document.getElementById("encoder-key-combination-ascii").innerHTML = oEvent.which;
+
+    var charCode = (typeof oEvent.which == "undefined") ? oEvent.keyCode : oEvent.which;
+    document.getElementById("encoder-key-combination-ascii").innerHTML = charCode;
 }
 
 var encodersKeyValues = []; //tmp array to store key combination value before send it
@@ -163,6 +163,7 @@ function keyEncoderPopup(Nencoder, actionNumber) {
             title = "Click";
             break;
     }
+    //style="display: none;"
     popupS.window({
         mode: 'confirm',
         labelOk: 'Enregistrer',
@@ -172,7 +173,7 @@ function keyEncoderPopup(Nencoder, actionNumber) {
                 <div id="key-div">
                   <h3>Selection des touches: ` + title + `</h3>
                   <h4 id="encoder-key-combination">Appuyer sur une touche</h4>
-                  <p style="display: none;" id="encoder-key-combination-ascii">Appuyer sur une touche</p>
+                  <p  id="encoder-key-combination-ascii">Appuyer sur une touche</p>
                 </div>
               </div>`,
         onSubmit: function(val) {
@@ -203,9 +204,8 @@ function keyEncoderPopup(Nencoder, actionNumber) {
                 if (actionNumber < 3) {
                     keyEncoderPopup(Nencoder, actionNumber);
                 } else { //send to macropad
-                    var msgToSend = "set-encoder " + Nencoder + " 1 " + encodersKeyValues[0] + " " + encodersKeyValues[1] + " " + encodersKeyValues[2];
-                    console.log(msgToSend);
-                    port.write(msgToSend);
+
+                    setToMacropad("set-encoder", Nencoder, "1", encodersKeyValues[0], encodersKeyValues[1], encodersKeyValues[2]); //Send to macropad set-encoder command with the encoderID, Mode 1(Key Combination), and values
                 }
 
             }
