@@ -125,7 +125,9 @@ function systemActionPopup(Nencoder) {
                 default:
                     break;
             }
-            var msgToSend = "set-encoder " + Nencoder + " " + value;
+
+            var msgToSend = "set-encoder " + Nencoder + " 0 " + value;
+            console.log("SEND TO MACROPAD: " + msgToSend);
             port.write(msgToSend);
 
             settings.set('profile1.encoder' + Nencoder + '.value', value);
@@ -146,7 +148,7 @@ function encoderKeyPress(oEvent) {
     document.getElementById("encoder-key-combination-ascii").innerHTML = oEvent.which;
 }
 
-
+var encodersKeyValues = []; //tmp array to store key combination value before send it
 function keyEncoderPopup(Nencoder, actionNumber) {
     document.addEventListener("keydown", encoderKeyPress);
     var title;
@@ -196,14 +198,14 @@ function keyEncoderPopup(Nencoder, actionNumber) {
             //-------------Key OK----------------------
             else {
 
-
-                var msgToSend = "set-encoder " + Nencoder + " " + actionNumber + " " + txt;
-                console.log(msgToSend);
-                port.write(msgToSend);
-
+                encodersKeyValues[actionNumber] = txt;
                 actionNumber++;
                 if (actionNumber < 3) {
                     keyEncoderPopup(Nencoder, actionNumber);
+                } else { //send to macropad
+                    var msgToSend = "set-encoder " + Nencoder + " 1 " + encodersKeyValues[0] + " " + encodersKeyValues[1] + " " + encodersKeyValues[2];
+                    console.log(msgToSend);
+                    port.write(msgToSend);
                 }
 
             }

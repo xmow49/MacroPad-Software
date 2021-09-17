@@ -208,7 +208,7 @@ function startAutoConnect() {
 }
 
 
-
+listPort();
 setTimeout(function() { //When Start, Auto connect to macropad
     autoConnect();
 }, 1000);
