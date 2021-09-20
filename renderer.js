@@ -12,7 +12,7 @@ const Readline = require('@serialport/parser-readline');
 const { Console } = require("console");
 
 function getAsciiKey(oEvent) {
-    return oEvent.which;
+    return (typeof oEvent.which == "number") ? oEvent.which : oEvent.keyCode;
 }
 
 settings.configure({
@@ -63,7 +63,7 @@ settings.configure({
 });*/
 
 
-function setToMacropad(cmdName, keyEncoderId, modeId, value1, value2 = "", value3 = "") {
+function setToMacropad(cmdName, keyEncoderId, modeId, value1, value2 = "0", value3 = "0") {
     var msgToSend = cmdName + " " + keyEncoderId + " " + modeId + " " + value1 + " " + value2 + " " + value3;
     console.log("SEND TO MACROPAD: " + msgToSend);
     port.write(msgToSend);

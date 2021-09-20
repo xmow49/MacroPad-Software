@@ -142,9 +142,14 @@ function systemActionPopup(Nencoder) {
 }
 
 function encoderKeyPress(oEvent) {
-    document.getElementById("encoder-key-combination").innerHTML = getStrKey(oEvent);
+    //---------------Unfocus all button to avoid space and enter action-------------
+    document.getElementById("popupS-button-ok").blur();
+    document.getElementById("popupS-button-cancel").blur();
+    document.getElementById("popupS-overlay").blur();
 
-    var charCode = (typeof oEvent.which == "undefined") ? oEvent.keyCode : oEvent.which;
+    //-----------------------------------------------------------------------------
+    document.getElementById("encoder-key-combination").innerHTML = getStrKey(oEvent);
+    var charCode = (typeof oEvent.which == "number") ? oEvent.which : oEvent.keyCode
     document.getElementById("encoder-key-combination-ascii").innerHTML = charCode;
 }
 
@@ -199,7 +204,7 @@ function keyEncoderPopup(Nencoder, actionNumber) {
             //-------------Key OK----------------------
             else {
 
-                encodersKeyValues[actionNumber] = txt;
+                encodersKeyValues[actionNumber] = (typeof oEvent.which == "number") ? oEvent.which : oEvent.keyCode;
                 actionNumber++;
                 if (actionNumber < 3) {
                     keyEncoderPopup(Nencoder, actionNumber);

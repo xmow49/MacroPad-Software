@@ -36,6 +36,7 @@ function keyDown(oEvent) {
         keyText += "+ " + oEvent.code;
 
         document.getElementById("key-combination").innerHTML = strListKey; //Display List
+
         pressed[oEvent.which] = true; //Add key to pressed State
 
     }
@@ -164,7 +165,7 @@ function setKey(Nkey) {
                     settings.set('profile1.key' + Nkey + '.value', txt); //Save to config
                     setTimeout(function() { settings.set('profile1.key' + Nkey + '.action', "keys-combination"); }, 100); //Save to config
 
-                    setToMacropad("set-key", Nkey, "1", listKey[0], listKey[1], listKey[2]); //Send to macropad set-key command with the keyID, Mode 1(key combination), and values 
+                    setToMacropad("set-key", Nkey, "1", keycodeToKeyboard(listKey[0]), keycodeToKeyboard(listKey[1]), keycodeToKeyboard(listKey[2])); //Send to macropad set-key command with the keyID, Mode 1(key combination), and values 
                 }
             }
 
