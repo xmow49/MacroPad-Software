@@ -21,15 +21,15 @@ function createWindow() {
 
         webPreferences: {
             nodeIntegration: true,
-            preload: path.join(__dirname, 'preload.js'),
+            preload: path.join(__dirname, 'js/preload.js'),
             enableRemoteModule: true
         },
-        icon: 'icon.ico'
+        icon: 'assets/img/icon.ico'
     })
 
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'index.html'),
+        pathname: path.join(__dirname, 'html/index.html'),
         protocol: 'file:',
         slashes: true
     }))

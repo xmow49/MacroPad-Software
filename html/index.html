@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, shrink-to-fit=no">
-    <link rel="stylesheet" href="node_modules/popups/css/popupS.css">
-    <link href="style.css" rel="stylesheet">
-    <link href="side-bar.css" rel="stylesheet">
+    <link rel="stylesheet" href="../node_modules/popups/css/popupS.css">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/side-bar.css" rel="stylesheet">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <title>MacroPad</title>
 </head>
@@ -25,7 +25,7 @@
         </div>
 
         <div>
-            <img src="assets/img/usb-disconnected.png" class="icon-connect" id="icon-connect">
+            <img src="../assets/img/usb-disconnected.png" class="icon-connect" id="icon-connect">
             <h3 id="connection-status">MacroPad Déconnecté</h3>
             <p id="debug-port"></p>
         </div>
@@ -47,18 +47,18 @@
 
             <button class="button-key" onclick="setKey(3)"></button>
             <button class="button-key" onclick="setKey(4)"></button>
-            <button class="button-key" onclick="testmidi()"></button>
+            <button class="button-key" onclick="setKey(5)"></button>
         </div>
 
         <div id="error"></div>
         <div id="ports"></div>
     </div>
 </body>
-<script src="./sidebar.js"></script>
-<script src="./renderer.js"></script>
-<script src="./encoders-settings.js"></script>
-<script src="./buttons-settings.js"></script>
-<script src="./keyboard.js"></script>
-<script src="./node_modules/popups/dist/popupS.js"></script>
+<script src="../js/sidebar.js"></script>
+<script src="../js/index.js"></script>
+<script src="../js/encoders-settings.js"></script>
+<script src="../js/buttons-settings.js"></script>
+<script src="../js/keyboard.js"></script>
+<script src="../node_modules/popups/dist/popupS.js"></script>
 
 </html>
