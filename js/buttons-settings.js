@@ -1,5 +1,4 @@
 var listKey = [];
-var strListKey = [];
 var pressed = {};
 
 Array.prototype.remove = function() {
@@ -26,10 +25,14 @@ function keyDown(oEvent) {
     document.getElementById("popupS-button-ok").blur();
     document.getElementById("popupS-button-cancel").blur();
     //-----------------------------------------------------------------------------
+    var strListKey = "";
     if (keyCount < 3) {
         if (!listKey.includes(getAsciiKey(oEvent))) { //If key isnt in the list (often the first key press)
             listKey.push(getAsciiKey(oEvent)); //Add the key to the list
-            strListKey.push(oEvent.code);
+            // array.forEach(element => listKey {
+            //     strListKey
+            // });
+            // var strListKey.push(oEvent.code);
             keyCount++;
         }
 
@@ -59,14 +62,13 @@ function clearKeys() {
 
 
 function setKey(Nkey) {
-    document.addEventListener("keydown", keyDown);
-    document.addEventListener("keyup", keyUp);
-
+    document.addEventListener("keydown", keyDown); //Add a listener for keydown
+    document.addEventListener("keyup", keyUp); //Add a listener for keyup
     popupS.window({
         mode: 'confirm',
         labelOk: 'Enregistrer',
         labelCancel: 'Annuler',
-        title: 'Selection de l\'action',
+        title: 'Selection de l\'action  de la touche n°' + (Nkey + 1),
         content: `<div class="dropper-form aligned">
                 <div>
                   <input type="radio" id="key" name="key-system" value="keys" onclick="onChangeKeyType(this)" checked>
@@ -213,6 +215,8 @@ function setKey(Nkey) {
             document.removeEventListener("keydown", keyDown); //Remove event listener
         }
     });
+
+    clearKeys(); //Clear previous key list
 }
 
 function selectSystem() {

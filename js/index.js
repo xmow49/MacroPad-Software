@@ -1,15 +1,15 @@
 const os = require('os');
 const settings = require('electron-settings');
 const { app } = require('@electron/remote');
-
+const { Console } = require("console");
+const { exec } = require("child_process");
 const serialport = require('serialport');
 const tableify = require('tableify');
 const loudness = require('loudness');
-const { exec } = require("child_process");
-var popupS = require('popups');
+const popupS = require('popups');
 const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
-const { Console } = require("console");
+
 
 function getAsciiKey(oEvent) {
     return (typeof oEvent.which == "number") ? oEvent.which : oEvent.keyCode;
@@ -63,10 +63,10 @@ settings.configure({
 });*/
 
 
-function setToMacropad(cmdName, keyEncoderId, modeId, value1, value2 = "0", value3 = "0") {
-    var msgToSend = cmdName + " " + keyEncoderId + " " + modeId + " " + value1 + " " + value2 + " " + value3;
-    console.log("SEND TO MACROPAD: " + msgToSend);
-    port.write(msgToSend);
+function setToMacropad(cmdName, keyEncoderId, modeId, value1, value2 = "0", value3 = "0") { //This Function Send command to macropad
+    var msgToSend = cmdName + " " + keyEncoderId + " " + modeId + " " + value1 + " " + value2 + " " + value3; //Create the command with values
+    console.log("SEND TO MACROPAD: " + msgToSend); //Debug
+    port.write(msgToSend); //Send to macropad
 }
 
 function getStrKey(oEvent) { //Convert Key text to Text to display it
