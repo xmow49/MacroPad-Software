@@ -84,10 +84,23 @@ function getStrKey(oEvent) { //Convert Key text to Text to display it
     }
 
 
-    if (oEvent.key.length == 1) {
-        txt = oEvent.key.toUpperCase();
-    } else if (oEvent.location != 0 && oEvent.which != 18) { //If key is as 2 location (left or right) (ctrl; shift..) AND isnt ALT key because Alt and ALT GR are not the same key
+
+    if (oEvent.location == 2 && oEvent.which == 18) //if AltGR
+    {
+        txt = toStrkey[oEvent.key];
+    }
+    //
+    else if (oEvent.key === ' ') // if space
+    {
+        txt = "Space";
+    }
+    //
+    else if (oEvent.location != 0) { //If key is as 2 location (left or right) (ctrl; shift..) AND isnt ALT key because Alt and ALT GR are not the same key
         txt = toStrkey[oEvent.key] + " " + keyLocationToStr[oEvent.location];
+    }
+    //
+    else if (oEvent.key.length == 1) {
+        txt = oEvent.key.toUpperCase();
     } else {
         txt = oEvent.key;
     }
@@ -127,7 +140,7 @@ var testedPorts = 0;
 var listPorts = [];
 var connected = false;
 
-function listPort() {
+function listPort() { //List all serial port and store into listPorts
     SerialPort.list().then(function(ports) {
         var i = 0;
         ports.forEach(function(port) {
@@ -142,25 +155,48 @@ function listPort() {
     })
 }
 
+var pingResponse = false; //When a ping is send, if there is a response, its true
+
 function responsesFromPort(data) {
-    //console.log("Reply: " + data); //Debug
-    if (data.includes("pong")) {
-        //Its MacroPad
+    if (data.includes("pong")) { //If is a macropad
+        pingResponse = true;
         console.log("FOUND");
         clearInterval(autoCheck);
         connected = true;
         document.getElementById("debug-port").textContent = "";
-
         document.getElementById('icon-connect').src = "../assets/img/usb-connected.png";
-
         const parser = new Readline();
         port.pipe(parser);
         port.on('data', function(data) {
             serialMessageRecevied(data);
         })
+        document.getElementById("connection-status").textContent = "MacroPad Connecté";
 
 
-        document.getElementById("connection-status").textContent = "MacroPad Connecté"
+
+
+        (function loop() {
+            setTimeout(function() {
+                console.log("SEND A PING");
+                port.write("ping"); //send a ping
+                pingResponse = false;
+
+                setTimeout(function() { //wait 2s for the response
+                    if (pingResponse) {
+                        //Macropad still connected
+                        connected = true;
+                        console.log("Macropad Connected");
+                    } else {
+                        connected = false;
+                        console.log("Macropad Disconnected");
+                    }
+                }, 2000);
+
+
+
+                loop()
+            }, 10000); //9000 = 9000ms = 9s
+        });
     }
 }
 

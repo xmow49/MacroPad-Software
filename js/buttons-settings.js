@@ -17,6 +17,17 @@ Array.prototype.remove = function() {
 var keyCount = 0;
 var strListKey = "";
 
+function printKeyList(oEvent) {
+    if (strListKey == "")
+        strListKey += getStrKey(oEvent);
+    else
+        strListKey += " + " + getStrKey(oEvent);
+
+    document.getElementById("key-combination").innerHTML = strListKey; //Display List
+    pressed[oEvent.which] = true; //Add key to pressed State
+}
+
+
 function keyDown(oEvent) {
 
     //---------------Unfocus all button to avoid space and enter action-------------
@@ -25,36 +36,43 @@ function keyDown(oEvent) {
     document.getElementById("popupS-button-ok").blur();
     document.getElementById("popupS-button-cancel").blur();
     //-----------------------------------------------------------------------------
-    console.log(oEvent.key);
-    if (keyCount < 3) {
+
+    if (oEvent.which == 18 && oEvent.location == 2) //If the last key is CTRL and the new key is ALTGR, remove CTRL from the list
+    {
+        clearKeys();
+        listKey.push(getAsciiKey(oEvent) + 2000);
+        printKeyList(oEvent)
+        keyCount++;
+    }
+    //
+    else if (keyCount < 3) {
         if (!listKey.includes(getAsciiKey(oEvent))) { //If key isnt in the list (often the first key press)
-            listKey.push(getAsciiKey(oEvent)); //Add the key to the list
-            if (strListKey == "")
-                strListKey += getStrKey(oEvent);
-            else
-                strListKey += " + " + getStrKey(oEvent);
+            var valueToSave;
+            if (oEvent.location == 1) {
+                valueToSave = getAsciiKey(oEvent) + 1000;
+            } else if (oEvent.location == 2) {
+                valueToSave = getAsciiKey(oEvent) + 2000;
+            } else {
+                valueToSave = getAsciiKey(oEvent);
+            }
+            listKey.push(valueToSave); //Add the key to the list
             keyCount++;
+            printKeyList(oEvent);
         }
-
-
-
-        document.getElementById("key-combination").innerHTML = strListKey; //Display List
-
-        pressed[oEvent.which] = true; //Add key to pressed State
 
     }
 
+    console.log(listKey);
 }
 
 function keyUp(oEvent) {
 
-    if (keyCount < 3) {
-        if (!listKey.includes(getAsciiKey(oEvent))) { //If key isnt in the list (often the first key press)
-            listKey.push(getAsciiKey(oEvent)); //Add the key to the list
-            keyCount++;
-        }
-
-    }
+    // if (keyCount < 3) {
+    //     if (!listKey.includes(getAsciiKey(oEvent))) { //If key isnt in the list (often the first key press)
+    //         listKey.push(getAsciiKey(oEvent)); //Add the key to the list
+    //         keyCount++;
+    //     }
+    // }
     //Display List
     pressed[oEvent.which] = false; //Add key to release State
 
@@ -64,7 +82,6 @@ function clearKeys() {
     pressed = {};
     listKey = [];
     strListKey = [];
-    keyText = "";
     keyCount = 0;
     document.getElementById("key-combination").innerHTML = "Appuyer sur une touche";
 }

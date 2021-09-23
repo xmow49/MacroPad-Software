@@ -11,7 +11,7 @@ function keycodeToKeyboard(key) { // This function transform keycodes from javas
         18: 226, //KEY_LEFT_ALT
         19: 72, //KEY_PAUSE
         20: 57, //KEY_CAPS_LOCK 
-        27: 41, //KEY_ESC -------------------
+        27: 41, //KEY_ESC
         33: 75, //KEY_PAGE_UP
         34: 78, //KEY_PAGE_DOWN
         35: 77, //KEY_END
@@ -23,6 +23,16 @@ function keycodeToKeyboard(key) { // This function transform keycodes from javas
         44: 70, //KEY_PRINT-------------------------
         45: 73, //KEY_INSERT
         46: 76, //KEY_DELETE
+        48: 39, //KEY_0
+        49: 30, //KEY_1
+        50: 31, //KEY_2
+        51: 32, //KEY_3
+        52: 33, //KEY_4
+        53: 34, //KEY_5
+        54: 35, //KEY_6
+        55: 36, //KEY_7
+        56: 37, //KEY_8
+        57: 38, //KEY_9
         91: 227, //KEY_LEFT_WINDOWS
         93: 01, //KEY_MENU
         96: 98, //KEYPAD_0
@@ -66,6 +76,13 @@ function keycodeToKeyboard(key) { // This function transform keycodes from javas
         222: 53, //KEY_TILDE (²)
         223: 56, //KEY_SLASH (!)
         226: 100, //KEY_NON_US (<>)
+        1016: 225, //KEY_LEFT_SHIFT
+        2016: 229, //KEY_RIGHT_SHIFT
+        1017: 224, //KEY_LEFT_CTRL
+        2017: 228, //KEY_RIGHT_CTRL
+        1018: 226, //KEY_LEFT_ALT
+        2018: 230 //KEY_RIGHT_ALT
+
 
     }
     if (toArduinoCode[key]) {
