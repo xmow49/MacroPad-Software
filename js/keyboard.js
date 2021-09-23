@@ -1,10 +1,17 @@
+/*
+All this code are from HID-master\src\KeyboardLayouts\ImprovedKeylayouts.h
+                        https://github.com/NicoHood/HID
+All value are converted to decimal and increment by 100 to differentiate it from normal ascii
+*/
 function keycodeToKeyboard(key) { // This function transform keycodes from javascript to a keyboard code for the arduino
     var toArduinoCode = {
+        13: 40, //KEY_ENTER or KEY_RETURN
+        16: 225, //KEY_LEFT_SHIFT
         17: 224, //KEY_LEFT_CTRL
         18: 226, //KEY_LEFT_ALT
         19: 72, //KEY_PAUSE
-        20: 57, //KEY_CAPS_LOCK
-        27: 41, //KEY_ESC
+        20: 57, //KEY_CAPS_LOCK 
+        27: 41, //KEY_ESC -------------------
         33: 75, //KEY_PAGE_UP
         34: 78, //KEY_PAGE_DOWN
         35: 77, //KEY_END
@@ -13,11 +20,11 @@ function keycodeToKeyboard(key) { // This function transform keycodes from javas
         38: 82, //KEY_UP_ARROW
         39: 79, //KEY_RIGHT_ARROW
         40: 81, //KEY_DOWN_ARROW
-        44: 70, //KEY_PRINT
+        44: 70, //KEY_PRINT-------------------------
         45: 73, //KEY_INSERT
         46: 76, //KEY_DELETE
         91: 227, //KEY_LEFT_WINDOWS
-        93: 101, //KEY_MENU
+        93: 01, //KEY_MENU
         96: 98, //KEYPAD_0
         97: 89, //KEYPAD_1
         98: 90, //KEYPAD_2
@@ -46,21 +53,23 @@ function keycodeToKeyboard(key) { // This function transform keycodes from javas
         122: 68, //KEY_F11
         123: 69, //KEY_F12
         144: 83, //KEY_NUM_LOCK
-        145: 81, //KEY_SCROLL_LOCK
-        186: 0, //$
+        145: 71, //KEY_SCROLL_LOCK
+        186: 48, //KEY_RIGHT_BRACE ($)
         187: 46, //KEY_EQUAL
-        190: 51, //KEY_SEMICOLON
+        188: 16, //KEY_M (,?)
+        190: 54, //KEY_COMMA
         191: 55, //KEY_PERIOD
         192: 52, //KEY_QUOTE
-        219: 0, //---
-        220: 0, //---
-        221: 0, //---
-        222: 0, //---
-        223: 207, //KEYPAD_EXCLAMATION_POINT
-        226: 0, //---
+        219: 45, //KEY_MINUS (")" °)
+        220: 49, //KEY_BACKSLASH
+        221: 47, //KEY_LEFT_BRACE (^)
+        222: 53, //KEY_TILDE (²)
+        223: 56, //KEY_SLASH (!)
+        226: 100, //KEY_NON_US (<>)
+
     }
     if (toArduinoCode[key]) {
-        return toArduinoCode[key];
+        return toArduinoCode[key] + 100;
     } else {
         return key;
     }

@@ -71,33 +71,28 @@ function setToMacropad(cmdName, keyEncoderId, modeId, value1, value2 = "0", valu
 
 function getStrKey(oEvent) { //Convert Key text to Text to display it
     var txt = "";
-    if (oEvent.key == "Control") { //Change Control text
-        txt = "CTRL";
-    }
-    if (oEvent.key == "AltGraph") { //Change AltGraph text
-        txt = "ALT GR";
-    }
-    if (oEvent.key == "Alt") { //Change Alt text
-        txt = "ALT";
-    }
-    if (oEvent.key == "Shift") { //Change Shift text
-        txt = "SHIFT";
-    }
-    if (oEvent.key == "Control" || oEvent.key == "Alt" || oEvent.key == "AltGraph" || oEvent.key == "Shift") {} else {
-        if (oEvent.ctrlKey)
-            txt = "CTRL + "
-        if (oEvent.altKey)
-            txt = "ALT + "
-        if (oEvent.shiftKey)
-            txt = "SHIFT + "
 
-        if (oEvent.key.length == 1) {
-            txt += oEvent.key.toUpperCase();
-        } else {
-            txt += oEvent.key;
-        }
-
+    var toStrkey = {
+        "Control": "CTRL",
+        "AltGraph": "ALT GR",
+        "Alt": "ALT",
+        "Shift": "SHIFT",
     }
+    var keyLocationToStr = {
+        "1": "LEFT",
+        "2": "RIGHT",
+    }
+
+
+    if (oEvent.key.length == 1) {
+        txt = oEvent.key.toUpperCase();
+    } else if (oEvent.location != 0 && oEvent.which != 18) { //If key is as 2 location (left or right) (ctrl; shift..) AND isnt ALT key because Alt and ALT GR are not the same key
+        txt = toStrkey[oEvent.key] + " " + keyLocationToStr[oEvent.location];
+    } else {
+        txt = oEvent.key;
+    }
+
+
     return txt;
 }
 
@@ -156,7 +151,7 @@ function responsesFromPort(data) {
         connected = true;
         document.getElementById("debug-port").textContent = "";
 
-        document.getElementById('icon-connect').src = "assets/img/usb-connected.png";
+        document.getElementById('icon-connect').src = "../assets/img/usb-connected.png";
 
         const parser = new Readline();
         port.pipe(parser);

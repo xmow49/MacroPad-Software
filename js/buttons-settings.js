@@ -14,8 +14,8 @@ Array.prototype.remove = function() {
     return this;
 };
 
-var keyText = "";
 var keyCount = 0;
+var strListKey = "";
 
 function keyDown(oEvent) {
 
@@ -25,18 +25,18 @@ function keyDown(oEvent) {
     document.getElementById("popupS-button-ok").blur();
     document.getElementById("popupS-button-cancel").blur();
     //-----------------------------------------------------------------------------
-    var strListKey = "";
+    console.log(oEvent.key);
     if (keyCount < 3) {
         if (!listKey.includes(getAsciiKey(oEvent))) { //If key isnt in the list (often the first key press)
             listKey.push(getAsciiKey(oEvent)); //Add the key to the list
-            // array.forEach(element => listKey {
-            //     strListKey
-            // });
-            // var strListKey.push(oEvent.code);
+            if (strListKey == "")
+                strListKey += getStrKey(oEvent);
+            else
+                strListKey += " + " + getStrKey(oEvent);
             keyCount++;
         }
 
-        keyText += "+ " + oEvent.code;
+
 
         document.getElementById("key-combination").innerHTML = strListKey; //Display List
 
@@ -47,8 +47,17 @@ function keyDown(oEvent) {
 }
 
 function keyUp(oEvent) {
+
+    if (keyCount < 3) {
+        if (!listKey.includes(getAsciiKey(oEvent))) { //If key isnt in the list (often the first key press)
+            listKey.push(getAsciiKey(oEvent)); //Add the key to the list
+            keyCount++;
+        }
+
+    }
     //Display List
     pressed[oEvent.which] = false; //Add key to release State
+
 }
 
 function clearKeys() {
