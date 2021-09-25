@@ -41,15 +41,19 @@
             <button class="encoder" onclick="encoder(1)"></button>
             <button class="encoder" onclick="encoder(2)"></button>
 
-            <button class="button-key" onclick="setKey(0)"></button>
-            <button class="button-key" onclick="setKey(1)"></button>
-            <button class="button-key" onclick="setKey(2)"></button>
+            <button class="key-button" id="key0" onclick="setKey(0)"></button>
+            <button class="key-button" id="key1" onclick="setKey(1)"></button>
+            <button class="key-button" id="key2" onclick="setKey(2)"></button>
 
-            <button class="button-key" onclick="setKey(3)"></button>
-            <button class="button-key" onclick="setKey(4)"></button>
-            <button class="button-key" onclick="setKey(5)"></button>
+            <button class="key-button" id="key3" onclick="setKey(3)"></button>
+            <button class="key-button" id="key4" onclick="setKey(4)"></button>
+            <button class="key-button" id="key5" onclick="setKey(5)"></button>
+
         </div>
-
+        <div class="action-button">
+            <button class="save-button action-button" onclick="saveToEeeprom()">Sauvegarder</button>
+            <button class="reset-button action-button" onclick="resetConfig()">Réinitialiser</button>
+        </div>
         <div id="error"></div>
         <div id="ports"></div>
     </div>

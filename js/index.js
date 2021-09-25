@@ -92,7 +92,13 @@ function getStrKey(oEvent) { //Convert Key text to Text to display it
     //
     else if (oEvent.key === ' ') // if space
     {
+
         txt = "Space";
+    }
+    //
+    else if (oEvent.which == 91) // if windows
+    {
+        txt = "Windows";
     }
     //
     else if (oEvent.location != 0) { //If key is as 2 location (left or right) (ctrl; shift..) AND isnt ALT key because Alt and ALT GR are not the same key
@@ -129,6 +135,14 @@ function setMusicName(software) {
     });
 }
 
+
+function saveToEeeprom() {
+    port.write("save-config");
+}
+
+function resetConfig() {
+    port.write("reset-config");
+}
 
 
 var refreshMusic = window.setInterval(function() {
@@ -275,6 +289,25 @@ function serialMessageRecevied(data) { //When serial mesage recevied
             changeVolume(value, -5)
         }
     } else {
+
+    }
+
+
+    if (stringData.includes("Key")) {
+        var msg = stringData.toLowerCase();
+        msg = msg.substr(msg.indexOf('key'), 4);
+
+        try {
+            let button = document.getElementById(msg);
+            button.style.transform = "scale(.9)";
+            setTimeout(function() {
+                button.style.transform = "scale(1)";
+            }, 300);
+        } catch (e) {
+
+        }
+
+
 
     }
 

@@ -46,23 +46,26 @@ function keyDown(oEvent) {
     }
     //
     else if (keyCount < 3) {
-        if (!listKey.includes(getAsciiKey(oEvent))) { //If key isnt in the list (often the first key press)
+        //If key isnt in the list (often the first key press), +1000 and +2000 are left and right keys like CTRL or shift
+        if (!listKey.includes(getAsciiKey(oEvent)) && !listKey.includes(getAsciiKey(oEvent) + 1000) && !listKey.includes(getAsciiKey(oEvent) + 2000)) {
             var valueToSave;
-            if (oEvent.location == 1) {
-                valueToSave = getAsciiKey(oEvent) + 1000;
-            } else if (oEvent.location == 2) {
-                valueToSave = getAsciiKey(oEvent) + 2000;
+            if (oEvent.which == 91) { //Windows Key
+                valueToSave = getAsciiKey(oEvent);
+            } else if (oEvent.location == 1) { //Key left (CTRL, ALT, SHIFT)
+                valueToSave = getAsciiKey(oEvent) + 1000; //add 1000 to know its left
+            } else if (oEvent.location == 2) { //Key right (CTRL, ALT, SHIFT)
+                valueToSave = getAsciiKey(oEvent) + 2000; //add 1000 to know its right
             } else {
                 valueToSave = getAsciiKey(oEvent);
             }
             listKey.push(valueToSave); //Add the key to the list
-            keyCount++;
-            printKeyList(oEvent);
+            keyCount++; //add keycout (max 3 keys)
+            printKeyList(oEvent); //display in the windows
         }
 
     }
 
-    console.log(listKey);
+    console.log(pressed);
 }
 
 function keyUp(oEvent) {

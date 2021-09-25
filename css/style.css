@@ -1,3 +1,39 @@
+/*---------Disable Select text and drag element-------------*/
+
+
+/* :not(input):not(textarea),
+:not(input):not(textarea)::after,
+:not(input):not(textarea)::before {
+    -webkit-user-select: none;
+    user-select: none;
+    width: auto;
+} */
+
+input,
+button,
+textarea,
+ :focus {
+    outline: none;
+}
+
+*,
+*::after,
+*::before {
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+    cursor: default;
+}
+
+:root {
+    --color-red: #ff0062;
+    --color-green: #3dcf03;
+    --color-blue: #008CBA;
+}
+
+
+/*-------------------------------------------------------------*/
+
 h1 {
     text-align: center;
     font-family: 'Product Sans';
@@ -28,7 +64,7 @@ h3 {
 
 button {
     display: inline-block;
-    background-color: #008CBA;
+    background-color: var(--color-blue);
     border: none;
     border-radius: 4px;
     color: white;
@@ -38,18 +74,28 @@ button {
     margin: 2px;
     width: 110px;
     cursor: pointer;
+    /* animation */
 }
 
-.button-key {
+
+/* ----- Buttons grid ----- */
+
+.button-grid button {
     width: 100px;
     height: 100px;
-    border-radius: 15px
+    transition: transform 0.5s;
 }
 
-.encoder {
-    width: 100px;
-    height: 100px;
-    border-radius: 100px
+.button-grid .key-button {
+    border-radius: 15px;
+}
+
+.button-grid .encoder {
+    border-radius: 100px;
+}
+
+.button-grid button:hover {
+    transform: scale(.9);
 }
 
 .button-grid {
@@ -62,6 +108,39 @@ button {
     width: 100px;
 }
 
+
+/* ----- /Buttons grid ----- */
+
+
+/* ----- Action Buttons ----- */
+
+.action-button {
+    width: 200px;
+    margin: 0 auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    transition: transform 0.5s;
+    border-radius: 15px;
+}
+
+.action-button button:hover {
+    transform: scale(.98);
+}
+
+.save-button {
+    background-color: #3dcf03;
+}
+
+.reset-button {
+    background-color: var(--color-red);
+}
+
+
+/* ----- /Action Buttons ----- */
+
+
+/* ----- PopupS settings ----- */
+
 .popup {
     right: 50;
 }
@@ -69,37 +148,6 @@ button {
 .popupS-layer {
     /*margin-left: 2px;*/
 }
-
-
-/*---------Disable Select text and drag element-------------*/
-
-:not(input):not(textarea),
-:not(input):not(textarea)::after,
-:not(input):not(textarea)::before {
-    -webkit-user-select: none;
-    user-select: none;
-    cursor: default;
-    width: auto;
-}
-
-input,
-button,
-textarea,
- :focus {
-    outline: none;
-}
-
-*,
-*::after,
-*::before {
-    -webkit-user-select: none;
-    -webkit-user-drag: none;
-    -webkit-app-region: no-drag;
-    cursor: default;
-}
-
-
-/*-------------------------------------------------------------*/
 
 .popupS-overlay {
     background: none;
@@ -114,11 +162,27 @@ textarea,
     font-size: 20px;
 }
 
+.popupS-buttons button {
+    width: auto;
+}
+
+#popupS-button-ok {
+    background-color: var(--color-green);
+}
+
+#popupS-button-cancel {
+    background-color: var(--color-red);
+    width: 5em;
+}
+
+#clear-keys {
+    width: 5em;
+}
+
+
+/* ----- /PopupS settings ----- */
+
 .key-combination {
-    border: solid;
-    border-color: black;
-    border-radius: 10px;
-    border-radius: 10px;
     width: auto;
     height: 30px;
     text-align: center;
