@@ -128,7 +128,7 @@ function setMusicName(software) {
 
         } else {
             musicName = data;
-            document.getElementById("current-music").innerHTML = "Musique: " + data;
+            document.getElementById("macropad-display").innerHTML = "" + data;
             data.replace(/[\n\r]/g, '');
             port.write('set-text "' + data);
         }

@@ -29,6 +29,7 @@ textarea,
     --color-red: #ff0062;
     --color-green: #3dcf03;
     --color-blue: #008CBA;
+    --width-display: 236px;
 }
 
 
@@ -58,7 +59,7 @@ h3 {
 }
 
 .icon-connect {
-    max-width: 5%;
+    max-width: 2em;
     height: auto;
 }
 
@@ -75,6 +76,34 @@ button {
     width: 110px;
     cursor: pointer;
     /* animation */
+}
+
+.macropad-info {
+    display: flex;
+    flex-direction: row;
+    flex-basis: auto;
+    align-items: center;
+    margin: 0;
+}
+
+.macropad-info h3 {
+    margin: 0;
+    margin-right: 2em;
+}
+
+.display-div {
+    width: auto;
+    height: auto;
+    margin: 0 auto;
+    width: var(--width-display);
+}
+
+#macropad-display {
+    text-align: center;
+    border: solid black;
+    border-radius: 15px;
+    width: var(--width-display);
+    height: 26px;
 }
 
 
@@ -99,13 +128,24 @@ button {
 }
 
 .button-grid {
-    width: auto;
-    height: auto;
     display: grid;
     grid-template-columns: repeat(3, auto);
-    justify-content: center;
+    width: 312px;
+    height: auto;
+    grid-template-columns: 104px 104px 104px;
+    padding: 5px;
+}
+
+.center-grid {
+    width: auto;
+    height: auto;
     margin: 0 auto;
-    width: 100px;
+    width: 328px;
+}
+
+.border-grid {
+    border-radius: 26px;
+    border: solid;
 }
 
 

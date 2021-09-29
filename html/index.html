@@ -21,10 +21,10 @@
     </div>
     <div id="main">
         <div>
-            <h1 class="mt-3">Macro Pad</h1>
+            <h1 class="mt-3">MacroPad</h1>
         </div>
 
-        <div>
+        <div class="macropad-info">
             <img src="../assets/img/usb-disconnected.png" class="icon-connect" id="icon-connect">
             <h3 id="connection-status">MacroPad Déconnecté</h3>
             <p id="debug-port"></p>
@@ -34,22 +34,32 @@
             <h2 id="current-music" class="current-music"></h2>
         </div>
 
+        <div class="center-grid">
+            <div class="border-grid">
+                <div class="display-div">
+                    <h3 id="macropad-display">MacroPad</h3>
+                </div>
 
+                <div class="button-grid">
+                    <button class="encoder" onclick="encoder(0)"></button>
+                    <button class="encoder" onclick="encoder(1)"></button>
+                    <button class="encoder" onclick="encoder(2)"></button>
 
-        <div class="button-grid">
-            <button class="encoder" onclick="encoder(0)"></button>
-            <button class="encoder" onclick="encoder(1)"></button>
-            <button class="encoder" onclick="encoder(2)"></button>
+                    <button class="key-button" id="key0" onclick="setKey(0)"></button>
+                    <button class="key-button" id="key1" onclick="setKey(1)"></button>
+                    <button class="key-button" id="key2" onclick="setKey(2)"></button>
 
-            <button class="key-button" id="key0" onclick="setKey(0)"></button>
-            <button class="key-button" id="key1" onclick="setKey(1)"></button>
-            <button class="key-button" id="key2" onclick="setKey(2)"></button>
+                    <button class="key-button" id="key3" onclick="setKey(3)"></button>
+                    <button class="key-button" id="key4" onclick="setKey(4)"></button>
+                    <button class="key-button" id="key5" onclick="setKey(5)"></button>
 
-            <button class="key-button" id="key3" onclick="setKey(3)"></button>
-            <button class="key-button" id="key4" onclick="setKey(4)"></button>
-            <button class="key-button" id="key5" onclick="setKey(5)"></button>
-
+                </div>
+            </div>
         </div>
+
+
+
+
         <div class="action-button">
             <button class="save-button action-button" onclick="saveToEeeprom()">Sauvegarder</button>
             <button class="reset-button action-button" onclick="resetConfig()">Réinitialiser</button>
