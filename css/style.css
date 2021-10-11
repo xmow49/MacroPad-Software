@@ -227,3 +227,37 @@ button {
     height: 30px;
     text-align: center;
 }
+
+
+/* ----- Select Profile ----- */
+
+.profiles span {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    padding: 10px;
+    border: solid 2px rgb(0, 0, 0);
+    transition: all 0.3s;
+    text-align: center;
+    border-radius: 10px;
+}
+
+.profiles label input {
+    /* hide "normal" radio to create custom */
+    display: none;
+}
+
+.profiles input:checked+span {
+    background: rgb(88, 88, 88);
+    border-color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
+}
+
+.profiles {
+    /* display: flex;
+    flex-direction: row; */
+    width: auto;
+    height: auto;
+    margin: 0 auto;
+    width: 260px;
+}
