@@ -20,48 +20,6 @@ settings.configure({
     prettify: true
 });
 
-/*settings.set('profile1', {
-  name: 'Le profile de TOTO',
-  color: [0, 179, 230],
-  encoder0:{
-    action: 0,
-    value: "spotify"
-  },
-  encoder1:{
-    action: 0,
-    value: "spotify"
-  },
-  encoder2:{
-    action: 0,
-    value: "spotify"
-  },
-  key0:{
-    action: 0,
-    value: "1"
-  },
-  key1:{
-    action: 0,
-    value: "2"
-  },
-  key2:{
-    action: 0,
-    value: "3"
-  },
-  key3:{
-    action: 0,
-    value: "4"
-  },
-  key4:{
-    action: 0,
-    value: "5"
-  },
-  key5:{
-    action: 0,
-    value: "6"
-  }
-
-});*/
-
 
 function setToMacropad(cmdName, keyEncoderId, modeId, value1, value2 = "0", value3 = "0") { //This Function Send command to macropad
     var msgToSend = cmdName + " " + keyEncoderId + " " + modeId + " " + value1 + " " + value2 + " " + value3; //Create the command with values
@@ -307,12 +265,61 @@ function serialMessageRecevied(data) { //When serial mesage recevied
 
         }
 
-
-
     }
 
 }
 
+function updateMacropadIcons() {
+    var profilesRadio = document.getElementsByName("profile-selector"); //Get profile selector Radio
+    var actualProfile; //actual profile id
+    for (var i = 0; i < profilesRadio.length; i++) { //forech profile, check if is checked to get the actual profile
+        if (profilesRadio[i].checked) {
+            actualProfile = profilesRadio[i].value - 1;
+        }
+    }
+    if (actualProfile != null) { //if a profile is selected
 
-// const value = settings.getSync();
-// console.log(value);
+        for (var i = 0; i <= 6; i++) { //forech keys
+            var jsonPathToKeyAction = "profiles." + actualProfile + ".keys." + i + ".action"; //Get action key for the current profile and the i key
+            if (settings.getSync(jsonPathToKeyAction) == 1) { //If the action is a key combination
+                var jsonPathToKeyValues = "profiles." + actualProfile + ".keys." + i + ".values";
+                var valuesArray = settings.getSync(jsonPathToKeyValues); //get all values for key
+                var valueCount = 0; //count of used value
+                valuesArray.forEach(values => { //for each value, get the number of values != 0
+                    if (values == 0) {
+
+                    } else {
+                        valueCount++;
+
+                    }
+                });
+                console.log("Key" + i + ": " + valueCount + " Values");
+                switch (valueCount) {
+                    case 0:
+                        var strKey = ""
+                        break;
+                    case 1:
+                        var strKey = keycodesToStr[valuesArray[0]]
+                        break;
+                    case 2:
+                        var strKey = keycodesToStr[valuesArray[0]] + " + " + keycodesToStr[valuesArray[1]]
+                        break;
+                    case 3:
+                        var strKey = keycodesToStr[valuesArray[0]] + " + " + keycodesToStr[valuesArray[1]] + " + " + keycodesToStr[valuesArray[2]]
+                        break;
+                    default:
+                        break;
+                }
+                document.getElementById("key" + i).textContent = strKey; //display value to the key
+
+            }
+
+        }
+
+    } else {
+        //something wrong
+    }
+
+
+
+}
