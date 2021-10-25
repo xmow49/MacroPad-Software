@@ -1,3 +1,8 @@
+@font-face {
+    font-family: Poppins;
+    src: url(../../fonts/poppins/Poppins-Regular.ttf);
+}
+
 header {
     display: flex;
     flex-direction: row-reverse;
@@ -5,11 +10,11 @@ header {
     -webkit-app-region: drag;
     width: 100%;
     height: 20px;
-    border-bottom: solid;
     justify-content: right;
     align-items: center;
-    padding-top: 2px;
-    padding-bottom: 2px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    background-color: rgb(230, 230, 230);
 }
 
 .navbarButton {
@@ -26,4 +31,29 @@ header {
 
 body {
     margin: 0px;
+}
+
+.software-title {
+    position: absolute;
+    left: 50px;
+    margin: 2px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: normal;
+    font-size: 37px;
+    line-height: 55px;
+    color: #3C3C3C;
+}
+
+.ligne {
+    position: absolute;
+    width: 90%;
+    left: 50px;
+    top: 80px;
+    border: 1px solid #3C3C3C;
+}
+
+.backgroudVector {
+    position: absolute;
+    bottom: 0;
 }
