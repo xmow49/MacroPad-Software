@@ -18,7 +18,9 @@
             </svg></button>
     </header>
     <div>
-        <h1 class="software-title">MacroPad Configurator</h1>
+        <h1 class="software-title">MacroPad Configurator
+            <a id="macropad-id"></a>
+        </h1>
         <hr class="ligne">
     </div>
 
@@ -28,6 +30,44 @@
             <rect y="284" width="1280" height="171" rx="10" fill="#F2F2F2"/>
             </svg>
     </div>
+
+
+    <div class="overview">
+        <div class="connect">
+            <button>Déconnecté</button>
+            <a id="connect-status"></a>
+        </div>
+    </div>
+
+    <div id="update-available" class="popup">
+        <div class="text">
+            <h1>Mise à jour disponible</h1>
+            <p>Une mise à jour est disponible !</p>
+            <p>Merci d'effectuer la mise à jour rapidement.</p>
+            <p>Version actuelle: <a class="current version">1.0</a> </p>
+            <p>Nouvelle version: <a class="nex version">1.2</a></p>
+
+        </div>
+        <div class="actions">
+            <button onclick="updatePopupChanglogBtn();">Voir le changelog</button>
+            <button onclick="updatePopupSkipBtn();">Plus tard</button>
+            <button onclick="updatePopupUpdateBtn();">Mettre à jour</button>
+
+        </div>
+    </div>
+
+    <div id="select-macropad" class="popup">
+        <h1>Selectionnez votre MacroPad</h1>
+        <div class="macropad-list">
+            <button id="0" onclick="selectMacropad(0);"><img  src="images/macropad1.png" alt="" width="200"></button>
+        </div>
+        <div class="actions">
+            <button>Ajouter un MacroPad</button>
+        </div>
+    </div>
+
+
+
 
 
 

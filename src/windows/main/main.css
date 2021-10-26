@@ -1,3 +1,26 @@
+:root {
+    --font-master: 'Poppins';
+    --font-master-color: #3C3C3C;
+    --button-color: #EAEAEA;
+    --button-color-hover: #c0c0c0;
+}
+
+input,
+button,
+textarea,
+ :focus {
+    outline: none;
+}
+
+*,
+*::after,
+*::before {
+    -webkit-user-select: none;
+    -webkit-user-drag: none;
+    -webkit-app-region: no-drag;
+    cursor: default;
+}
+
 @font-face {
     font-family: Poppins;
     src: url(../../fonts/poppins/Poppins-Regular.ttf);
@@ -29,6 +52,10 @@ header {
     background: rgb(206, 206, 206);
 }
 
+.closeBtn:hover {
+    background: rgb(255, 0, 0);
+}
+
 body {
     margin: 0px;
 }
@@ -37,12 +64,12 @@ body {
     position: absolute;
     left: 50px;
     margin: 2px;
-    font-family: 'Poppins';
+    font-family: var(--font-master);
     font-style: normal;
     font-weight: normal;
     font-size: 37px;
     line-height: 55px;
-    color: #3C3C3C;
+    color: var(--font-master-color);
 }
 
 .ligne {
@@ -50,10 +77,175 @@ body {
     width: 90%;
     left: 50px;
     top: 80px;
-    border: 1px solid #3C3C3C;
+    border: 1px solid var(--font-master-color);
 }
 
 .backgroudVector {
     position: absolute;
     bottom: 0;
+}
+
+
+/* ---- Popup ----- */
+
+.popup {
+    position: fixed;
+    /* Sit on top */
+    /* Location of the box */
+    padding: 20px;
+    left: 50px;
+    top: 100px;
+    width: 87%;
+    height: 300px;
+    overflow: auto;
+    /* Fallback color */
+    background: #FFFFFF;
+    border: 3px solid var(--font-master-color);
+    border-radius: 25px;
+    margin: 0px;
+}
+
+.popup h1 {
+    font-family: var(--font-master);
+    font-style: normal;
+    font-weight: normal;
+    font-size: 25px;
+    line-height: 37px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: #3C3C3C;
+    border-bottom: 1px solid var(--font-master-color);
+    margin-top: 0px;
+}
+
+.popup p {
+    font-family: var(--font-master);
+    font-style: normal;
+    font-weight: normal;
+    font-size: 20px;
+    margin: 2px;
+    color: var(--font-master-color);
+}
+
+
+/* ---- /Popup ----- */
+
+.popup .version {
+    font-weight: bold;
+}
+
+.popup .actions {
+    display: flex;
+    position: absolute;
+    padding: 5px;
+    right: 0;
+    bottom: 0px;
+}
+
+.popup button {
+    display: flex;
+    background: var(--button-color);
+    border: 1px solid var(--font-master-color);
+    box-sizing: border-box;
+    border-radius: 20px;
+    padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: var(--font-master);
+    color: var(--font-master-color);
+    font-size: 25px;
+    cursor: pointer;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+
+/* ---- Popup Update----- */
+
+.popup button:hover {
+    background: var(--button-color-hover);
+    transition: .2s;
+}
+
+#update-available {
+    position: relative;
+    display: none;
+}
+
+
+/* ---- /Popup Update----- */
+
+
+/* ---- Select macropad ----- */
+
+#select-macropad {
+    position: relative;
+    display: none;
+    /*------------------------------- tmp */
+}
+
+#select-macropad.popup {
+    height: 500px;
+}
+
+.macropad-list button,
+img {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#select-macropad button:hover {
+    background: var(--button-color-hover);
+}
+
+.macropad-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+}
+
+
+/* ---- /Select macropad ----- */
+
+
+/* ------------------ Overview ------------------- */
+
+.overview {
+    position: absolute;
+    top: 130px;
+    left: 50px;
+}
+
+.connect button {
+    border: none;
+    background: none;
+    font-family: var(--font-master);
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.connect {
+    background: #F0F0F0;
+    border: 1px solid var(--font-master-color);
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 10px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    /* text */
+    padding: 5px;
+    cursor: pointer;
+}
+
+#connect-status {
+    width: 13px;
+    height: 13px;
+    border-radius: 25px;
+    background: red;
+    margin-top: 6px;
+    margin-right: 5px;
 }

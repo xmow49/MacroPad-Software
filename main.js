@@ -1,6 +1,7 @@
 // Modules to control application life and create native browser window
 const { app, BrowserWindow, ipcMain, remote } = require('electron')
 const path = require('path')
+const shell = require('electron').shell;
 
 function createWindow() {
     // Create the browser window.
@@ -9,6 +10,8 @@ function createWindow() {
         height: 720,
         minWidth: 1280,
         minHeight: 720,
+        maxWidth: 1280,
+        maxHeight: 720,
         frame: false,
         webPreferences: {
             nodeIntegration: true,
@@ -47,6 +50,11 @@ function createWindow() {
 
     ipcMain.on('minimize', () => {
         mainWindow.minimize();
+    });
+
+
+    ipcMain.on('openLink', function(event, link) {
+        shell.openExternal(link);
     });
 
 }
