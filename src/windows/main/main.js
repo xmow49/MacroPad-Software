@@ -41,3 +41,16 @@ function updatePopupUpdateBtn() {
 }
 
 //------------------ /Update Popup -------------------
+
+
+
+//------------------ Select Macroad Popup -------------------
+var selectPopup = document.getElementById("select-macropad");
+
+function selectMacropad(id) {
+    selectPopup.style.display = "none";
+}
+
+
+
+//------------------ /Select Macroad Popup -------------------
