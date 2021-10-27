@@ -10,6 +10,10 @@
     "author": "Dorian Benech",
     "license": "CC0-1.0",
     "devDependencies": {
-        "electron": "^15.3.0"
+        "electron": "^13.5.2",
+        "electron-rebuild": "^3.2.3"
+    },
+    "dependencies": {
+        "serialport": "^9.2.4"
     }
 }

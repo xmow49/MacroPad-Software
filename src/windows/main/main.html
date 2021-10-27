@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html>
 
 <head>
     <meta charset="UTF-8">
@@ -27,15 +28,17 @@
     <div class="backgroudVector">
         <svg width="1280" height="455" viewBox="0 0 1280 455" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M0 66.7229L26.6667 60.7163C53.3333 54.7097 106.667 42.6965 160 84.7427C213.333 126.789 266.667 222.894 320 252.927C373.333 282.96 426.667 246.921 480 210.881C533.333 174.842 586.667 138.802 640 156.822C693.333 174.842 746.667 246.921 800 240.914C853.333 234.908 906.667 150.815 960 90.7493C1013.33 30.6833 1066.67 -5.35631 1120 0.650287C1173.33 6.65688 1226.67 54.7097 1253.33 78.7361L1280 102.762V319H1253.33C1226.67 319 1173.33 319 1120 319C1066.67 319 1013.33 319 960 319C906.667 319 853.333 319 800 319C746.667 319 693.333 319 640 319C586.667 319 533.333 319 480 319C426.667 319 373.333 319 320 319C266.667 319 213.333 319 160 319C106.667 319 53.3333 319 26.6667 319H0V66.7229Z" fill="#F2F2F2"/>
-            <rect y="284" width="1280" height="171" rx="10" fill="#F2F2F2"/>
+            <rect y="284" width="1280" height="171" fill="#F2F2F2"/>
             </svg>
+
+
+
     </div>
 
 
     <div class="overview">
         <div class="connect">
-            <button>Déconnecté</button>
-            <a id="connect-status"></a>
+            <button onclick="connectPopup();">Déconnecté<span id="connect-status"></span></button>
         </div>
     </div>
 
@@ -57,7 +60,7 @@
     </div>
 
     <div id="select-macropad" class="popup">
-        <h1>Selectionnez votre MacroPad</h1>
+        <h2>Selectionnez votre MacroPad</h2>
         <div class="macropad-list">
             <button id="0" onclick="selectMacropad(0);"><img  src="images/macropad1.png" alt="" width="200"></button>
         </div>
@@ -66,11 +69,35 @@
         </div>
     </div>
 
+    <div id="connect-macropad" class="popup">
+        <h2>Connexion au MacroPad</h2>
+        <button onclick="scanSerialsPorts();">Scanner les Ports</button>
 
+        <div class="port-list" id="port-list">
+            <!-- JS -->
+        </div>
 
+        <div>
+            <h3>Nom du MacroPad</h3>
+            <div id="set-name">
+                <input type="text" id="macropad-name">
+                <button>Valider</button>
+            </div>
 
+        </div>
 
+        </select>
+
+        <div class="actions">
+            <button>Annuler</button>
+            <button>Enregistrer</button>
+
+        </div>
+    </div>
 
 </body>
 
 <script src="main.js"></script>
+<script src="port-mannager.js"></script>
+
+</html>

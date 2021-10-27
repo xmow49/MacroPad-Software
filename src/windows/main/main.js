@@ -51,6 +51,13 @@ function selectMacropad(id) {
     selectPopup.style.display = "none";
 }
 
-
-
 //------------------ /Select Macroad Popup -------------------
+
+//------------------ Connnect Macroad Popup -------------------
+var connectPopup = document.getElementById("connect-macropad");
+
+function connectPopup() {
+    connectPopup.style.display = "block";
+}
+
+//------------------ /Connnect Macroad Popup -------------------

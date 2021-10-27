@@ -3,6 +3,9 @@ const { app, BrowserWindow, ipcMain, remote } = require('electron')
 const path = require('path')
 const shell = require('electron').shell;
 
+
+app.allowRendererProcessReuse = false //Serial port
+
 function createWindow() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
@@ -86,8 +89,8 @@ const createLoadingScreen = () => {
 };
 
 
-
 app.whenReady().then(() => {
+
     createLoadingScreen();
 
 
