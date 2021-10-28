@@ -52,6 +52,12 @@ function responsesFromPort(data) {
         console.log("FOUND");
         clearInterval(checkInterval); //stop all check
         document.getElementById("port-" + currentTestingPort).checked = true;
+        scanInProgress = false;
+        var progressBar = document.getElementById("port-scan-progress");
+        progressBar.max = 100;
+        progressBar.value = 100;
+        progressBar.className = "end"
+        document.getElementById("scan-port-log").innerHTML = "Connecté au MacroPad."
     }
 }
 
@@ -84,6 +90,7 @@ function scanSerialsPorts() {
         //if already scan, do nothing
     } else {
         scanInProgress = true; //Scan in progress
+        document.getElementById("scan-port-log").innerHTML = "Scan en cours ..."
         var availablePorts = scanPorts(); //Get all ports
         setTimeout(function() {
             updateGUIPortList(availablePorts) //update the list after 100ms
@@ -98,9 +105,26 @@ function scanSerialsPorts() {
             if (currentTestingPort > testToDoCount) {
                 clearInterval(checkInterval);
             } else {
+                document.getElementById("scan-port-log").innerHTML = "Test de " + availablePorts[currentTestingPort] + " ...";
+                var progressBar = document.getElementById("port-scan-progress");
+                progressBar.max = testToDoCount + 1;
+                progressBar.value = currentTestingPort + 1;
+                progressBar.className = "progress"
                 console.log("Trying: " + availablePorts[currentTestingPort] + ":" + currentTestingPort + "/" + testToDoCount);
                 connectToPort(availablePorts[currentTestingPort]);
             }
         }, 2000);
     }
+}
+
+
+
+
+function connectPopupCancel() {
+
+    document.getElementById("connect-macropad").style.display = "none";
+}
+
+function connectPopupSave() {
+    document.getElementById("connect-macropad").style.display = "none";
 }

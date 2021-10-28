@@ -1,0 +1,144 @@
+/* ------------------ Overview ------------------- */
+
+.overview {
+    position: absolute;
+    top: 140px;
+    left: 5%;
+    width: 90%;
+    height: 500px;
+}
+
+.connect button {
+    border: none;
+    background: none;
+    font-family: var(--font-master);
+    font-size: 16px;
+    line-height: 24px;
+    cursor: pointer;
+}
+
+.connect:hover {
+    background: var(--button-color-hover);
+}
+
+.connect {
+    background: #F0F0F0;
+    border: 1px solid var(--font-master-color);
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    border-radius: var(--border-radius-input);
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    /* text */
+    padding: 5px;
+    cursor: pointer;
+    width: 150px;
+}
+
+#connect-status {
+    width: 13px;
+    height: 13px;
+    border-radius: var(--border-radius-button);
+    margin-left: 5px;
+    background: red;
+    display: inline-block;
+}
+
+:root {
+    --profil-button-size: 60px;
+    --profil-button-margin-right: 10px;
+    --profil-button-margin: 2px;
+    --profil-button-border: 2px;
+    --profil-button-border-radius: 10px;
+    --profil-button-padding: 6px;
+    --macropad-button-size: 100px;
+    --macropad-button-border: 2px;
+    --macropad-button-margin: 5px;
+    --macropad-button-padding: 6px;
+    --macropad-grid-padding: 5px;
+    --macropad-size: calc(var(--profil-button-margin) + (2 * var(--profil-button-border)) + var(--profil-button-size) + var(--profil-button-margin-right) + (2 * var(--macropad-button-border)) + (2 * var(--macropad-button-margin)) + var(--macropad-button-size) + (2 * var(--macropad-grid-padding)) + (6*var(--macropad-button-padding)) + (2 * var(--profil-button-padding)) + 150px);
+}
+
+
+/* ------------------ /Overview ------------------- */
+
+.macropad-grid button {
+    width: var(--macropad-button-size);
+    height: var(--macropad-button-size);
+    transition: transform 0.5s;
+    border: var(--macropad-button-border) solid #3C3C3C;
+    box-sizing: border-box;
+    margin: var(--macropad-button-margin);
+    padding: var(--macropad-button-padding);
+}
+
+.macropad-grid .key {
+    border-radius: 15px;
+}
+
+.macropad-grid .encoder {
+    border-radius: 100px;
+}
+
+.macropad-grid button:hover {
+    transform: scale(.9);
+}
+
+.macropad-grid {
+    display: grid;
+    height: auto;
+    width: fit-content;
+    grid-template-columns: repeat(3, auto);
+    padding: var(--macropad-grid-padding);
+}
+
+.macropad-border {
+    border: 3px solid #3C3C3C;
+    border-radius: 23px;
+    width: fit-content;
+}
+
+.macropad-display {
+    margin: 5px;
+    margin-left: 50px;
+    margin-right: 50px;
+    background: var(--font-master-color);
+    border-radius: 8px;
+    border: none;
+    text-align: center;
+}
+
+.macropad-display h4 {
+    font-style: normal;
+    font-weight: normal;
+    font-size: 18px;
+    line-height: 22px;
+    color: var(--font-master-invert-color);
+}
+
+.profil-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.profil-list button {
+    width: var(--profil-button-size);
+    height: var(--profil-button-size);
+    border: var(--profil-button-border) solid var(--font-master-color);
+    margin: var(--profil-button-margin);
+    margin-right: var(--profil-button-margin-right);
+    margin-left: 0px;
+    border-radius: var(--profil-button-border-radius);
+    padding: var(--profil-button-padding);
+}
+
+.macropad {
+    display: flex;
+    margin: 0 auto;
+    /* 415px */
+    /* width: var(--macropad-size); */
+    width: 418px
+}

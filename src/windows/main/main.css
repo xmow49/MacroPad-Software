@@ -3,6 +3,7 @@
     --font-master-color: #3C3C3C;
     --button-color: #EAEAEA;
     --button-color-hover: #c0c0c0;
+    --font-master-invert-color: #FFFFFF;
 }
 
 input,
@@ -45,6 +46,12 @@ h2 {
 
 h3 {
     font-size: 25px;
+    margin: 5px;
+}
+
+h4 {
+    margin: 0px;
+    padding: 0px;
 }
 
 header {
@@ -80,11 +87,12 @@ header {
 body {
     margin: 0px;
     background: #FFFFFF;
+    overflow: hidden;
 }
 
 .software-title {
     position: absolute;
-    left: 50px;
+    left: 5%;
     margin: 2px;
     line-height: 55px;
     color: var(--font-master-color);
@@ -93,14 +101,9 @@ body {
 .ligne {
     position: absolute;
     width: 90%;
-    left: 50px;
+    left: 5%;
     top: 80px;
     border: 1px solid var(--font-master-color);
-}
-
-.backgroudVector {
-    position: absolute;
-    bottom: 0;
 }
 
 
@@ -171,13 +174,13 @@ body {
     margin: 5px;
 }
 
-
-/* ---- Popup Update----- */
-
 .popup button:hover {
     background: var(--button-color-hover);
     transition: .2s;
 }
+
+
+/* ---- Popup Update----- */
 
 #update-available {
     position: relative;
@@ -188,169 +191,10 @@ body {
 /* ---- /Popup Update----- */
 
 
-/* ---- Select macropad ----- */
-
-#select-macropad {
-    position: relative;
-    display: none;
-    /*------------------------------- tmp */
-}
-
-#select-macropad.popup {
-    height: 500px;
-}
-
-.macropad-list button,
-img {
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-#select-macropad button:hover {
-    background: var(--button-color-hover);
-}
-
-.macropad-list {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: fit-content;
-}
-
-
-/* ---- /Select macropad ----- */
-
-
-/* ------------------ Overview ------------------- */
-
-.overview {
-    position: absolute;
-    top: 130px;
-    left: 50px;
-}
-
-.connect button {
-    border: none;
-    background: none;
-    font-family: var(--font-master);
-    font-size: 16px;
-    line-height: 24px;
-    cursor: pointer;
-}
-
-.connect:hover {
-    background: var(--button-color-hover);
-}
-
-.connect {
-    background: #F0F0F0;
-    border: 1px solid var(--font-master-color);
-    box-sizing: border-box;
-    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-    border-radius: var(--border-radius-input);
-    display: flex;
-    align-content: center;
-    justify-content: center;
-    /* text */
-    padding: 5px;
-    cursor: pointer;
-}
-
-#connect-status {
-    width: 13px;
-    height: 13px;
-    border-radius: var(--border-radius-button);
-    margin-left: 5px;
-    background: red;
-    display: inline-block;
-}
-
-
-/* ------------------ /Overview ------------------- */
-
-
 /* ------------------ /Connect Popup ------------------- */
 
-#connect-macropad {
-    /* display: none; */
-    height: 500px;
-}
-
-select option {
-    background: var(--button-color);
-    color: var(--font-master-color);
-    font-family: var(--font-master);
-    user-select: var(--font-master-color);
-}
-
-select.decorated {
-    background: var(--button-color-hover);
-}
-
-
-/* Select Port */
-
-:root {
-    --select-port-width: 350px;
-    --select-port-padding: 5px;
-    --select-port-border: 2px;
-    --select-port-span-width: calc(var(--select-port-width) - (2*var(--select-port-padding)) - (2*var(--select-port-border)));
-    --border-radius-button: 15px;
-    --border-radius-popup: 25px;
-    --border-radius-input: 10px;
-}
-
-.port-list {
-    display: flex;
-    flex-direction: column;
-    border: var(--select-port-border) solid #3C3C3C;
-    box-sizing: border-box;
-    border-radius: var(--border-radius-button);
-    width: var(--select-port-width);
-    height: 250px;
-    padding-top: 15px;
-    padding-bottom: 15px;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-
-.port-list span {
-    display: inline-block;
-    transition: all 0.3s;
-    text-align: left;
-    padding: var(--select-port-padding);
-    width: var(--select-port-span-width);
-    font-family: var(--font-master);
-    font-size: normal;
-    font-size: 30px;
-    line-height: 48px;
-}
-
-.port-list label input {
-    /* hide "normal" radio to create custom */
-    display: none;
-}
-
-.port-list input:checked+span {
-    background: var(--button-color-hover);
-}
-
-#set-name {
-    display: flex;
-    align-content: center;
-    align-items: center;
-}
-
-#set-name button {
-    border-radius: var(--border-radius-button);
-    border: 2px solid var(--font-master-color);
-}
-
-#set-name input {
-    border-radius: var(--border-radius-button);
-    border: 2px solid var(--font-master-color);
-    font-size: var(--font-master);
-    font-size: 30px;
-    width: 300px;
+.backgroud-vector svg {
+    position: absolute;
+    bottom: -2px;
+    width: 100%;
 }

@@ -1,0 +1,31 @@
+/* ---- Select macropad ----- */
+
+#select-macropad {
+    position: relative;
+    display: none;
+}
+
+#select-macropad.popup {
+    height: 500px;
+}
+
+.macropad-list button,
+img {
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+#select-macropad button:hover {
+    background: var(--button-color-hover);
+}
+
+.macropad-list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+}
+
+
+/* ---- /Select macropad ----- */

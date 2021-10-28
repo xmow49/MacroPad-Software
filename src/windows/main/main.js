@@ -19,7 +19,7 @@ function minimizeBtn() {
 
 //------------------ Update Popup -------------------
 function updateAvailable() {
-    return true;
+    return false;
 }
 
 var updatePopup = document.getElementById("update-available");
@@ -34,10 +34,11 @@ function updatePopupChanglogBtn() {
 
 function updatePopupSkipBtn() {
     updatePopup.style.display = "none";
+    document.getElementById("select-macropad").style.display = "block";
 }
 
 function updatePopupUpdateBtn() {
-
+    document.getElementById("select-macropad").style.display = "block";
 }
 
 //------------------ /Update Popup -------------------
@@ -49,6 +50,7 @@ var selectPopup = document.getElementById("select-macropad");
 
 function selectMacropad(id) {
     selectPopup.style.display = "none";
+    document.getElementById("connect-macropad").style.display = "block";
 }
 
 //------------------ /Select Macroad Popup -------------------
