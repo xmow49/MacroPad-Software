@@ -14,6 +14,7 @@
         "electron-rebuild": "^3.2.3"
     },
     "dependencies": {
+        "@mdi/font": "^6.4.95",
         "serialport": "^9.2.4"
     }
 }

@@ -5,7 +5,7 @@
     top: 140px;
     left: 5%;
     width: 90%;
-    height: 500px;
+    height: 550px;
 }
 
 .connect button {
@@ -41,8 +41,15 @@
     height: 13px;
     border-radius: var(--border-radius-button);
     margin-left: 5px;
-    background: red;
     display: inline-block;
+}
+
+#connect-status.offline {
+    background: red;
+}
+
+#connect-status.online {
+    background: green;
 }
 
 :root {
@@ -101,8 +108,8 @@
 
 .macropad-display {
     margin: 5px;
-    margin-left: 50px;
-    margin-right: 50px;
+    margin-left: 82px;
+    margin-right: 82px;
     background: var(--font-master-color);
     border-radius: 8px;
     border: none;
@@ -142,3 +149,50 @@
     /* width: var(--macropad-size); */
     width: 418px
 }
+
+
+/* ---- Buttons Icon ---- */
+
+:root {
+    --action-button-size: 45px;
+    --action-button-icon-size: 30px;
+}
+
+.edit {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.edit button {
+    width: var(--action-button-size);
+    height: var(--action-button-size);
+    font-size: var(--action-button-icon-size);
+    border: 1px solid var(--font-master-color);
+    box-sizing: border-box;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.edit button:hover {
+    background: var(--button-color-hover);
+    transition: 0.2s;
+}
+
+.settings {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+}
+
+.settings button {
+    width: var(--action-button-size);
+    height: var(--action-button-size);
+    font-size: var(--action-button-icon-size);
+    border: 1px solid var(--font-master-color);
+    box-sizing: border-box;
+    border-radius: 12px;
+}
+
+
+/* ---- /Buttons Icon ---- */

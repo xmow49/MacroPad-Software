@@ -48,6 +48,7 @@ var pingResponse = false;
 
 function responsesFromPort(data) {
     if (data.includes("pong")) { //its a Macropad
+        // Here, the macropad is connected and a pong is received
         pingResponse = true;
         console.log("FOUND");
         clearInterval(checkInterval); //stop all check
@@ -57,7 +58,23 @@ function responsesFromPort(data) {
         progressBar.max = 100;
         progressBar.value = 100;
         progressBar.className = "end"
+        updateOverviewConnectionStatus(true);
+    }
+}
+
+
+function updateOverviewConnectionStatus(status) {
+    if (status) {
         document.getElementById("scan-port-log").innerHTML = "Connecté au MacroPad."
+        document.getElementById("connect-status").className = "online"; //Change the status to online in the overview menu
+        var text = document.getElementById("connect-status-button").innerHTML;
+        text.replace("Déconnecté", "Connecté");
+        document.getElementById("connect-status-button").innerHTML = text;
+    } else {
+        document.getElementById("connect-status").className = "offline"; //Change the status to offline in the overview menu
+        var text = document.getElementById("connect-status-button").innerHTML;
+        text.replace("Connecté", "Déconnecté");
+        document.getElementById("connect-status-button").innerHTML = text;
     }
 }
 
@@ -66,6 +83,7 @@ function connectToPort(port) {
     currentTest = SerialPort(port, function(err) { //test to connect
         if (err) { //if no work
             console.log("ERROR TO CONNECT");
+
         } else { //if connected
             console.log("Connected!");
             currentTest.on('data', function(data) { //Add listener for recevied message from serial
@@ -123,8 +141,10 @@ function scanSerialsPorts() {
 function connectPopupCancel() {
 
     document.getElementById("connect-macropad").style.display = "none";
+    updatePopupBackgroud()
 }
 
 function connectPopupSave() {
     document.getElementById("connect-macropad").style.display = "none";
+    updatePopupBackgroud()
 }

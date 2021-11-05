@@ -4,6 +4,7 @@
     --button-color: #EAEAEA;
     --button-color-hover: #c0c0c0;
     --font-master-invert-color: #FFFFFF;
+    --header-size: 28px;
 }
 
 input,
@@ -20,6 +21,14 @@ textarea,
     -webkit-user-drag: none;
     -webkit-app-region: no-drag;
     cursor: default;
+}
+
+button {
+    cursor: pointer
+}
+
+button>span::before {
+    cursor: pointer;
 }
 
 @font-face {
@@ -66,6 +75,7 @@ header {
     padding-top: 4px;
     padding-bottom: 4px;
     background-color: rgb(230, 230, 230);
+    z-index: 9999;
 }
 
 .navbarButton {
@@ -117,13 +127,14 @@ body {
     left: 50px;
     top: 100px;
     width: 87%;
-    height: 300px;
-    overflow: auto;
+    overflow: hidden;
     /* Fallback color */
     background: #FFFFFF;
     border: 3px solid var(--font-master-color);
     border-radius: var(--border-radius-popup);
     margin: 0px;
+    z-index: 100;
+    box-shadow: 0px 0px 10px black;
 }
 
 .popup h2 {
@@ -197,4 +208,18 @@ body {
     position: absolute;
     bottom: -2px;
     width: 100%;
+}
+
+#popup-backgroud {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: var(--header-size);
+    left: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 50;
+}
+
+.disable {
+    display: none;
 }

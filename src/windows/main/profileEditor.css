@@ -1,0 +1,36 @@
+#icon-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-auto-rows: auto auto auto;
+    width: 100px;
+}
+
+.profile-icon {
+    width: 50px;
+    height: 50px;
+    margin: 0px;
+}
+
+#color-selector {}
+
+input[type="color"] {
+    -webkit-appearance: none;
+    border: none;
+    width: 32px;
+    height: 32px;
+}
+
+input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+
+/* -------- Profile editor left --------*/
+
+#profile-editor-left {
+    background: none;
+    border: none;
+    box-shadow: none;
+    width: 405px;
+    height: 75%;
+}
