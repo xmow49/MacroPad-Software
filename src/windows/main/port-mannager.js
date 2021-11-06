@@ -45,11 +45,14 @@ function updateGUIPortList(availablePorts) {
 }
 
 var pingResponse = false;
+var macropadConnectionStatus = false;
 
 function responsesFromPort(data) {
+    var stringFromSerial = data.toString();
     if (data.includes("pong")) { //its a Macropad
         // Here, the macropad is connected and a pong is received
         pingResponse = true;
+        macropadConnectionStatus = true;
         console.log("FOUND");
         clearInterval(checkInterval); //stop all check
         document.getElementById("port-" + currentTestingPort).checked = true;
@@ -59,6 +62,21 @@ function responsesFromPort(data) {
         progressBar.value = 100;
         progressBar.className = "end"
         updateOverviewConnectionStatus(true);
+    }
+
+    if (macropadConnectionStatus) {
+        //key annimation when macropad key is pressed
+        if (stringFromSerial.includes("Key")) {
+            var msg = stringFromSerial.toLowerCase(); //get the key
+            msg = msg.substr(msg.indexOf('key'), 4); //keep the key id
+            try { //try to find the button with key id
+                let button = document.getElementById(msg);
+                button.style.transform = "scale(.9)"; //animate the button
+                setTimeout(function() { //wait 0.3s and stop the animation
+                    button.style.transform = "scale(1)";
+                }, 300);
+            } catch (e) {}
+        }
     }
 }
 
@@ -80,17 +98,17 @@ function updateOverviewConnectionStatus(status) {
 
 function connectToPort(port) {
 
-    currentTest = SerialPort(port, function(err) { //test to connect
+    serialPortConnection = SerialPort(port, function(err) { //test to connect
         if (err) { //if no work
             console.log("ERROR TO CONNECT");
 
         } else { //if connected
             console.log("Connected!");
-            currentTest.on('data', function(data) { //Add listener for recevied message from serial
+            serialPortConnection.on('data', function(data) { //Add listener for recevied message from serial
                 responsesFromPort(data); //and send it to this function to check the ping 
             })
             setTimeout(function() { //wait 0.5s and send a ping to the macropad
-                currentTest.write("ping");
+                serialPortConnection.write("ping");
             }, 500);
         }
         baudRate: 9600;
@@ -136,6 +154,10 @@ function scanSerialsPorts() {
 }
 
 
+function connectPopup() {
+    document.getElementById("connect-macropad").style.display = "block";
+    updatePopupBackgroud()
+}
 
 
 function connectPopupCancel() {

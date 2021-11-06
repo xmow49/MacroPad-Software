@@ -64,13 +64,14 @@
     --macropad-button-margin: 5px;
     --macropad-button-padding: 6px;
     --macropad-grid-padding: 5px;
-    --macropad-size: calc(var(--profil-button-margin) + (2 * var(--profil-button-border)) + var(--profil-button-size) + var(--profil-button-margin-right) + (2 * var(--macropad-button-border)) + (2 * var(--macropad-button-margin)) + var(--macropad-button-size) + (2 * var(--macropad-grid-padding)) + (6*var(--macropad-button-padding)) + (2 * var(--profil-button-padding)) + 150px);
+    --macropad-center: 403px;
+    --macropad-profile-selector-width: 64px;
 }
 
 
 /* ------------------ /Overview ------------------- */
 
-.macropad-grid button {
+#macropad-grid button {
     width: var(--macropad-button-size);
     height: var(--macropad-button-size);
     transition: transform 0.5s;
@@ -80,19 +81,25 @@
     padding: var(--macropad-button-padding);
 }
 
-.macropad-grid .key {
+#macropad-grid .key {
     border-radius: 15px;
 }
 
-.macropad-grid .encoder {
+#macropad-grid .encoder {
     border-radius: 100px;
+    font-size: 50px;
 }
 
-.macropad-grid button:hover {
+#macropad button:hover {
+    cursor: unset;
+}
+
+#macropad.editor button:hover {
     transform: scale(.9);
+    cursor: pointer;
 }
 
-.macropad-grid {
+#macropad-grid {
     display: grid;
     height: auto;
     width: fit-content;
@@ -100,13 +107,13 @@
     padding: var(--macropad-grid-padding);
 }
 
-.macropad-border {
+#macropad-border {
     border: 3px solid #3C3C3C;
     border-radius: 23px;
     width: fit-content;
 }
 
-.macropad-display {
+#macropad-display {
     margin: 5px;
     margin-left: 82px;
     margin-right: 82px;
@@ -116,7 +123,7 @@
     text-align: center;
 }
 
-.macropad-display h4 {
+#macropad-display h4 {
     font-style: normal;
     font-weight: normal;
     font-size: 18px;
@@ -124,30 +131,40 @@
     color: var(--font-master-invert-color);
 }
 
-.profil-list {
+#profil-list {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    position: absolute;
+    top: 58px;
+    left: calc(var(--macropad-center) - var(--profil-button-size) - 5px);
 }
 
-.profil-list button {
+#profil-list button {
     width: var(--profil-button-size);
     height: var(--profil-button-size);
     border: var(--profil-button-border) solid var(--font-master-color);
     margin: var(--profil-button-margin);
-    margin-right: var(--profil-button-margin-right);
-    margin-left: 0px;
     border-radius: var(--profil-button-border-radius);
     padding: var(--profil-button-padding);
 }
 
-.macropad {
+#profil-list.disable {
+    display: none;
+}
+
+#macropad {
+    position: absolute;
+    top: 50px;
+    left: var(--macropad-center);
+}
+
+#macropad-container {
     display: flex;
-    margin: 0 auto;
-    /* 415px */
-    /* width: var(--macropad-size); */
-    width: 418px
+    flex-direction: left;
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -158,13 +175,13 @@
     --action-button-icon-size: 30px;
 }
 
-.edit {
+#edit {
     position: absolute;
     right: 0px;
     top: 0px;
 }
 
-.edit button {
+#edit button {
     width: var(--action-button-size);
     height: var(--action-button-size);
     font-size: var(--action-button-icon-size);
@@ -174,9 +191,13 @@
     cursor: pointer;
 }
 
-.edit button:hover {
+#edit button:hover {
     background: var(--button-color-hover);
     transition: 0.2s;
+}
+
+.active-button button {
+    background: var(--button-color-hover);
 }
 
 .settings {

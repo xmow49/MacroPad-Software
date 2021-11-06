@@ -51,12 +51,32 @@
             </div>
         </div>
 
-        <div class="edit">
+        <div id="edit">
             <button onclick="editProfilePopup();"><span class="mdi mdi-pencil"></span></button>
         </div>
 
+        <div id="profile-editor-actions" class="disable">
+            <button>Enregistrer</button>
+            <button>Annuler</button>
 
-        <div id="profile-editor-left" class="popup">
+        </div>
+
+        <div id="left" class="popup profile-editor disable">
+            <div id="profile-editor-actions">
+                <select name="" id="">
+                    <option value="0">Profil 1</option select>
+                    <option value="1">Profil 2</option>
+                    <option value="2">Profil 3</option>
+                    <option value="3">Profil 4</option>
+                    <option value="4">Profil 5</option>
+                    <option value="5">Profil 6</option>
+                </select>
+                <button>Annuler</button>
+                <button>Enregistrer</button>
+
+            </div>
+
+
             <h3>Nom du Profil: <input type="text" id="profile-name"></h3>
             <h3>Icon du Profil:</h3>
             <div id="icon-grid">
@@ -66,9 +86,7 @@
                 <button class="profile-icon"></button>
                 <button class="profile-icon"></button>
                 <button class="profile-icon"></button>
-                <button class="profile-icon"></button>
 
-                <button class="profile-icon"></button>
                 <button class="profile-icon"></button>
                 <button class="profile-icon"></button>
                 <button class="profile-icon"></button>
@@ -79,14 +97,27 @@
             <h3>Couleur du Profil:</h3>
             <input type="color" id="color-selector">
             <h3></h3>
-            <h3>Couleur du Profil:</h3>
+        </div>
 
+        <div id="right" class="popup profile-editor disable">
+            <h4 id="image-comment">Choisisez une image qui va apparaître sur sur le logiciel</h4>
+            <button id="upload-icon">Importer une image</button>
+            <h3>Selection des actions:</h3>
 
+            <div id="edit-encoder" class="disable">
+                <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
+                <button>Choisir</button>
+                <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>
+                <button>Choisir</button>
+                <h3><span class="mdi mdi-press"></span> Clic Encoder</h3>
+                <button>Choisir</button>
+
+            </div>
         </div>
 
 
-        <div class="macropad">
-            <div class="profil-list" id="profil-list">
+        <div id="macropad-container">
+            <div id="profil-list">
                 <button class="profil"></button>
                 <button class="profil"></button>
                 <button class="profil"></button>
@@ -94,27 +125,29 @@
                 <button class="profil"></button>
                 <button class="profil"></button>
             </div>
+            <div id="macropad">
+                <div id="macropad-border">
+                    <div id="macropad-display">
+                        <h4>23:30</h4>
+                        <h4>28/10/2021</h4>
+                    </div>
+                    <div id="macropad-grid">
+                        <button class="encoder" onclick="editEncoderBtn(0);"><span id="encoder0" class="mdi mdi-pencil disable"></span></button>
+                        <button class="encoder" onclick="editEncoderBtn(1);"><span id="encoder1" class="mdi mdi-pencil disable"></span></button>
+                        <button class="encoder" onclick="editEncoderBtn(2);"><span id="encoder2" class="mdi mdi-pencil disable"></span></button>
 
-            <div class="macropad-border">
-                <div class="macropad-display">
-                    <h4>23:30</h4>
-                    <h4>28/10/2021</h4>
+                        <button id="key0" class="key" onclick="editKeyBtn(0);"></button>
+                        <button id="key1" class="key" onclick="editKeyBtn(1);"></button>
+                        <button id="key2" class="key" onclick="editKeyBtn(2);"></button>
+                        <button id="key3" class="key" onclick="editKeyBtn(3);"></button>
+                        <button id="key4" class="key" onclick="editKeyBtn(4);"></button>
+                        <button id="key5" class="key" onclick="editKeyBtn(5);"></button>
+                    </div>
                 </div>
-                <div class="macropad-grid">
-                    <button class="encoder"></button>
-                    <button class="encoder"></button>
-                    <button class="encoder"></button>
 
-                    <button class="key"></button>
-                    <button class="key"></button>
-                    <button class="key"></button>
-                    <button class="key"></button>
-                    <button class="key"></button>
-                    <button class="key"></button>
-                </div>
             </div>
-
         </div>
+
 
     </div>
 

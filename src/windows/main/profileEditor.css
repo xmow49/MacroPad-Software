@@ -1,6 +1,6 @@
 #icon-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     grid-auto-rows: auto auto auto;
     width: 100px;
 }
@@ -27,10 +27,52 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 
 /* -------- Profile editor left --------*/
 
-#profile-editor-left {
+.profile-editor {
+    position: absolute;
     background: none;
     border: none;
     box-shadow: none;
-    width: 405px;
-    height: 75%;
+    margin: 0px;
+    padding: 5px;
+    border-radius: 0px;
+    width: 380px;
+    height: 80%;
+    top: 50px;
+}
+
+.profile-editor#left {
+    left: 0px;
+}
+
+.profile-editor#right.disable {
+    display: none;
+}
+
+.profile-editor#right {
+    left: 757px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#profile-editor-actions {
+    display: flex;
+    height: 50px;
+}
+
+#edit-encoder {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#edit-encoder.disable {
+    display: none;
+}
+
+#image-comment {
+    text-align: center;
+    width: 300px;
 }
