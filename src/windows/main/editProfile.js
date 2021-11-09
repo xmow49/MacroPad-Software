@@ -25,27 +25,41 @@ function editProfilePopup() {
 
 }
 
+const editButtonIcon = "mdi mdi-pencil";
+
+function clearEditButton() {
+    //clear edit mode for all encoder buttons
+    for (var i = 0; i <= 2; i++) {
+        document.getElementById("encoderIcon" + i).className = "mdi";
+    }
+
+    //clear edit mode for all key buttons
+    for (var i = 0; i <= 5; i++) {
+        document.getElementById("keyIcon" + i).className = "mdi";
+    }
+
+    document.getElementById("edit-encoder").className = "disable";
+    document.getElementById("edit-key").className = "disable";
+
+}
 
 function editEncoderBtn(encoderId) {
     //clear edit mode for all encoder buttons
-    for (var i = 0; i <= 2; i++) {
-        var button = document.getElementById("encoder" + i).className;
-        if (!(button.indexOf("disable") > -1)) {
-            document.getElementById("encoder" + i).className += " disable";
-            console.log("encoder" + i);
-        }
-    }
+    clearEditButton();
     //show new encoder in edition mode
-    var encoderBtn = document.getElementById("encoder" + encoderId).className;
-    encoderBtn = encoderBtn.replace("disable", "");
-    document.getElementById("encoder" + encoderId).className = encoderBtn;
-
-
+    document.getElementById("encoderIcon" + encoderId).className = editButtonIcon;
     //if previous encoder was selected, save old values
 
     //load new values
 
     //display the gui
     document.getElementById("edit-encoder").className = "";
+
+}
+
+function editKeyBtn(keyId) {
+    clearEditButton();
+    document.getElementById("keyIcon" + keyId).className = editButtonIcon;
+    document.getElementById("edit-key").className = "";
 
 }
