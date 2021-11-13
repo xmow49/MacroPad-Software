@@ -102,21 +102,45 @@
         <div id="right" class="popup profile-editor disable">
             <h4 id="image-comment">Choisisez une image qui va apparaître sur sur le logiciel</h4>
             <button id="upload-icon">Importer une image</button>
-            <h3>Selection des actions:</h3>
+            <h3>Selection des actions</h3>
 
             <div id="edit-encoder" class="disable">
-                <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
-                <button>Choisir</button>
-                <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>
-                <button>Choisir</button>
-                <h3><svg width="26" height="26" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19.5 0L26 6.5V0H19.5ZM26 19.5L19.5 26H26V19.5ZM6.5 26L0 19.5V26H6.5ZM0 6.5L6.5 0H0V6.5ZM21.0438 4.95625C16.6075 0.52 9.3925 0.52 4.95625 4.95625C0.52 9.3925 0.52 16.6075 4.95625 21.0438C9.3925 25.48 16.6075 25.48 21.0438 21.0438C25.48 16.6075 25.48 9.40875 21.0438 4.95625ZM19.2563 19.2563C15.795 22.7175 10.205 22.7175 6.74375 19.2563C3.2825 15.795 3.2825 10.205 6.74375 6.74375C10.205 3.2825 15.795 3.2825 19.2563 6.74375C22.7175 10.205 22.7175 15.795 19.2563 19.2563Z" fill="#3C3C3C"/>
-                    </svg> Clic Encoder</h3>
-                <button>Choisir</button>
+
+                <select id="select-encoder-action-type" onchange="updateEncoderGUI();">
+                    <option value="0">Volume principal</option>
+                    <option value="1">Volume d'un logiciel</option>
+                    <option value="2">Custom</option>
+                </select>
+
+
+                <div id="encoder-master-volume">
+
+                </div>
+
+                <div id="encoder-software-volume">
+
+                </div>
+
+                <div id="encoder-custom" class="disable">
+                    <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
+                    <button>Choisir</button>
+                    <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>
+                    <button>Choisir</button>
+                    <h3><span class="mdi mdi-bullseye"></span> Clic Encoder</h3>
+                    <button>Choisir</button>
+                </div>
+
             </div>
 
             <div id="edit-key" class="disable">
-                <h3><span class="mdi "></span> Action</h3>
+                <h3><span class="mdi mdi-checkbox-intermediate"></span> Action lors de l'appuis</h3>
+                <select name="select-key-action-type">
+                    <option value="0">Combinaison de touches</option>
+                    <option value="1">Action sur le systeme</option>
+                    <option value="2">Midi</option>
+                </select>
+
+
                 <button>Choisir</button>
             </div>
         </div>

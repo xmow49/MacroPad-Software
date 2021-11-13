@@ -63,3 +63,26 @@ function editKeyBtn(keyId) {
     document.getElementById("edit-key").className = "";
 
 }
+
+
+function updateEncoderGUI() {
+    var value = document.getElementById("select-encoder-action-type").value;
+
+    if (value == "0") {
+        document.getElementById("encoder-master-volume").className = "";
+        document.getElementById("encoder-software-volume").className = "disable";
+        document.getElementById("encoder-custom").className = "disable";
+    }
+    if (value == "1") {
+        document.getElementById("encoder-master-volume").className = "disable";
+        document.getElementById("encoder-software-volume").className = "";
+        document.getElementById("encoder-custom").className = "disable";
+    }
+    if (value == "2") {
+        document.getElementById("encoder-master-volume").className = "disable";
+        document.getElementById("encoder-software-volume").className = "disable";
+        document.getElementById("encoder-custom").className = "";
+    }
+
+
+}
