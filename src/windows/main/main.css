@@ -23,6 +23,13 @@ textarea,
     cursor: default;
 }
 
+button:disabled,
+button[disabled] {
+    background: unset;
+    background-color: unset;
+    color: unset;
+}
+
 button {
     cursor: pointer
 }

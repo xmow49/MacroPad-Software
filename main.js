@@ -28,13 +28,14 @@ function createWindow() {
     mainWindow.loadFile('./src/windows/main/main.html')
 
 
-    mainWindow.webContents.openDevTools()
+
 
     mainWindow.webContents.on('did-finish-load', () => {
         /// then close the loading screen window and show the main window
         if (loadingScreen) {
             loadingScreen.close();
         }
+        mainWindow.webContents.openDevTools();
         mainWindow.show();
     });
 

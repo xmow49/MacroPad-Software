@@ -1,8 +1,25 @@
 var profileEditorEnabled = false;
 
-function editProfilePopup() {
 
+function disableMacropadButtons(state) {
+    // for all encoder buttons
+    var encoders = [...document.getElementsByClassName("encoder")];
+    encoders.forEach(i => {
+        i.disabled = state;
+    });
+
+    //for all key buttons
+    var keys = [...document.getElementsByClassName("key")];
+    keys.forEach(i => {
+        i.disabled = state;
+    });
+
+}
+
+function editProfilePopup() {
+    updateEncoderGUI();
     if (profileEditorEnabled) {
+        //disable the profile editor
         profileEditorEnabled = false;
         document.getElementById("normal-view").className = "";
         document.getElementById("profil-list").className = "";
@@ -11,7 +28,13 @@ function editProfilePopup() {
 
         document.getElementById("edit").className = "";
         document.getElementById("macropad").className = "connectPopup";
+
+        //disable edit mode for all encoders/keys buttons
+        disableMacropadButtons(true);
+
+
     } else {
+        //enable the profile editor
         profileEditorEnabled = true;
         document.getElementById("normal-view").className = "disable";
         document.getElementById("profil-list").className = "disable";
@@ -19,6 +42,9 @@ function editProfilePopup() {
         document.getElementsByClassName("profile-editor")[1].className = "popup profile-editor";
         document.getElementById("edit").className = "active-button";
         document.getElementById("macropad").className = "editor";
+
+        //enable edit mode for all encoders/keys buttons
+        disableMacropadButtons(false);
     }
 
 
@@ -72,16 +98,19 @@ function updateEncoderGUI() {
         document.getElementById("encoder-master-volume").className = "";
         document.getElementById("encoder-software-volume").className = "disable";
         document.getElementById("encoder-custom").className = "disable";
-    }
-    if (value == "1") {
+    } else if (value == "1") {
+        console.log(value);
         document.getElementById("encoder-master-volume").className = "disable";
         document.getElementById("encoder-software-volume").className = "";
         document.getElementById("encoder-custom").className = "disable";
-    }
-    if (value == "2") {
+    } else if (value == "2") {
         document.getElementById("encoder-master-volume").className = "disable";
         document.getElementById("encoder-software-volume").className = "disable";
         document.getElementById("encoder-custom").className = "";
+    } else {
+        document.getElementById("encoder-master-volume").className = "disable";
+        document.getElementById("encoder-software-volume").className = "disable";
+        document.getElementById("encoder-custom").className = "disable";
     }
 
 

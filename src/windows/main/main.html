@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
     <meta charset="UTF-8">
@@ -55,12 +55,6 @@
             <button onclick="editProfilePopup();"><span class="mdi mdi-pencil"></span></button>
         </div>
 
-        <div id="profile-editor-actions" class="disable">
-            <button>Enregistrer</button>
-            <button>Annuler</button>
-
-        </div>
-
         <div id="left" class="popup profile-editor disable">
             <div id="profile-editor-actions">
                 <select name="" id="">
@@ -107,21 +101,27 @@
             <div id="edit-encoder" class="disable">
 
                 <select id="select-encoder-action-type" onchange="updateEncoderGUI();">
+                    <option value="-1">Désactivé</option select>
                     <option value="0">Volume principal</option>
                     <option value="1">Volume d'un logiciel</option>
                     <option value="2">Custom</option>
+                   
                 </select>
 
 
                 <div id="encoder-master-volume">
-
+                    <h4>L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.</h4>
                 </div>
 
                 <div id="encoder-software-volume">
-
+                    <h4>L'encoder va controler le volume du logiciel choisi ci-dessous. Lors d'un appuis, le son se mute.</h4>
+                    <select id="select-software-volume">
+                        <option>Choisir un logiciel</option>
+                    </select>
                 </div>
 
                 <div id="encoder-custom" class="disable">
+                    <h4>Choisisez manuellement les actions de l'encoder</h4>
                     <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
                     <button>Choisir</button>
                     <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>
@@ -135,6 +135,7 @@
             <div id="edit-key" class="disable">
                 <h3><span class="mdi mdi-checkbox-intermediate"></span> Action lors de l'appuis</h3>
                 <select name="select-key-action-type">
+                    <option value="-1">Désactivé</option select>
                     <option value="0">Combinaison de touches</option>
                     <option value="1">Action sur le systeme</option>
                     <option value="2">Midi</option>
