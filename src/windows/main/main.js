@@ -1,11 +1,7 @@
 //const { ipcMain, app, BrowserWindow, remote } = require("electron");
 const { ipcRenderer } = require('electron')
-const Store = require('electron-store');
 
-const store = new Store();
-
-store.set('unicorn', '🦄');
-console.log(store.get('unicorn'));
+const IPC = ipcRenderer;
 
 //------------------ Windows Buttons -------------------
 function closeBtn() {
@@ -13,11 +9,11 @@ function closeBtn() {
 }
 
 function minimizeWindowBtn() {
-    ipcRenderer.send("maximize");
+    IPC.send("maximize");
 }
 
 function minimizeBtn() {
-    ipcRenderer.send("minimize");
+    IPC.send("minimize");
 }
 //------------------ /Windows Buttons -------------------
 
@@ -35,7 +31,7 @@ if (updateAvailable()) {
 }
 
 function updatePopupChanglogBtn() {
-    ipcRenderer.send("openLink", "https://github.com/xmow49/MacroPad-Software/releases")
+    IPC.send("open-link", "https://github.com/xmow49/MacroPad-Software/releases")
     updatePopupBackgroud()
 }
 
@@ -89,4 +85,13 @@ function updatePopupBackgroud() {
     } else {
         document.getElementById("popup-backgroud").className = "disable";
     }
+}
+
+
+function saveToConfig(key, data) {
+    IPC.send("save-config", key, data);
+}
+
+function readFromConfig(key) {
+    return IPC.sendSync("get-config", key);
 }

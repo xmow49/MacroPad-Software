@@ -3,6 +3,11 @@ const { app, BrowserWindow, ipcMain, remote } = require('electron')
 const path = require('path')
 const shell = require('electron').shell;
 
+const Store = require('electron-store');
+
+const config = new Store();
+
+
 app.allowRendererProcessReuse = false //Serial port
 
 function createWindow() {
@@ -54,10 +59,21 @@ function createWindow() {
     });
 
 
-    ipcMain.on('openLink', function(event, link) {
+    ipcMain.on('open-link', function(event, link) {
         shell.openExternal(link);
+        console.log(event);
     });
 
+    ipcMain.on('save-config', function(event, key, data) {
+        console.log("Saving: " + key + " : " + data);
+        config.set(key, data);
+    });
+
+    ipcMain.on('get-config', function(event, key) {
+        var value = config.get(key);
+        console.log("Getting " + key + " : " + value);
+        event.returnValue = value;
+    });
 }
 
 
@@ -108,3 +124,5 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function() {
     if (process.platform !== 'darwin') app.quit()
 })
+
+console.log(app.getPath('userData'));
