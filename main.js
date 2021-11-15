@@ -16,7 +16,10 @@ function createWindow() {
         width: 1280,
         height: 720,
 
-        resizable: false,
+
+        minHeight: 720,
+        minWidth: 1280,
+
         frame: false,
         webPreferences: {
             nodeIntegration: true,

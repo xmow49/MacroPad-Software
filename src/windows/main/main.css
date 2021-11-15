@@ -107,6 +107,11 @@ body {
     overflow: hidden;
 }
 
+#app-container {
+    width: 1280px;
+    height: 720px;
+}
+
 .software-title {
     position: absolute;
     left: 5%;

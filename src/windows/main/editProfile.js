@@ -1,7 +1,7 @@
 var profileEditorEnabled = false;
 
 
-function disableMacropadButtons(state) {
+function disableMacropadButtons(state) { //disable all encoders/keys buttons when edit mode is disabled
     // for all encoder buttons
     var encoders = [...document.getElementsByClassName("encoder")];
     encoders.forEach(i => {
@@ -16,7 +16,7 @@ function disableMacropadButtons(state) {
 
 }
 
-function editProfilePopup() {
+function editProfilePopup() { //when edit profile button is clicked
     updateEncoderGUI();
     if (profileEditorEnabled) {
         //disable the profile editor
@@ -53,7 +53,7 @@ function editProfilePopup() {
 
 const editButtonIcon = "mdi mdi-pencil";
 
-function clearEditButton() {
+function clearEditButton() { //remove edit icon (pen) from all encoders and keys buttons
     //clear edit mode for all encoder buttons
     for (var i = 0; i <= 2; i++) {
         document.getElementById("encoderIcon" + i).className = "mdi";
@@ -69,13 +69,14 @@ function clearEditButton() {
 
 }
 
-function editEncoderBtn(encoderId) {
+function editEncoderBtn(encoderId) { //when a edit encoder button is clicked
     //clear edit mode for all encoder buttons
     clearEditButton();
     //show new encoder in edition mode
     document.getElementById("encoderIcon" + encoderId).className = editButtonIcon;
-    //if previous encoder was selected, save old values
-
+    //save old values
+    var currentProfile = document.getElementById("profile-editor-selector").value;
+    saveToConfig("profiles[" + currentProfile + "].encoders[" + encoderId + "].action", document.getElementById("select-encoder-action-type").value);
     //load new values
 
     //display the gui

@@ -26,38 +26,41 @@
             <path d="M12 2H0V0H12V2Z" fill="#3C3C3C" />
             </svg></button>
     </header>
-    <div>
-        <h1 class="software-title">MacroPad Configurator
-            <a id="macropad-id"></a>
-        </h1>
-        <hr class="ligne">
-    </div>
 
-    <div class="backgroud-vector">
-        <svg width="1280" height="455" viewBox="0 0 1280 455" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <div id="app-container">
+
+        <div>
+            <h1 class="software-title">MacroPad Configurator
+                <a id="macropad-id"></a>
+            </h1>
+            <hr class="ligne">
+        </div>
+
+        <div class="backgroud-vector">
+            <svg width="1280" height="455" viewBox="0 0 1280 455" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path fill-rule="evenodd" clip-rule="evenodd" d="M0 66.7229L26.6667 60.7163C53.3333 54.7097 106.667 42.6965 160 84.7427C213.333 126.789 266.667 222.894 320 252.927C373.333 282.96 426.667 246.921 480 210.881C533.333 174.842 586.667 138.802 640 156.822C693.333 174.842 746.667 246.921 800 240.914C853.333 234.908 906.667 150.815 960 90.7493C1013.33 30.6833 1066.67 -5.35631 1120 0.650287C1173.33 6.65688 1226.67 54.7097 1253.33 78.7361L1280 102.762V319H1253.33C1226.67 319 1173.33 319 1120 319C1066.67 319 1013.33 319 960 319C906.667 319 853.333 319 800 319C746.667 319 693.333 319 640 319C586.667 319 533.333 319 480 319C426.667 319 373.333 319 320 319C266.667 319 213.333 319 160 319C106.667 319 53.3333 319 26.6667 319H0V66.7229Z" fill="#F2F2F2"/>
             <rect y="284" width="1280" height="171" fill="#F2F2F2"/>
             </svg>
-    </div>
-
-    <div class="overview">
-
-        <div id="normal-view">
-            <div class="settings">
-                <button><span class="mdi mdi-cog-outline"></span></button>
-            </div>
-            <div class="connect">
-                <button id="connect-status-button" onclick="connectPopup();">Déconnecté<span id="connect-status" class="offline"></span></button>
-            </div>
         </div>
 
-        <div id="edit">
-            <button onclick="editProfilePopup();"><span class="mdi mdi-pencil"></span></button>
-        </div>
+        <div class="overview">
 
-        <div id="left" class="popup profile-editor disable">
-            <div id="profile-editor-actions">
-                <select name="" id="">
+            <div id="normal-view">
+                <div class="settings">
+                    <button><span class="mdi mdi-cog-outline"></span></button>
+                </div>
+                <div class="connect">
+                    <button id="connect-status-button" onclick="connectPopup();">Déconnecté<span id="connect-status" class="offline"></span></button>
+                </div>
+            </div>
+
+            <div id="edit">
+                <button onclick="editProfilePopup();"><span class="mdi mdi-pencil"></span></button>
+            </div>
+
+            <div id="left" class="popup profile-editor disable">
+                <div id="profile-editor-actions">
+                    <select name="" id="profile-editor-selector">
                     <option value="0">Profil 1</option select>
                     <option value="1">Profil 2</option>
                     <option value="2">Profil 3</option>
@@ -65,42 +68,42 @@
                     <option value="4">Profil 5</option>
                     <option value="5">Profil 6</option>
                 </select>
-                <button>Annuler</button>
-                <button>Enregistrer</button>
+                    <button>Annuler</button>
+                    <button>Enregistrer</button>
 
+                </div>
+
+
+                <h3>Nom du Profil: <input type="text" id="profile-name"></h3>
+                <h3>Icon du Profil:</h3>
+                <div id="icon-grid">
+                    <button class="profile-icon"></button>
+                    <button class="profile-icon"></button>
+                    <button class="profile-icon"></button>
+                    <button class="profile-icon"></button>
+                    <button class="profile-icon"></button>
+                    <button class="profile-icon"></button>
+
+                    <button class="profile-icon"></button>
+                    <button class="profile-icon"></button>
+                    <button class="profile-icon"></button>
+                    <button class="profile-icon"></button>
+                    <button class="profile-icon"></button>
+                    <button class="profile-icon"></button>
+                </div>
+                <h3>Couleur du Profil:</h3>
+                <input type="color" id="color-selector">
+                <h3></h3>
             </div>
 
+            <div id="right" class="popup profile-editor disable">
+                <h4 id="image-comment">Choisisez une image qui va apparaître sur sur le logiciel</h4>
+                <button id="upload-icon">Importer une image</button>
+                <h3>Selection des actions</h3>
 
-            <h3>Nom du Profil: <input type="text" id="profile-name"></h3>
-            <h3>Icon du Profil:</h3>
-            <div id="icon-grid">
-                <button class="profile-icon"></button>
-                <button class="profile-icon"></button>
-                <button class="profile-icon"></button>
-                <button class="profile-icon"></button>
-                <button class="profile-icon"></button>
-                <button class="profile-icon"></button>
+                <div id="edit-encoder" class="disable">
 
-                <button class="profile-icon"></button>
-                <button class="profile-icon"></button>
-                <button class="profile-icon"></button>
-                <button class="profile-icon"></button>
-                <button class="profile-icon"></button>
-                <button class="profile-icon"></button>
-            </div>
-            <h3>Couleur du Profil:</h3>
-            <input type="color" id="color-selector">
-            <h3></h3>
-        </div>
-
-        <div id="right" class="popup profile-editor disable">
-            <h4 id="image-comment">Choisisez une image qui va apparaître sur sur le logiciel</h4>
-            <button id="upload-icon">Importer une image</button>
-            <h3>Selection des actions</h3>
-
-            <div id="edit-encoder" class="disable">
-
-                <select id="select-encoder-action-type" onchange="updateEncoderGUI();">
+                    <select id="select-encoder-action-type" onchange="updateEncoderGUI();">
                     <option value="-1">Désactivé</option select>
                     <option value="0">Volume principal</option>
                     <option value="1">Volume d'un logiciel</option>
@@ -109,32 +112,32 @@
                 </select>
 
 
-                <div id="encoder-master-volume">
-                    <h4>L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.</h4>
-                </div>
+                    <div id="encoder-master-volume">
+                        <h4>L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.</h4>
+                    </div>
 
-                <div id="encoder-software-volume">
-                    <h4>L'encoder va controler le volume du logiciel choisi ci-dessous. Lors d'un appuis, le son se mute.</h4>
-                    <select id="select-software-volume">
+                    <div id="encoder-software-volume">
+                        <h4>L'encoder va controler le volume du logiciel choisi ci-dessous. Lors d'un appuis, le son se mute.</h4>
+                        <select id="select-software-volume">
                         <option>Choisir un logiciel</option>
                     </select>
+                    </div>
+
+                    <div id="encoder-custom" class="disable">
+                        <h4>Choisisez manuellement les actions de l'encoder</h4>
+                        <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
+                        <button>Choisir</button>
+                        <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>
+                        <button>Choisir</button>
+                        <h3><span class="mdi mdi-bullseye"></span> Clic Encoder</h3>
+                        <button>Choisir</button>
+                    </div>
+
                 </div>
 
-                <div id="encoder-custom" class="disable">
-                    <h4>Choisisez manuellement les actions de l'encoder</h4>
-                    <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
-                    <button>Choisir</button>
-                    <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>
-                    <button>Choisir</button>
-                    <h3><span class="mdi mdi-bullseye"></span> Clic Encoder</h3>
-                    <button>Choisir</button>
-                </div>
-
-            </div>
-
-            <div id="edit-key" class="disable">
-                <h3><span class="mdi mdi-checkbox-intermediate"></span> Action lors de l'appuis</h3>
-                <select name="select-key-action-type">
+                <div id="edit-key" class="disable">
+                    <h3><span class="mdi mdi-checkbox-intermediate"></span> Action lors de l'appuis</h3>
+                    <select name="select-key-action-type">
                     <option value="-1">Désactivé</option select>
                     <option value="0">Combinaison de touches</option>
                     <option value="1">Action sur le systeme</option>
@@ -142,102 +145,105 @@
                 </select>
 
 
-                <button>Choisir</button>
+                    <button>Choisir</button>
+                </div>
+            </div>
+
+
+            <div id="macropad-container">
+                <div id="profil-list">
+                    <button class="profil"></button>
+                    <button class="profil"></button>
+                    <button class="profil"></button>
+                    <button class="profil"></button>
+                    <button class="profil"></button>
+                    <button class="profil"></button>
+                </div>
+                <div id="macropad">
+                    <div id="macropad-border">
+                        <div id="macropad-display">
+                            <h4>23:30</h4>
+                            <h4>28/10/2021</h4>
+                        </div>
+                        <div id="macropad-grid">
+                            <button class="encoder" onclick="editEncoderBtn(0);"><span id="encoderIcon0" class="mdi"></span></button>
+                            <button class="encoder" onclick="editEncoderBtn(1);"><span id="encoderIcon1" class="mdi"></span></button>
+                            <button class="encoder" onclick="editEncoderBtn(2);"><span id="encoderIcon2" class="mdi"></span></button>
+
+                            <button id="key0" class="key" onclick="editKeyBtn(0);"><span id="keyIcon0" class="mdi"></span></button>
+                            <button id="key1" class="key" onclick="editKeyBtn(1);"><span id="keyIcon1" class="mdi"></span></button>
+                            <button id="key2" class="key" onclick="editKeyBtn(2);"><span id="keyIcon2" class="mdi"></span></button>
+                            <button id="key3" class="key" onclick="editKeyBtn(3);"><span id="keyIcon3" class="mdi"></span></button>
+                            <button id="key4" class="key" onclick="editKeyBtn(4);"><span id="keyIcon4" class="mdi"></span></button>
+                            <button id="key5" class="key" onclick="editKeyBtn(5);"><span id="keyIcon5" class="mdi"></span></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+        </div>
+
+        <div id="popup-backgroud" class="disable"></div>
+        <div id="update-available" class="popup">
+
+            <div class="text">
+                <h1>Mise à jour disponible</h1>
+                <p>Une mise à jour est disponible !</p>
+                <p>Merci d'effectuer la mise à jour rapidement.</p>
+                <p>Version actuelle: <a class="current version">1.0</a> </p>
+                <p>Nouvelle version: <a class="nex version">1.2</a></p>
+
+            </div>
+            <div class="actions">
+                <button onclick="updatePopupChanglogBtn();">Voir le changelog</button>
+                <button onclick="updatePopupSkipBtn();">Plus tard</button>
+                <button onclick="updatePopupUpdateBtn();">Mettre à jour</button>
+
+            </div>
+
+        </div>
+
+        <div id="select-macropad" class="popup">
+            <h2>Selectionnez votre MacroPad</h2>
+            <div class="macropad-list">
+                <button id="0" onclick="selectMacropad(0);"><img  src="images/macropad1.png" alt="" width="200"></button>
+            </div>
+            <div class="actions">
+                <button>Ajouter un MacroPad</button>
             </div>
         </div>
 
+        <div id="connect-macropad" class="popup">
+            <h2>Connexion au MacroPad</h2>
+            <button onclick="scanSerialsPorts();">Scanner les Ports</button>
+            <p id="scan-port-log"></p>
+            <progress id="port-scan-progress" class="progress" max="100" value="0"></progress>
 
-        <div id="macropad-container">
-            <div id="profil-list">
-                <button class="profil"></button>
-                <button class="profil"></button>
-                <button class="profil"></button>
-                <button class="profil"></button>
-                <button class="profil"></button>
-                <button class="profil"></button>
+            <div class="port-list" id="port-list">
+                <!-- JS -->
             </div>
-            <div id="macropad">
-                <div id="macropad-border">
-                    <div id="macropad-display">
-                        <h4>23:30</h4>
-                        <h4>28/10/2021</h4>
-                    </div>
-                    <div id="macropad-grid">
-                        <button class="encoder" onclick="editEncoderBtn(0);"><span id="encoderIcon0" class="mdi"></span></button>
-                        <button class="encoder" onclick="editEncoderBtn(1);"><span id="encoderIcon1" class="mdi"></span></button>
-                        <button class="encoder" onclick="editEncoderBtn(2);"><span id="encoderIcon2" class="mdi"></span></button>
 
-                        <button id="key0" class="key" onclick="editKeyBtn(0);"><span id="keyIcon0" class="mdi"></span></button>
-                        <button id="key1" class="key" onclick="editKeyBtn(1);"><span id="keyIcon1" class="mdi"></span></button>
-                        <button id="key2" class="key" onclick="editKeyBtn(2);"><span id="keyIcon2" class="mdi"></span></button>
-                        <button id="key3" class="key" onclick="editKeyBtn(3);"><span id="keyIcon3" class="mdi"></span></button>
-                        <button id="key4" class="key" onclick="editKeyBtn(4);"><span id="keyIcon4" class="mdi"></span></button>
-                        <button id="key5" class="key" onclick="editKeyBtn(5);"><span id="keyIcon5" class="mdi"></span></button>
-                    </div>
+            <div>
+                <h3>Nom du MacroPad</h3>
+                <div id="set-name">
+                    <input type="text" id="macropad-name">
                 </div>
 
             </div>
-        </div>
 
+            </select>
 
-    </div>
-
-    <div id="popup-backgroud" class="disable"></div>
-    <div id="update-available" class="popup">
-
-        <div class="text">
-            <h1>Mise à jour disponible</h1>
-            <p>Une mise à jour est disponible !</p>
-            <p>Merci d'effectuer la mise à jour rapidement.</p>
-            <p>Version actuelle: <a class="current version">1.0</a> </p>
-            <p>Nouvelle version: <a class="nex version">1.2</a></p>
-
-        </div>
-        <div class="actions">
-            <button onclick="updatePopupChanglogBtn();">Voir le changelog</button>
-            <button onclick="updatePopupSkipBtn();">Plus tard</button>
-            <button onclick="updatePopupUpdateBtn();">Mettre à jour</button>
-
-        </div>
-
-    </div>
-
-    <div id="select-macropad" class="popup">
-        <h2>Selectionnez votre MacroPad</h2>
-        <div class="macropad-list">
-            <button id="0" onclick="selectMacropad(0);"><img  src="images/macropad1.png" alt="" width="200"></button>
-        </div>
-        <div class="actions">
-            <button>Ajouter un MacroPad</button>
-        </div>
-    </div>
-
-    <div id="connect-macropad" class="popup">
-        <h2>Connexion au MacroPad</h2>
-        <button onclick="scanSerialsPorts();">Scanner les Ports</button>
-        <p id="scan-port-log"></p>
-        <progress id="port-scan-progress" class="progress" max="100" value="0"></progress>
-
-        <div class="port-list" id="port-list">
-            <!-- JS -->
-        </div>
-
-        <div>
-            <h3>Nom du MacroPad</h3>
-            <div id="set-name">
-                <input type="text" id="macropad-name">
+            <div class="actions">
+                <button onclick="connectPopupCancel();">Annuler</button>
+                <button onclick="connectPopupSave();">Enregistrer</button>
             </div>
 
         </div>
-
-        </select>
-
-        <div class="actions">
-            <button onclick="connectPopupCancel();">Annuler</button>
-            <button onclick="connectPopupSave();">Enregistrer</button>
-        </div>
-
     </div>
+
+
 </body>
 
 <script src="main.js"></script>
