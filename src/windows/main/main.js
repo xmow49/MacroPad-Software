@@ -1,5 +1,11 @@
 //const { ipcMain, app, BrowserWindow, remote } = require("electron");
 const { ipcRenderer } = require('electron')
+const Store = require('electron-store');
+
+const store = new Store();
+
+store.set('unicorn', '🦄');
+console.log(store.get('unicorn'));
 
 //------------------ Windows Buttons -------------------
 function closeBtn() {
