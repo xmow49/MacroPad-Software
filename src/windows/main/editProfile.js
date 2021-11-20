@@ -75,6 +75,7 @@ var currentEncoderEdit = -1;
 var currentKeyEdit = -1;
 
 function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
+    currentKeyEdit = -1;
     if (currentEncoderEdit == -1) {
         currentEncoderEdit = newEncoderId;
     }
@@ -99,6 +100,7 @@ function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
 }
 
 function editKeyBtn(newKeyId) {
+    currentEncoderEdit = -1;
     if (currentKeyEdit == -1) {
         currentKeyEdit = newKeyId;
     }
@@ -109,7 +111,7 @@ function editKeyBtn(newKeyId) {
     document.getElementById("keyIcon" + newKeyId).className = editButtonIcon;
     //save old values in the config
     var currentProfile = document.getElementById("profile-editor-selector").value;
-    saveToConfig("profiles." + currentProfile + ".keys." + currentEncoderEdit + ".action", document.getElementById("select-key-action-type").value);
+    saveToConfig("profiles." + currentProfile + ".keys." + currentKeyEdit + ".action", document.getElementById("select-key-action-type").value);
 
     currentKeyEdit = newKeyId; //store the new encoder id
 

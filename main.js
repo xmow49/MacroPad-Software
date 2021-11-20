@@ -8,21 +8,11 @@ const Store = require('electron-store');
 
 
 
-const schema = {
-    profiles: {
-        type: 'object',
-        properties: {
-            encoders: {
-                type: 'object',
-                properties: {
-                    action: { type: 'number', default: -1 },
-                    value: { type: 'number', default: -1 },
+const schema = {};
 
-                }
-            }
-        }
-    }
-};
+
+
+
 const config = new Store({ schema });
 
 app.allowRendererProcessReuse = false //Serial port
