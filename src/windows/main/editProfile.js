@@ -1,3 +1,5 @@
+const { cp } = require("original-fs");
+
 var profileEditorEnabled = false;
 
 
@@ -69,24 +71,53 @@ function clearEditButton() { //remove edit icon (pen) from all encoders and keys
 
 }
 
-function editEncoderBtn(encoderId) { //when a edit encoder button is clicked
+var currentEncoderEdit = -1;
+var currentKeyEdit = -1;
+
+function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
+    if (currentEncoderEdit == -1) {
+        currentEncoderEdit = newEncoderId;
+    }
+
     //clear edit mode for all encoder buttons
     clearEditButton();
     //show new encoder in edition mode
-    document.getElementById("encoderIcon" + encoderId).className = editButtonIcon;
-    //save old values
+    document.getElementById("encoderIcon" + newEncoderId).className = editButtonIcon;
+    //save old values in the config
     var currentProfile = document.getElementById("profile-editor-selector").value;
-    saveToConfig("profiles[" + currentProfile + "].encoders[" + encoderId + "].action", document.getElementById("select-encoder-action-type").value);
-    //load new values
+    saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".action", document.getElementById("select-encoder-action-type").value);
+
+    currentEncoderEdit = newEncoderId; //store the new encoder id
+
+    //load new action values
+    document.getElementById("select-encoder-action-type").value = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".action");
 
     //display the gui
+    updateEncoderGUI();
     document.getElementById("edit-encoder").className = "";
 
 }
 
-function editKeyBtn(keyId) {
+function editKeyBtn(newKeyId) {
+    if (currentKeyEdit == -1) {
+        currentKeyEdit = newKeyId;
+    }
+
+    //clear edit mode for all encoder buttons
     clearEditButton();
-    document.getElementById("keyIcon" + keyId).className = editButtonIcon;
+    //show new encoder in edition mode
+    document.getElementById("keyIcon" + newKeyId).className = editButtonIcon;
+    //save old values in the config
+    var currentProfile = document.getElementById("profile-editor-selector").value;
+    saveToConfig("profiles." + currentProfile + ".keys." + currentEncoderEdit + ".action", document.getElementById("select-key-action-type").value);
+
+    currentKeyEdit = newKeyId; //store the new encoder id
+
+    //load new action values
+    document.getElementById("select-key-action-type").value = readFromConfig("profiles." + currentProfile + ".key." + newKeyId + ".action");
+
+    //display the gui
+    updateEncoderGUI();
     document.getElementById("edit-key").className = "";
 
 }

@@ -100,9 +100,9 @@
                 <h4 id="image-comment">Choisisez une image qui va apparaître sur sur le logiciel</h4>
                 <button id="upload-icon">Importer une image</button>
                 <h3>Selection des actions</h3>
+                <h4 id="current-edition">Cliquez sur une touche pour choisir une action</h4>
 
                 <div id="edit-encoder" class="disable">
-
                     <select id="select-encoder-action-type" onchange="updateEncoderGUI();">
                     <option value="-1">Désactivé</option select>
                     <option value="0">Volume principal</option>
@@ -137,12 +137,12 @@
 
                 <div id="edit-key" class="disable">
                     <h3><span class="mdi mdi-checkbox-intermediate"></span> Action lors de l'appuis</h3>
-                    <select name="select-key-action-type">
-                    <option value="-1">Désactivé</option select>
-                    <option value="0">Combinaison de touches</option>
-                    <option value="1">Action sur le systeme</option>
-                    <option value="2">Midi</option>
-                </select>
+                    <select id="select-key-action-type">
+                        <option value="-1">Désactivé</option select>
+                        <option value="0">Combinaison de touches</option>
+                        <option value="1">Action sur le systeme</option>
+                        <option value="2">Midi</option>
+                    </select>
 
 
                     <button>Choisir</button>
