@@ -5,8 +5,25 @@ const shell = require('electron').shell;
 
 const Store = require('electron-store');
 
-const config = new Store();
 
+
+
+const schema = {
+    profiles: {
+        type: 'object',
+        properties: {
+            encoders: {
+                type: 'object',
+                properties: {
+                    action: { type: 'number', default: -1 },
+                    value: { type: 'number', default: -1 },
+
+                }
+            }
+        }
+    }
+};
+const config = new Store({ schema });
 
 app.allowRendererProcessReuse = false //Serial port
 
@@ -127,5 +144,3 @@ app.whenReady().then(() => {
 app.on('window-all-closed', function() {
     if (process.platform !== 'darwin') app.quit()
 })
-
-console.log(app.getPath('userData'));

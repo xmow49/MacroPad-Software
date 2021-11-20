@@ -2,7 +2,6 @@
 const { ipcRenderer } = require('electron')
 
 const IPC = ipcRenderer;
-
 //------------------ Windows Buttons -------------------
 function closeBtn() {
     window.close();

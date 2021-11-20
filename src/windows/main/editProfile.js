@@ -114,7 +114,7 @@ function editKeyBtn(newKeyId) {
     currentKeyEdit = newKeyId; //store the new encoder id
 
     //load new action values
-    document.getElementById("select-key-action-type").value = readFromConfig("profiles." + currentProfile + ".key." + newKeyId + ".action");
+    document.getElementById("select-key-action-type").value = readFromConfig("profiles." + currentProfile + ".keys." + newKeyId + ".action");
 
     //display the gui
     updateEncoderGUI();
