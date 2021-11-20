@@ -103,21 +103,27 @@
                 <h4 id="current-edition">Cliquez sur une touche pour choisir une action</h4>
 
                 <div id="edit-encoder" class="disable">
-                    <select id="select-encoder-action-type" onchange="updateEncoderGUI();">
-                    <option value="-1">Désactivé</option select>
-                    <option value="0">Volume principal</option>
-                    <option value="1">Volume d'un logiciel</option>
-                    <option value="2">Custom</option>
-                   
-                </select>
+
+                    <select id="select-encoder-action-type" onchange="updateEditGUI('encoder', -1);"> 
+                        <option value="-1">Désactivé</option select>
+                        <option value="0">Volume principal</option>
+                        <option value="1">Volume d'un logiciel</option>
+                        <option value="2">Custom</option>
+                    </select>
 
 
                     <div id="encoder-master-volume">
-                        <h4>L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.</h4>
+                        <div class="action-help">
+                            <span class="mdi mdi-help-circle"></span>
+                            <span class="text-action-help">L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.</span>
+                        </div>
                     </div>
 
                     <div id="encoder-software-volume">
-                        <h4>L'encoder va controler le volume du logiciel choisi ci-dessous. Lors d'un appuis, le son se mute.</h4>
+                        <div class="action-help">
+                            <span class="mdi mdi-help-circle"></span>
+                            <span class="text-action-help">L'encoder va controler le volume du logiciel choisi ci-dessous. Lors d'un appuis, le son se mute.</span>
+                        </div>
                         <select id="select-software-volume">
                         <option>Choisir un logiciel</option>
                     </select>
@@ -137,7 +143,7 @@
 
                 <div id="edit-key" class="disable">
                     <h3><span class="mdi mdi-checkbox-intermediate"></span> Action lors de l'appuis</h3>
-                    <select id="select-key-action-type">
+                    <select id="select-key-action-type" onchange="updateEditGUI('key', -1);">
                         <option value="-1">Désactivé</option select>
                         <option value="0">Combinaison de touches</option>
                         <option value="1">Action sur le systeme</option>

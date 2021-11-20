@@ -19,7 +19,7 @@ function disableMacropadButtons(state) { //disable all encoders/keys buttons whe
 }
 
 function editProfilePopup() { //when edit profile button is clicked
-    updateEncoderGUI();
+    //updateEditGUI();
     if (profileEditorEnabled) {
         //disable the profile editor
         profileEditorEnabled = false;
@@ -75,76 +75,80 @@ var currentEncoderEdit = -1;
 var currentKeyEdit = -1;
 
 function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
-    currentKeyEdit = -1;
-    if (currentEncoderEdit == -1) {
-        currentEncoderEdit = newEncoderId;
-    }
-
-    //clear edit mode for all encoder buttons
-    clearEditButton();
-    //show new encoder in edition mode
-    document.getElementById("encoderIcon" + newEncoderId).className = editButtonIcon;
-    //save old values in the config
+    currentKeyEdit = -1; //disable edit on key
     var currentProfile = document.getElementById("profile-editor-selector").value;
-    saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".action", document.getElementById("select-encoder-action-type").value);
+    if (currentEncoderEdit == -1) { //if no previous encoder is in edition mode set the new encoder in edition mode
+
+    } else {
+        //save old values in the config
+        saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".action", parseInt(document.getElementById("select-encoder-action-type").value));
+    }
 
     currentEncoderEdit = newEncoderId; //store the new encoder id
 
     //load new action values
     document.getElementById("select-encoder-action-type").value = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".action");
 
+    clearEditButton();
+    document.getElementById("encoderIcon" + newEncoderId).className = editButtonIcon; //dispplay the edit icon (pen) on the new encoder
     //display the gui
-    updateEncoderGUI();
-    document.getElementById("edit-encoder").className = "";
+    updateEditGUI("encoder", newEncoderId);
 
 }
 
-function editKeyBtn(newKeyId) {
-    currentEncoderEdit = -1;
-    if (currentKeyEdit == -1) {
-        currentKeyEdit = newKeyId;
-    }
-
-    //clear edit mode for all encoder buttons
-    clearEditButton();
-    //show new encoder in edition mode
-    document.getElementById("keyIcon" + newKeyId).className = editButtonIcon;
-    //save old values in the config
+function editKeyBtn(newKeyId) { //when a edit key button is clicked
+    currentEncoderEdit = -1; //disable edit on encoder
     var currentProfile = document.getElementById("profile-editor-selector").value;
-    saveToConfig("profiles." + currentProfile + ".keys." + currentKeyEdit + ".action", document.getElementById("select-key-action-type").value);
+    if (currentKeyEdit == -1) { //if no previous key is in edition mode set the new key in edition mode
 
+    } else {
+        //save old values in the config
+        saveToConfig("profiles." + currentProfile + ".keys." + currentKeyEdit + ".action", parseInt(document.getElementById("select-key-action-type").value));
+    }
     currentKeyEdit = newKeyId; //store the new encoder id
 
     //load new action values
     document.getElementById("select-key-action-type").value = readFromConfig("profiles." + currentProfile + ".keys." + newKeyId + ".action");
 
+    clearEditButton();
+    document.getElementById("keyIcon" + newKeyId).className = editButtonIcon;
     //display the gui
-    updateEncoderGUI();
-    document.getElementById("edit-key").className = "";
+    updateEditGUI("key", newKeyId);
+
 
 }
 
 
-function updateEncoderGUI() {
-    var value = document.getElementById("select-encoder-action-type").value;
+function updateEditGUI(type, id) { //update the gui when an encoder or key changes action, value ....
+    if (type == "encoder") {
+        document.getElementById("edit-encoder").className = ""; //enable the edit encoder menu
+        document.getElementById("edit-key").className = "disable"; //disable the edit key menu
 
-    if (value == "0") {
-        document.getElementById("encoder-master-volume").className = "";
-        document.getElementById("encoder-software-volume").className = "disable";
-        document.getElementById("encoder-custom").className = "disable";
-    } else if (value == "1") {
-        console.log(value);
-        document.getElementById("encoder-master-volume").className = "disable";
-        document.getElementById("encoder-software-volume").className = "";
-        document.getElementById("encoder-custom").className = "disable";
-    } else if (value == "2") {
-        document.getElementById("encoder-master-volume").className = "disable";
-        document.getElementById("encoder-software-volume").className = "disable";
-        document.getElementById("encoder-custom").className = "";
-    } else {
-        document.getElementById("encoder-master-volume").className = "disable";
-        document.getElementById("encoder-software-volume").className = "disable";
-        document.getElementById("encoder-custom").className = "disable";
+        var value = document.getElementById("select-encoder-action-type").value; //
+
+        if (value == "0") {
+            document.getElementById("encoder-master-volume").className = "";
+            document.getElementById("encoder-software-volume").className = "disable";
+            document.getElementById("encoder-custom").className = "disable";
+        } else if (value == "1") {
+            console.log(value);
+            document.getElementById("encoder-master-volume").className = "disable";
+            document.getElementById("encoder-software-volume").className = "";
+            document.getElementById("encoder-custom").className = "disable";
+        } else if (value == "2") {
+            document.getElementById("encoder-master-volume").className = "disable";
+            document.getElementById("encoder-software-volume").className = "disable";
+            document.getElementById("encoder-custom").className = "";
+        } else {
+            document.getElementById("encoder-master-volume").className = "disable";
+            document.getElementById("encoder-software-volume").className = "disable";
+            document.getElementById("encoder-custom").className = "disable";
+        }
+
+    } else if (type == "key") {
+        document.getElementById("edit-key").className = ""; //enable the edit key menu
+        document.getElementById("edit-encoder").className = "disable"; //disable the edit encoder menu
+
     }
 
 

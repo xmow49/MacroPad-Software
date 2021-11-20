@@ -61,6 +61,9 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     height: 50px;
 }
 
+
+/* ---------- Encoder Edit Action -------- */
+
 #edit-encoder {
     display: flex;
     flex-direction: column;
@@ -69,6 +72,79 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 }
 
 #edit-encoder.disable {
+    display: none;
+}
+
+#edit-encoder>* {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#encoder-software-volume.disable>* {
+    display: none;
+}
+
+#encoder-software-volume.disable>* {
+    display: none;
+}
+
+
+/* ---------- Help text -------- */
+
+.action-help {
+    position: relative;
+    display: inline-block;
+}
+
+.action-help .text-action-help {
+    visibility: hidden;
+    width: 300px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -150px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.action-help:hover .text-action-help {
+    visibility: visible;
+    opacity: 1;
+}
+
+.action-help .text-action-help::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+
+/* ---------- /Help text -------- */
+
+
+/* ---------- /Encoder Edit Action -------- */
+
+#edit-key {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#edit-key.disable {
     display: none;
 }
 

@@ -8,8 +8,111 @@ const Store = require('electron-store');
 
 
 
-const schema = {};
-
+const schema = {
+    "profiles": {
+        "type": "object",
+        "properties": {
+            "0": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "color": {
+                        "type": "array",
+                        "items": {
+                            "anyOf": [{
+                                "type": "integer"
+                            }]
+                        }
+                    },
+                    "encoders": {
+                        "type": "object",
+                        "properties": {
+                            "0": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "1": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "2": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "keys": {
+                        "type": "object",
+                        "properties": {
+                            "0": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "1": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "2": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "3": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "4": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "5": {
+                                "type": "object",
+                                "properties": {
+                                    "action": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+};
 
 
 
