@@ -82,11 +82,7 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     align-items: center;
 }
 
-#encoder-software-volume.disable>* {
-    display: none;
-}
-
-#encoder-software-volume.disable>* {
+#right>*>.disable>* {
     display: none;
 }
 
@@ -99,6 +95,7 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 }
 
 .action-help .text-action-help {
+    font-family: var(--font-master);
     visibility: hidden;
     width: 300px;
     background-color: #555;
@@ -132,6 +129,15 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 }
 
 
+/* move help */
+
+#right>*>*>.action-help {
+    position: relative;
+    top: -18px;
+    right: -85px;
+}
+
+
 /* ---------- /Help text -------- */
 
 
@@ -151,4 +157,14 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 #image-comment {
     text-align: center;
     width: 300px;
+}
+
+#upload-icon {
+    font-size: 15px;
+    padding: 5px;
+}
+
+#import-image {
+    display: flex;
+    align-items: center;
 }

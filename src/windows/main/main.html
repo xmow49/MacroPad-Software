@@ -97,8 +97,15 @@
             </div>
 
             <div id="right" class="popup profile-editor disable">
-                <h4 id="image-comment">Choisisez une image qui va apparaître sur sur le logiciel</h4>
-                <button id="upload-icon">Importer une image</button>
+
+                <div id="import-image">
+                    <button id="upload-icon">Importer une image</button>
+                    <div class="action-help">
+                        <span class="mdi mdi-help-circle"></span>
+                        <span class="text-action-help">Choisisez une image qui va apparaître sur sur le logiciel</span>
+                    </div>
+                </div>
+
                 <h3>Selection des actions</h3>
                 <h4 id="current-edition">Cliquez sur une touche pour choisir une action</h4>
 
@@ -130,7 +137,10 @@
                     </div>
 
                     <div id="encoder-custom" class="disable">
-                        <h4>Choisisez manuellement les actions de l'encoder</h4>
+                        <div class="action-help">
+                            <span class="mdi mdi-help-circle"></span>
+                            <span class="text-action-help">Choisisez manuellement les actions de l'encoder</span>
+                        </div>
                         <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
                         <button>Choisir</button>
                         <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>

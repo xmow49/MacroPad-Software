@@ -2,7 +2,7 @@
 const { app, BrowserWindow, ipcMain, remote } = require('electron')
 const path = require('path')
 const shell = require('electron').shell;
-
+const { exec } = require("child_process");
 const Store = require('electron-store');
 
 
@@ -186,6 +186,16 @@ function createWindow() {
         var value = config.get(key);
         console.log("Getting " + key + " : " + value);
         event.returnValue = value;
+    });
+
+    ipcMain.on('get-music-software', function(event, software) {
+        exec("\\volume_control\\VolumeMixerControl.exe getMusicSoftware " + software, (error, data, getter) => {
+            console.log(error);
+            console.log(data);
+            console.log(getter);
+
+            event.returnValue = data;
+        });
     });
 }
 

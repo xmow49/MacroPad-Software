@@ -86,8 +86,10 @@ function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
 
     currentEncoderEdit = newEncoderId; //store the new encoder id
 
+    var value = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".action");
+    if (value == null) value = -1;
     //load new action values
-    document.getElementById("select-encoder-action-type").value = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".action");
+    document.getElementById("select-encoder-action-type").value = value;
 
     clearEditButton();
     document.getElementById("encoderIcon" + newEncoderId).className = editButtonIcon; //dispplay the edit icon (pen) on the new encoder
@@ -107,8 +109,11 @@ function editKeyBtn(newKeyId) { //when a edit key button is clicked
     }
     currentKeyEdit = newKeyId; //store the new encoder id
 
+    //Read value from config
+    var value = readFromConfig("profiles." + currentProfile + ".keys." + newKeyId + ".action");
+    if (value == null) value = -1;
     //load new action values
-    document.getElementById("select-key-action-type").value = readFromConfig("profiles." + currentProfile + ".keys." + newKeyId + ".action");
+    document.getElementById("select-key-action-type").value = value;
 
     clearEditButton();
     document.getElementById("keyIcon" + newKeyId).className = editButtonIcon;
@@ -126,7 +131,11 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
 
         var value = document.getElementById("select-encoder-action-type").value; //
 
-        if (value == "0") {
+        if (value == "-1") {
+            document.getElementById("encoder-master-volume").className = "disable";
+            document.getElementById("encoder-software-volume").className = "disable";
+            document.getElementById("encoder-custom").className = "disable";
+        } else if (value == "0") {
             document.getElementById("encoder-master-volume").className = "";
             document.getElementById("encoder-software-volume").className = "disable";
             document.getElementById("encoder-custom").className = "disable";
@@ -144,11 +153,11 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
             document.getElementById("encoder-software-volume").className = "disable";
             document.getElementById("encoder-custom").className = "disable";
         }
-
+        document.getElementById("current-edition").innerHTML = "Encoder " + (id + 1);
     } else if (type == "key") {
         document.getElementById("edit-key").className = ""; //enable the edit key menu
         document.getElementById("edit-encoder").className = "disable"; //disable the edit encoder menu
-
+        document.getElementById("current-edition").innerHTML = "Key " + (id + 1);
     }
 
 
