@@ -235,3 +235,15 @@ body {
 .disable {
     display: none;
 }
+
+#software-div-selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#software-div-selector>button {
+    font-size: 15px;
+    padding: 2px;
+}

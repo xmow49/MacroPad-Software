@@ -1,3 +1,4 @@
+const { contextBridge } = require("electron");
 const { cp } = require("original-fs");
 
 var profileEditorEnabled = false;
@@ -144,6 +145,7 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
             document.getElementById("encoder-master-volume").className = "disable";
             document.getElementById("encoder-software-volume").className = "";
             document.getElementById("encoder-custom").className = "disable";
+            displayAllSoundSoftwaresInSelector();
         } else if (value == "2") {
             document.getElementById("encoder-master-volume").className = "disable";
             document.getElementById("encoder-software-volume").className = "disable";
@@ -161,4 +163,23 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
     }
 
 
+}
+
+function displayAllSoundSoftwaresInSelector() {
+    var strSoftwareList = IPC.sendSync("get-softwares-names");
+    //remove all \n and \r from the string
+    strSoftwareList = strSoftwareList.replace(/\r?\n|\r/g, "");
+    var softwareList = strSoftwareList.split(" ");
+
+    var softwareSelector = document.getElementById("software-volume-selector");
+    //clear the software selector
+    softwareSelector.innerHTML = "";
+    //add options to the software selector
+    for (var i = 0; i < softwareList.length; i++) {
+        var option = document.createElement("option");
+        option.text = softwareList[i];
+        softwareSelector.add(option);
+    }
+
+    console.log(softwareList);
 }

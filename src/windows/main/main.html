@@ -131,9 +131,12 @@
                             <span class="mdi mdi-help-circle"></span>
                             <span class="text-action-help">L'encoder va controler le volume du logiciel choisi ci-dessous. Lors d'un appuis, le son se mute.</span>
                         </div>
-                        <select id="select-software-volume">
-                        <option>Choisir un logiciel</option>
-                    </select>
+                        <h4>Choisir un logiciel</h4>
+                        <div id="software-div-selector">
+                            <select id="software-volume-selector"></select>
+                            <button onclick="displayAllSoundSoftwaresInSelector();">Actualiser</button>
+                        </div>
+
                     </div>
 
                     <div id="encoder-custom" class="disable">

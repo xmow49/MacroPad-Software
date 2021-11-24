@@ -189,11 +189,21 @@ function createWindow() {
     });
 
     ipcMain.on('get-music-software', function(event, software) {
-        exec("\\volume_control\\VolumeMixerControl.exe getMusicSoftware " + software, (error, data, getter) => {
-            console.log(error);
+        var path = app.getAppPath();
+        exec("\"" + path + "\\volume_control\\VolumeMixerControl.exe\" getMusicSoftware " + software, (error, data, getter) => {
+            //console.log(error);
             console.log(data);
-            console.log(getter);
+            //console.log(getter);
+            event.returnValue = data;
+        });
+    });
 
+    ipcMain.on('get-softwares-names', function(event) {
+        var path = app.getAppPath();
+        exec("\"" + path + "\\volume_control\\VolumeMixerControl.exe\" getSoftwaresNames", (error, data, getter) => {
+            //console.log(error);
+            console.log(data);
+            //console.log(getter);
             event.returnValue = data;
         });
     });
