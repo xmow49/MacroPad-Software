@@ -120,16 +120,27 @@ const config = new Store({ schema });
 
 app.allowRendererProcessReuse = false //Serial port
 
+function readBounds(i) {
+    const bounds = [];
+    bounds[0] = config.get('windows.main.width');
+    bounds[1] = config.get('windows.main.height');
+    bounds[2] = config.get('windows.main.x');
+    bounds[3] = config.get('windows.main.y');
+    bounds[4] = config.get('windows.main.maximized');
+    return bounds[i];
+}
+
 function createWindow() {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 1280,
-        height: 720,
-
-
+        width: readBounds(0),
+        height: readBounds(1),
         minHeight: 720,
         minWidth: 1280,
 
+        x: readBounds(2),
+        y: readBounds(3),
+        isMaximized: readBounds(4),
         frame: false,
         webPreferences: {
             nodeIntegration: true,
@@ -140,12 +151,9 @@ function createWindow() {
 
         },
         show: false
-    })
+    });
 
-    mainWindow.loadFile('./src/windows/main/main.html')
-
-
-
+    mainWindow.loadFile('./src/windows/main/main.html');
 
     mainWindow.webContents.on('did-finish-load', () => {
         /// then close the loading screen window and show the main window
@@ -156,6 +164,15 @@ function createWindow() {
         mainWindow.show();
     });
 
+    mainWindow.on("close", () => {
+        console.log("Saving values...");
+        config.set("windows.main.width", mainWindow.getBounds().width);
+        config.set("windows.main.height", mainWindow.getBounds().height);
+        config.set("windows.main.x", mainWindow.getBounds().x);
+        config.set("windows.main.y", mainWindow.getBounds().y);
+        config.set("windows.main.maximized", mainWindow.isMaximized());
+        console.log("OK");
+    });
 
 
     ipcMain.on('maximize', () => {
@@ -214,6 +231,7 @@ function createWindow() {
 let loadingScreen;
 const createLoadingScreen = () => {
     /// create a browser window
+
     loadingScreen = new BrowserWindow(
         Object.assign({
             /// define width and height for the window
@@ -245,6 +263,7 @@ app.whenReady().then(() => {
         createWindow();
     }, 1000);
 
+
     app.on('activate', function() {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
@@ -253,7 +272,9 @@ app.whenReady().then(() => {
 })
 
 
+
+
 // explicitly with Cmd + Q.
 app.on('window-all-closed', function() {
     if (process.platform !== 'darwin') app.quit()
-})
+});
