@@ -19,9 +19,9 @@
         <button class="navbarButton closeBtn" onclick="closeBtn()"><svg  width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path d="M12 1.20857L10.7914 0L6 4.79143L1.20857 0L0 1.20857L4.79143 6L0 10.7914L1.20857 12L6 7.20857L10.7914 12L12 10.7914L7.20857 6L12 1.20857Z" fill="#3C3C3C"/>
             </svg></button>
-        <!-- <button class="navbarButton max-minBtn" onclick="minimizeWindowBtn()"><svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <button class="navbarButton max-minBtn" onclick="minimizeWindowBtn()"><svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                 <path d="M13.6364 12.2727H15L15 1.36364C15 0.613636 14.3864 0 13.6364 0L2.72727 0L2.72727 1.36364L13.6364 1.36364L13.6364 12.2727ZM1.36364 15L10.9091 15C11.6591 15 12.2727 14.3864 12.2727 13.6364L12.2727 4.09091C12.2727 3.34091 11.6591 2.72727 10.9091 2.72727L1.36364 2.72727C0.613636 2.72727 0 3.34091 0 4.09091L0 13.6364C0 14.3864 0.613636 15 1.36364 15ZM1.36364 4.09091L10.9091 4.09091L10.9091 13.6364L1.36364 13.6364L1.36364 4.09091Z" fill="#3C3C3C"/>
-                </svg></button> -->
+                </svg></button>
         <button class="navbarButton resuceBtn" onclick="minimizeBtn()"><svg width="12" height="2" viewBox="0 0 12 2" fill="none">
             <path d="M12 2H0V0H12V2Z" fill="#3C3C3C" />
             </svg></button>
@@ -99,24 +99,25 @@
             <div id="right" class="popup profile-editor disable">
 
                 <div id="import-image">
-                    <button id="upload-icon">Importer une image</button>
+                    <button id="upload-icon">Importer un icon</button>
                     <div class="action-help">
                         <span class="mdi mdi-help-circle"></span>
-                        <span class="text-action-help">Choisisez une image qui va apparaître sur sur le logiciel</span>
+                        <span class="text-action-help">Choisisez un icon qui va apparaître sur le profile et le Marcopad</span>
                     </div>
                 </div>
 
-                <h3>Selection des actions</h3>
+                <h3 id="select-action-title">Selection des actions</h3>
                 <h4 id="current-edition">Cliquez sur une touche pour choisir une action</h4>
 
                 <div id="edit-encoder" class="disable">
 
-                    <select id="select-encoder-action-type" onchange="updateEditGUI('encoder', -1);"> 
-                        <option value="-1">Désactivé</option select>
-                        <option value="0">Volume principal</option>
-                        <option value="1">Volume d'un logiciel</option>
-                        <option value="2">Custom</option>
-                    </select>
+
+                    <div class="action-selector" id="encoder-action-selector" onchange="updateEditGUI('encoder', -1);">
+                        <label><input type="radio" name="encoder-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
+                        <label><input type="radio" name="encoder-action-type" value="0"><span class="mdi mdi-volume-source"></span><span>Volume</span></label>
+                        <label><input type="radio" name="encoder-action-type" value="1"><span class="mdi mdi-monitor"></span><span>Logiciel</span></label>
+                        <label><input type="radio" name="encoder-action-type" value="2"><span class="mdi mdi-pencil"></span><span>Custom</span></label>
+                    </div>
 
 
                     <div id="encoder-master-volume">
@@ -155,13 +156,13 @@
                 </div>
 
                 <div id="edit-key" class="disable">
-                    <h3><span class="mdi mdi-checkbox-intermediate"></span> Action lors de l'appuis</h3>
-                    <select id="select-key-action-type" onchange="updateEditGUI('key', -1);">
-                        <option value="-1">Désactivé</option select>
-                        <option value="0">Combinaison de touches</option>
-                        <option value="1">Action sur le systeme</option>
-                        <option value="2">Midi</option>
-                    </select>
+
+                    <div class="action-selector" id="key-action-selector" onchange="updateEditGUI('key', -1);">
+                        <label><input type="radio" name="key-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
+                        <label><input type="radio" name="key-action-type" value="0"><span class="mdi mdi-keyboard"></span><span>Combinaison</span></label>
+                        <label><input type="radio" name="key-action-type" value="1"><span class="mdi mdi-microsoft-windows"></span><span>Système</span></label>
+                        <label><input type="radio" name="key-action-type" value="2"><span class="mdi mdi-midi"></span><span>Midi</span></label>
+                    </div>
 
 
                     <button>Choisir</button>

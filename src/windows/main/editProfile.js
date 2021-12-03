@@ -19,6 +19,8 @@ function disableMacropadButtons(state) { //disable all encoders/keys buttons whe
 
 }
 
+disableMacropadButtons(true);
+
 function editProfilePopup() { //when edit profile button is clicked
     //updateEditGUI();
     if (profileEditorEnabled) {
@@ -75,14 +77,47 @@ function clearEditButton() { //remove edit icon (pen) from all encoders and keys
 var currentEncoderEdit = -1;
 var currentKeyEdit = -1;
 
+function saveActionType() {
+
+
+}
+
+function getActionValue(type) {
+    if (type == "encoder" || type == "key") {
+        var actionType = document.getElementsByName(type + "-action-type"); // get all input elements
+    } else {
+        return -1;
+    }
+    var currentProfile = document.getElementById("profile-editor-selector").value;
+
+    for (var i = 0; i < actionType.length; i++) {
+        if (actionType[i].checked) {
+            return actionType[i].value;
+        }
+    }
+    return -1;
+}
+
 function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
     currentKeyEdit = -1; //disable edit on key
     var currentProfile = document.getElementById("profile-editor-selector").value;
+    var actionType = document.getElementsByName("encoder-action-type"); // get all input elements
     if (currentEncoderEdit == -1) { //if no previous encoder is in edition mode set the new encoder in edition mode
 
     } else {
         //save old values in the config
-        saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".action", parseInt(document.getElementById("select-encoder-action-type").value));
+
+        var value;
+        for (var i = 0; i < actionType.length; i++) {
+            if (actionType[i].checked) {
+                value = actionType[i].value;
+            }
+        }
+
+        if (value == null) {
+            value = -1;
+        }
+        saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".action", parseInt(value));
     }
 
     currentEncoderEdit = newEncoderId; //store the new encoder id
@@ -90,7 +125,13 @@ function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
     var value = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".action");
     if (value == null) value = -1;
     //load new action values
-    document.getElementById("select-encoder-action-type").value = value;
+    for (var i = 0; i < actionType.length; i++) {
+        if (actionType[i].value == value) {
+            actionType[i].checked = true;
+        } else {
+            actionType[i].checked = false;
+        }
+    }
 
     clearEditButton();
     document.getElementById("encoderIcon" + newEncoderId).className = editButtonIcon; //dispplay the edit icon (pen) on the new encoder
@@ -102,11 +143,23 @@ function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
 function editKeyBtn(newKeyId) { //when a edit key button is clicked
     currentEncoderEdit = -1; //disable edit on encoder
     var currentProfile = document.getElementById("profile-editor-selector").value;
+    var actionType = document.getElementsByName("key-action-type"); // get all input elements
     if (currentKeyEdit == -1) { //if no previous key is in edition mode set the new key in edition mode
 
     } else {
         //save old values in the config
-        saveToConfig("profiles." + currentProfile + ".keys." + currentKeyEdit + ".action", parseInt(document.getElementById("select-key-action-type").value));
+
+        var value;
+        for (var i = 0; i < actionType.length; i++) {
+            if (actionType[i].checked) {
+                value = actionType[i].value;
+            }
+        }
+
+        if (value == null) {
+            value = -1;
+        }
+        saveToConfig("profiles." + currentProfile + ".keys." + currentKeyEdit + ".action", parseInt(value));
     }
     currentKeyEdit = newKeyId; //store the new encoder id
 
@@ -114,7 +167,13 @@ function editKeyBtn(newKeyId) { //when a edit key button is clicked
     var value = readFromConfig("profiles." + currentProfile + ".keys." + newKeyId + ".action");
     if (value == null) value = -1;
     //load new action values
-    document.getElementById("select-key-action-type").value = value;
+    for (var i = 0; i < actionType.length; i++) {
+        if (actionType[i].value == value) {
+            actionType[i].checked = true;
+        } else {
+            actionType[i].checked = false;
+        }
+    }
 
     clearEditButton();
     document.getElementById("keyIcon" + newKeyId).className = editButtonIcon;
@@ -130,7 +189,7 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
         document.getElementById("edit-encoder").className = ""; //enable the edit encoder menu
         document.getElementById("edit-key").className = "disable"; //disable the edit key menu
 
-        var value = document.getElementById("select-encoder-action-type").value; //
+        var value = getActionValue("encoder");
 
         if (value == "-1") {
             document.getElementById("encoder-master-volume").className = "disable";

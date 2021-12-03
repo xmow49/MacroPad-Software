@@ -75,12 +75,13 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     display: none;
 }
 
-#edit-encoder>* {
+
+/* #edit-encoder>* {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-}
+} */
 
 #right>*>.disable>* {
     display: none;
@@ -167,4 +168,49 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 #import-image {
     display: flex;
     align-items: center;
+}
+
+
+/* ----------select action -------- */
+
+#select-action-title {
+    font-size: 15px;
+    padding: 0px;
+    margin: 5px;
+}
+
+#edit-encoder {
+    margin: 5px;
+}
+
+.action-selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-selector label input {
+    display: none;
+}
+
+.action-selector .mdi {
+    font-size: 30px;
+}
+
+.action-selector label {
+    width: 50px;
+    height: 50px;
+    padding: 10px;
+    border: solid 1px rgb(0, 0, 0);
+    transition: all 0.3s;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 10px;
+    background: var(--button-color);
+}
+
+.action-selector input:checked+span {
+    background: var(--button-color-hover);
+    transition: all 0.3s;
 }

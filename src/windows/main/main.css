@@ -25,9 +25,7 @@ textarea,
 
 button:disabled,
 button[disabled] {
-    background: unset;
-    background-color: unset;
-    color: unset;
+    background: var(--button-color);
 }
 
 button {
@@ -104,7 +102,11 @@ header {
 body {
     margin: 0px;
     background: #FFFFFF;
-    /* overflow: hidden; */
+    overflow: hidden;
+}
+
+span {
+    font-family: var(--font-master);
 }
 
 #app-container {
