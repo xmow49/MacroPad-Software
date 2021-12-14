@@ -97,6 +97,7 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 
 .action-help .text-action-help {
     font-family: var(--font-master);
+    font-size: var(--font-size-small);
     visibility: hidden;
     width: 300px;
     background-color: #555;
@@ -132,11 +133,12 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 
 /* move help */
 
-#right>*>*>.action-help {
+
+/* #right>*>*>.action-help {
     position: relative;
     top: -18px;
     right: -85px;
-}
+} */
 
 
 /* ---------- /Help text -------- */
@@ -208,9 +210,30 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     border-radius: 10px;
     font-size: 10px;
     background: var(--button-color);
+    margin-left: 5px;
+    margin-right: 5px;
 }
 
-.action-selector input:checked+span {
+.action-selector .checked {
     background: var(--button-color-hover);
     transition: all 0.3s;
+}
+
+
+/* ---------- /select action -------- */
+
+
+/* ---------- key combination selector  -------- */
+
+.key-selector {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#encoder-rotate-left {
+    border: 1px solid black;
+    width: 200px;
+    height: 30px;
 }

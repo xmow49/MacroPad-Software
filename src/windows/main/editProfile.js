@@ -195,26 +195,60 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
             document.getElementById("encoder-master-volume").className = "disable";
             document.getElementById("encoder-software-volume").className = "disable";
             document.getElementById("encoder-custom").className = "disable";
+
+            document.getElementById('action-selector-1').classList.add('checked');
+            document.getElementById('action-selector0').classList.remove('checked');
+            document.getElementById('action-selector1').classList.remove('checked');
+            document.getElementById('action-selector2').classList.remove('checked');
+
+
+
         } else if (value == "0") {
             document.getElementById("encoder-master-volume").className = "";
             document.getElementById("encoder-software-volume").className = "disable";
             document.getElementById("encoder-custom").className = "disable";
+            document.getElementById('help-text').innerHTML = "L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.";
+
+            document.getElementById('action-selector-1').classList.remove('checked');
+            document.getElementById('action-selector0').classList.add('checked');
+            document.getElementById('action-selector1').classList.remove('checked');
+            document.getElementById('action-selector2').classList.remove('checked');
+
         } else if (value == "1") {
             console.log(value);
             document.getElementById("encoder-master-volume").className = "disable";
             document.getElementById("encoder-software-volume").className = "";
             document.getElementById("encoder-custom").className = "disable";
+            document.getElementById('help-text').innerHTML = "L'encoder va controler le volume du logiciel choisi ci-dessous. Lors d'un appuis, le son se mute.";
             displayAllSoundSoftwaresInSelector();
+
+
+            document.getElementById('action-selector-1').classList.remove('checked');
+            document.getElementById('action-selector0').classList.remove('checked');
+            document.getElementById('action-selector1').classList.add('checked');
+            document.getElementById('action-selector2').classList.remove('checked');
+
         } else if (value == "2") {
             document.getElementById("encoder-master-volume").className = "disable";
             document.getElementById("encoder-software-volume").className = "disable";
             document.getElementById("encoder-custom").className = "";
+            document.getElementById('help-text').innerHTML = "Choisisez manuellement les actions de l'encoder";
+
+            document.getElementById('action-selector-1').classList.remove('checked');
+            document.getElementById('action-selector0').classList.remove('checked');
+            document.getElementById('action-selector1').classList.remove('checked');
+            document.getElementById('action-selector2').classList.add('checked');
+
         } else {
             document.getElementById("encoder-master-volume").className = "disable";
             document.getElementById("encoder-software-volume").className = "disable";
             document.getElementById("encoder-custom").className = "disable";
+
         }
-        document.getElementById("current-edition").innerHTML = "Encoder " + (id + 1);
+        if (id != -1) { //update the encoder id on the gui
+            document.getElementById("current-edition").innerHTML = "Encoder " + (id + 1);
+        }
+
     } else if (type == "key") {
         document.getElementById("edit-key").className = ""; //enable the edit key menu
         document.getElementById("edit-encoder").className = "disable"; //disable the edit encoder menu

@@ -113,40 +113,36 @@
 
 
                     <div class="action-selector" id="encoder-action-selector" onchange="updateEditGUI('encoder', -1);">
-                        <label><input type="radio" name="encoder-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
-                        <label><input type="radio" name="encoder-action-type" value="0"><span class="mdi mdi-volume-source"></span><span>Volume</span></label>
-                        <label><input type="radio" name="encoder-action-type" value="1"><span class="mdi mdi-monitor"></span><span>Logiciel</span></label>
-                        <label><input type="radio" name="encoder-action-type" value="2"><span class="mdi mdi-pencil"></span><span>Custom</span></label>
-                    </div>
-
-
-                    <div id="encoder-master-volume">
+                        <label id="action-selector-1"><input type="radio" name="encoder-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
+                        <label id="action-selector0"><input type="radio" name="encoder-action-type" value="0"><span class="mdi mdi-volume-source"></span><span>Volume</span></label>
+                        <label id="action-selector1"><input type="radio" name="encoder-action-type" value="1"><span class="mdi mdi-monitor"></span><span>Logiciel</span></label>
+                        <label id="action-selector2"><input type="radio" name="encoder-action-type" value="2"><span class="mdi mdi-pencil"></span><span>Custom</span></label>
                         <div class="action-help">
                             <span class="mdi mdi-help-circle"></span>
-                            <span class="text-action-help">L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.</span>
+                            <span id="help-text" class="text-action-help">L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.</span>
                         </div>
+                    </div>
+
+                    <!-- affichage pour chaque action-->
+                    <div id="encoder-master-volume">
+
                     </div>
 
                     <div id="encoder-software-volume">
-                        <div class="action-help">
-                            <span class="mdi mdi-help-circle"></span>
-                            <span class="text-action-help">L'encoder va controler le volume du logiciel choisi ci-dessous. Lors d'un appuis, le son se mute.</span>
-                        </div>
                         <h4>Choisir un logiciel</h4>
                         <div id="software-div-selector">
                             <select id="software-volume-selector"></select>
                             <button onclick="displayAllSoundSoftwaresInSelector();">Actualiser</button>
                         </div>
-
                     </div>
 
                     <div id="encoder-custom" class="disable">
-                        <div class="action-help">
-                            <span class="mdi mdi-help-circle"></span>
-                            <span class="text-action-help">Choisisez manuellement les actions de l'encoder</span>
-                        </div>
                         <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
-                        <button>Choisir</button>
+                        <div class="key-selector">
+                            <label id="encoder-rotate-left"></label>
+                            <button>Valider</button>
+                        </div>
+
                         <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>
                         <button>Choisir</button>
                         <h3><span class="mdi mdi-bullseye"></span> Clic Encoder</h3>
@@ -168,6 +164,8 @@
                     <button>Choisir</button>
                 </div>
             </div>
+
+            <!-- /affichage pour chaque action-->
 
 
             <div id="macropad-container">
