@@ -137,22 +137,27 @@
                     </div>
 
                     <div id="encoder-custom" class="disable">
+                        <!-- encoder key turn left -->
                         <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
                         <div class="key-selector">
-                            <label id="encoder-rotate-left" onclick="startKeyCombinationCapture();"></label>
+                            <label id="encoder-edit-key-1" value="" onclick="startKeyCombinationCapture('encoder', 1, 1);"></label>
+                            <span id="encoder-edit-key-1-values" style="display: none;"></span>
                             <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
                         </div>
 
+                        <!-- encoder key turn right -->
                         <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>
                         <div class="key-selector">
-                            <label id="encoder-rotate-right" onclick="startKeyCombinationCapture();"></label>
+                            <label id="encoder-edit-key-2" onclick="startKeyCombinationCapture('encoder', 2, 1);"></label>
+                            <span id="encoder-edit-key-2-values" style="display: none;"></span>
                             <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
                         </div>
 
-
+                        <!-- encoder key press -->
                         <h3><span class="mdi mdi-bullseye"></span> Clic Encoder</h3>
                         <div class="key-selector">
-                            <label id="encoder-press" onclick="startKeyCombinationCapture();"></label>
+                            <label id="encoder-edit-key-3" onclick="startKeyCombinationCapture('encoder', 3, 1);"></label>
+                            <span id="encoder-edit-key-3-values" style="display: none;"></span>
                             <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
                         </div>
                     </div>

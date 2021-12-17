@@ -232,13 +232,16 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     align-items: center;
 }
 
-#encoder-rotate-left {
+.key-selector label {
     border: 1px solid black;
     border-radius: var(--border-radius-popup);
     width: 200px;
     height: 30px;
     background: var(--button-color);
     cursor: pointer;
+    font-family: var(--font-master);
+    text-align: center;
+    font-size: var(--font-size-medium);
 }
 
 #save-key-combination {

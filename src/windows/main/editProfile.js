@@ -102,41 +102,75 @@ function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
     currentKeyEdit = -1; //disable edit on key
     var currentProfile = document.getElementById("profile-editor-selector").value;
     var actionType = document.getElementsByName("encoder-action-type"); // get all input elements
+
+    //---------------------------------------------Save old values in the config -------------------------------------------------
+
+
     if (currentEncoderEdit == -1) { //if no previous encoder is in edition mode set the new encoder in edition mode
 
     } else {
         //save old values in the config
 
-        var value;
-        for (var i = 0; i < actionType.length; i++) {
+        //------------save action type ------------
+        var currentActionType;
+        for (var i = 0; i < actionType.length; i++) { //check all radio and save the checked one
             if (actionType[i].checked) {
-                value = actionType[i].value;
+                currentActionType = actionType[i].value;
             }
         }
 
-        if (value == null) {
-            value = -1;
+        if (currentActionType == null) { //if no radio is checked
+            currentActionType = -1;
         }
-        saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".action", parseInt(value));
+        saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".action", parseInt(currentActionType));
+
+        //------------save value ------------
+        if (currentActionType == 2) { //key combination
+            for (var i = 1; i <= 3; i++) {
+                var strValues = document.getElementById("encoder-edit-key-" + i + "-values").innerHTML; //get the values of the key combination
+                var values = strValues.split(","); //tranform in array
+                saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".values." + i, parseInt(values[0])); //save the values
+            }
+        }
+
+
+
     }
 
+    //---------------------------------------------End of save old values in the config -------------------------------------------------
+
+    //---------------------------------------------Load values from the config -------------------------------------------------
     currentEncoderEdit = newEncoderId; //store the new encoder id
 
-    var value = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".action");
-    if (value == null) value = -1;
+    var newActionType = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".action");
+    if (newActionType == null) newActionType = -1;
     //load new action values
     for (var i = 0; i < actionType.length; i++) {
-        if (actionType[i].value == value) {
+        if (actionType[i].value == newActionType) {
             actionType[i].checked = true;
         } else {
             actionType[i].checked = false;
         }
     }
 
+    if (newActionType == 2) { //if key combination
+        var newValues = [];
+        for (var i = 1; i <= 3; i++) {
+            newValues[i] = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".values." + i);
+            if (newValues[i] == null) newValues[i] = -1;
+            console.log(newValues);
+            document.getElementById("encoder-edit-key-" + i).innerHTML = newValues[i];
+        }
+        //document.getElementById("encoder-edit-key-" + i + "-values").innerHTML = newValues.join(",");
+    }
+
+
+
     clearEditButton();
     document.getElementById("encoderIcon" + newEncoderId).className = editButtonIcon; //dispplay the edit icon (pen) on the new encoder
     //display the gui
     updateEditGUI("encoder", newEncoderId);
+    //---------------------------------------------End of load values from the config -------------------------------------------------
 
 }
 
@@ -324,10 +358,16 @@ function getStrKey(oEvent) { //Convert Key text to Text to display it
     return txt;
 }
 
-var currentCapture = [-1, -1];
+var captureType = [-1, -1];
+var captureKey = [-1, -1, -1];
+var captureCount = 0;
+var maxCaptureCount = 0;
 
-function startKeyCombinationCapture() {
+function startKeyCombinationCapture(type, action, maxCount) {
     document.addEventListener("keydown", keyCombinationCapture);
+    captureType = [type, action];
+    maxCaptureCount = maxCount;
+    captureCount = 0;
 }
 
 function stopKeyCombinationCapture() {
@@ -335,7 +375,23 @@ function stopKeyCombinationCapture() {
 }
 
 function keyCombinationCapture(oEvent) {
-    var charCode = (typeof oEvent.which == "number") ? oEvent.which : oEvent.keyCode
-    document.getElementById("encoder-rotate-left").innerHTML = getStrKey(oEvent);
+    if (captureCount < maxCaptureCount) {
+        if (captureType[0] == "encoder") {
+            console.log("keyCombinationCapture");
+            var charCode = (typeof oEvent.which == "number") ? oEvent.which : oEvent.keyCode
+            var label = "encoder-edit-key-" + captureType[1];
+            document.getElementById(label).innerHTML = getStrKey(oEvent);
+            captureKey[captureCount] = charCode;
+            var strKey = "";
+            for (var i = 0; i < maxCaptureCount; i++) {
+                strKey += captureKey[i] + ",";
+            }
+            document.getElementById(label + "-values").innerHTML = strKey;
+        }
+    } else {
+        stopKeyCombinationCapture();
+    }
 
+
+    captureCount++;
 }
