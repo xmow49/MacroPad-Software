@@ -276,3 +276,66 @@ function displayAllSoundSoftwaresInSelector() {
 
     console.log(softwareList);
 }
+
+
+function getStrKey(oEvent) { //Convert Key text to Text to display it
+    var txt = "";
+
+    var toStrkey = {
+        "Control": "CTRL",
+        "AltGraph": "ALT GR",
+        "Alt": "ALT",
+        "Shift": "SHIFT",
+    }
+    var keyLocationToStr = {
+        "1": "LEFT",
+        "2": "RIGHT",
+    }
+
+
+
+    if (oEvent.location == 2 && oEvent.which == 18) //if AltGR
+    {
+        txt = toStrkey[oEvent.key];
+    }
+    //
+    else if (oEvent.key === ' ') // if space
+    {
+
+        txt = "Space";
+    }
+    //
+    else if (oEvent.which == 91) // if windows
+    {
+        txt = "Windows";
+    }
+    //
+    else if (oEvent.location != 0) { //If key is as 2 location (left or right) (ctrl; shift..) AND isnt ALT key because Alt and ALT GR are not the same key
+        txt = toStrkey[oEvent.key] + " " + keyLocationToStr[oEvent.location];
+    }
+    //
+    else if (oEvent.key.length == 1) {
+        txt = oEvent.key.toUpperCase();
+    } else {
+        txt = oEvent.key;
+    }
+
+
+    return txt;
+}
+
+var currentCapture = [-1, -1];
+
+function startKeyCombinationCapture() {
+    document.addEventListener("keydown", keyCombinationCapture);
+}
+
+function stopKeyCombinationCapture() {
+    document.removeEventListener('keydown', keyCombinationCapture);
+}
+
+function keyCombinationCapture(oEvent) {
+    var charCode = (typeof oEvent.which == "number") ? oEvent.which : oEvent.keyCode
+    document.getElementById("encoder-rotate-left").innerHTML = getStrKey(oEvent);
+
+}

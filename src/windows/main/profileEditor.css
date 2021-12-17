@@ -234,6 +234,15 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 
 #encoder-rotate-left {
     border: 1px solid black;
+    border-radius: var(--border-radius-popup);
     width: 200px;
     height: 30px;
+    background: var(--button-color);
+    cursor: pointer;
+}
+
+#save-key-combination {
+    width: 30px;
+    height: 30px;
+    padding: 0px;
 }
