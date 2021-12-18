@@ -98,6 +98,12 @@ function getActionValue(type) {
     return -1;
 }
 
+function saveProfileName() {
+    var currentProfile = document.getElementById("profile-editor-selector").value;
+    saveToConfig("profiles." + currentProfile + ".name", document.getElementById("profile-name").value);
+
+}
+
 function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
     currentKeyEdit = -1; //disable edit on key
     var currentProfile = document.getElementById("profile-editor-selector").value;
@@ -126,7 +132,7 @@ function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
 
         //------------save value ------------
         if (currentActionType == 2) { //key combination
-            for (var i = 1; i <= 3; i++) {
+            for (var i = 0; i < 3; i++) {
                 var strValues = document.getElementById("encoder-edit-key-" + i + "-values").innerHTML; //get the values of the key combination
                 var values = strValues.split(","); //tranform in array
                 saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".values." + i, parseInt(values[0])); //save the values
@@ -155,13 +161,14 @@ function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
 
     if (newActionType == 2) { //if key combination
         var newValues = [];
-        for (var i = 1; i <= 3; i++) {
+        for (var i = 0; i < 3; i++) {
             newValues[i] = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".values." + i);
             if (newValues[i] == null) newValues[i] = -1;
             console.log(newValues);
-            document.getElementById("encoder-edit-key-" + i).innerHTML = newValues[i];
+            document.getElementById("encoder-edit-key-" + i).innerHTML = keycodesToStr[newValues[i]];
+            document.getElementById("encoder-edit-key-" + i + "-values").innerHTML = newValues[i];
         }
-        //document.getElementById("encoder-edit-key-" + i + "-values").innerHTML = newValues.join(",");
+
     }
 
 
@@ -235,6 +242,8 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
             document.getElementById('action-selector1').classList.remove('checked');
             document.getElementById('action-selector2').classList.remove('checked');
 
+            document.getElementById('help-text').innerHTML = "L'encoder est désactivé, il ne fera rien.";
+
 
 
         } else if (value == "0") {
@@ -287,10 +296,22 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
         document.getElementById("edit-key").className = ""; //enable the edit key menu
         document.getElementById("edit-encoder").className = "disable"; //disable the edit encoder menu
         document.getElementById("current-edition").innerHTML = "Key " + (id + 1);
+    } else if (type == "empty") {
+
+        document.getElementById("edit-encoder").className = "disable"; //disable the edit encoder menu
+        document.getElementById("edit-key").className = "disable"; //disable the edit key menu
+        clearEditButton();
     }
 
+}
+
+function updateProfileGui() {
+    var input = document.getElementById("profile-name");
+    var currentProfile = document.getElementById("profile-editor-selector").value;
+    input.value = readFromConfig("profiles." + currentProfile + ".name");
 
 }
+
 
 function displayAllSoundSoftwaresInSelector() {
     var strSoftwareList = IPC.sendSync("get-softwares-names");
@@ -311,52 +332,6 @@ function displayAllSoundSoftwaresInSelector() {
     console.log(softwareList);
 }
 
-
-function getStrKey(oEvent) { //Convert Key text to Text to display it
-    var txt = "";
-
-    var toStrkey = {
-        "Control": "CTRL",
-        "AltGraph": "ALT GR",
-        "Alt": "ALT",
-        "Shift": "SHIFT",
-    }
-    var keyLocationToStr = {
-        "1": "LEFT",
-        "2": "RIGHT",
-    }
-
-
-
-    if (oEvent.location == 2 && oEvent.which == 18) //if AltGR
-    {
-        txt = toStrkey[oEvent.key];
-    }
-    //
-    else if (oEvent.key === ' ') // if space
-    {
-
-        txt = "Space";
-    }
-    //
-    else if (oEvent.which == 91) // if windows
-    {
-        txt = "Windows";
-    }
-    //
-    else if (oEvent.location != 0) { //If key is as 2 location (left or right) (ctrl; shift..) AND isnt ALT key because Alt and ALT GR are not the same key
-        txt = toStrkey[oEvent.key] + " " + keyLocationToStr[oEvent.location];
-    }
-    //
-    else if (oEvent.key.length == 1) {
-        txt = oEvent.key.toUpperCase();
-    } else {
-        txt = oEvent.key;
-    }
-
-
-    return txt;
-}
 
 var captureType = [-1, -1];
 var captureKey = [-1, -1, -1];
@@ -380,7 +355,7 @@ function keyCombinationCapture(oEvent) {
             console.log("keyCombinationCapture");
             var charCode = (typeof oEvent.which == "number") ? oEvent.which : oEvent.keyCode
             var label = "encoder-edit-key-" + captureType[1];
-            document.getElementById(label).innerHTML = getStrKey(oEvent);
+            document.getElementById(label).innerHTML = keycodesToStr[charCode];
             captureKey[captureCount] = charCode;
             var strKey = "";
             for (var i = 0; i < maxCaptureCount; i++) {

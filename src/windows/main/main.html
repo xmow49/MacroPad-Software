@@ -60,21 +60,21 @@
 
             <div id="left" class="popup profile-editor disable">
                 <div id="profile-editor-actions">
-                    <select name="" id="profile-editor-selector">
-                    <option value="0">Profil 1</option select>
-                    <option value="1">Profil 2</option>
-                    <option value="2">Profil 3</option>
-                    <option value="3">Profil 4</option>
-                    <option value="4">Profil 5</option>
-                    <option value="5">Profil 6</option>
-                </select>
-                    <button>Annuler</button>
-                    <button>Enregistrer</button>
+                    <select onchange="updateProfileGui();" name="" id="profile-editor-selector">
+                        <option value="0">Profil 1</option select>
+                        <option value="1">Profil 2</option>
+                        <option value="2">Profil 3</option>
+                        <option value="3">Profil 4</option>
+                        <option value="4">Profil 5</option>
+                        <option value="5">Profil 6</option>
+                    </select>
+                    <!-- <button>Annuler</button>
+                    <button>Enregistrer</button> -->
 
                 </div>
 
 
-                <h3>Nom du Profil: <input type="text" id="profile-name"></h3>
+                <h3>Nom du Profil: <input type="text" id="profile-name" onfocusout="saveProfileName();" maxlength="10"></h3>
                 <h3>Icon du Profil:</h3>
                 <div id="icon-grid">
                     <button class="profile-icon"></button>
@@ -140,24 +140,24 @@
                         <!-- encoder key turn left -->
                         <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
                         <div class="key-selector">
-                            <label id="encoder-edit-key-1" value="" onclick="startKeyCombinationCapture('encoder', 1, 1);"></label>
-                            <span id="encoder-edit-key-1-values" style="display: none;"></span>
+                            <label id="encoder-edit-key-0" value="" onclick="startKeyCombinationCapture('encoder', 0, 1);"></label>
+                            <span id="encoder-edit-key-0-values" style="display: none;"></span>
                             <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
                         </div>
 
                         <!-- encoder key turn right -->
                         <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>
                         <div class="key-selector">
-                            <label id="encoder-edit-key-2" onclick="startKeyCombinationCapture('encoder', 2, 1);"></label>
-                            <span id="encoder-edit-key-2-values" style="display: none;"></span>
+                            <label id="encoder-edit-key-1" onclick="startKeyCombinationCapture('encoder', 1, 1);"></label>
+                            <span id="encoder-edit-key-1-values" style="display: none;"></span>
                             <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
                         </div>
 
                         <!-- encoder key press -->
                         <h3><span class="mdi mdi-bullseye"></span> Clic Encoder</h3>
                         <div class="key-selector">
-                            <label id="encoder-edit-key-3" onclick="startKeyCombinationCapture('encoder', 3, 1);"></label>
-                            <span id="encoder-edit-key-3-values" style="display: none;"></span>
+                            <label id="encoder-edit-key-2" onclick="startKeyCombinationCapture('encoder', 2, 1);"></label>
+                            <span id="encoder-edit-key-2-values" style="display: none;"></span>
                             <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
                         </div>
                     </div>
@@ -280,6 +280,7 @@
 <script src="main.js"></script>
 <script src="port-mannager.js"></script>
 <script src="editProfile.js"></script>
+<script src="keyboard.js"></script>
 
 
 </html>
