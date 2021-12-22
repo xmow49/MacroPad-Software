@@ -1,7 +1,10 @@
 //const { ipcMain, app, BrowserWindow, remote } = require("electron");
-const { ipcRenderer } = require('electron')
+const { ipcRenderer } = require('electron');
+const { IconPickerModule } = require('ngx-icon-picker');
+
 
 const IPC = ipcRenderer;
+
 //------------------ Windows Buttons -------------------
 function closeBtn() {
     window.close();

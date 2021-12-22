@@ -7,7 +7,6 @@ const Store = require('electron-store');
 
 
 
-
 const schema = {
     "profiles": {
         "type": "object",

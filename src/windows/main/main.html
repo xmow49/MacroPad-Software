@@ -77,6 +77,8 @@
 
                 <h3>Nom: <input type="text" id="profile-name" onfocusout="saveProfileName();" maxlength="10"></h3>
                 <h3>Icon:</h3>
+
+                <input [iconPicker]="icon" (iconPickerSelect)="onIconPickerSelect(newIcon)" />
                 <div id="icon-grid">
                     <button class="profile-icon"></button>
                     <button class="profile-icon"></button>
@@ -279,9 +281,9 @@
         </div>
     </div>
 
-
 </body>
 
+<script type="module" src="../../../icon-picker.js"></script>
 <script src="main.js"></script>
 <script src="port-mannager.js"></script>
 <script src="editProfile.js"></script>
