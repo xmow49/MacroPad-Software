@@ -58,7 +58,25 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 
 #profile-editor-actions {
     display: flex;
-    height: 50px;
+    align-items: center;
+}
+
+#profile-editor-selector {
+    width: 175px;
+    height: 30px;
+    border: var(--font-master-color) solid 2px;
+    border-radius: calc(var(--border-radius-button) / 2);
+    font-family: var(--font-master);
+    font-size: var(--font-size-medium);
+}
+
+#profile-name {
+    width: 175px;
+    height: 30px;
+    border: var(--font-master-color) solid 2px;
+    border-radius: calc(var(--border-radius-button) / 2);
+    font-family: var(--font-master);
+    font-size: var(--font-size-medium);
 }
 
 

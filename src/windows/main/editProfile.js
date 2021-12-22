@@ -23,6 +23,7 @@ disableMacropadButtons(true);
 
 function editProfilePopup() { //when edit profile button is clicked
     //updateEditGUI();
+    updateProfileGui();
     if (profileEditorEnabled) {
         //disable the profile editor
         profileEditorEnabled = false;
@@ -98,11 +99,50 @@ function getActionValue(type) {
     return -1;
 }
 
+
+//------------------------- Profile Name ---------------------------------
+
 function saveProfileName() {
     var currentProfile = document.getElementById("profile-editor-selector").value;
-    saveToConfig("profiles." + currentProfile + ".name", document.getElementById("profile-name").value);
-
+    var profileName = document.getElementById("profile-name").value;
+    if (profileName.length == 0) {
+        profileName = "Profil " + (parseInt(currentProfile) + 1);
+    }
+    saveToConfig("profiles." + currentProfile + ".name", profileName);
+    updateProfileGui();
 }
+
+
+
+function changeProfile() {
+    currentEncoderEdit = -1;
+    currentKeyEdit = -1;
+    clearEditButton();
+    updateProfileGui();
+}
+
+function updateProfileGui() {
+    var input = document.getElementById("profile-name");
+    var currentProfile = document.getElementById("profile-editor-selector").value;
+    var profileName = readFromConfig("profiles." + currentProfile + ".name");
+    if (profileName == null) {
+        profileName = "Profil " + (parseInt(currentProfile) + 1);
+    }
+    input.value = profileName
+
+    for (var i = 0; i < 6; i++) {
+        var profileName = readFromConfig("profiles." + i + ".name");
+        if (profileName == null) {
+            profileName = "Profil " + (parseInt(i) + 1);
+        }
+        document.getElementById('profile-editor-selector').getElementsByTagName('option')[i].innerHTML = profileName;
+    }
+}
+
+
+
+
+//-------------------------  ---------------------------------
 
 function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
     currentKeyEdit = -1; //disable edit on key
@@ -305,12 +345,7 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
 
 }
 
-function updateProfileGui() {
-    var input = document.getElementById("profile-name");
-    var currentProfile = document.getElementById("profile-editor-selector").value;
-    input.value = readFromConfig("profiles." + currentProfile + ".name");
 
-}
 
 
 function displayAllSoundSoftwaresInSelector() {

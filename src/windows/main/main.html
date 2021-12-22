@@ -60,7 +60,8 @@
 
             <div id="left" class="popup profile-editor disable">
                 <div id="profile-editor-actions">
-                    <select onchange="updateProfileGui();" name="" id="profile-editor-selector">
+                    <h3>Choix du profil: </h3>
+                    <select onchange="changeProfile();" name="" id="profile-editor-selector">
                         <option value="0">Profil 1</option select>
                         <option value="1">Profil 2</option>
                         <option value="2">Profil 3</option>
@@ -74,8 +75,8 @@
                 </div>
 
 
-                <h3>Nom du Profil: <input type="text" id="profile-name" onfocusout="saveProfileName();" maxlength="10"></h3>
-                <h3>Icon du Profil:</h3>
+                <h3>Nom: <input type="text" id="profile-name" onfocusout="saveProfileName();" maxlength="10"></h3>
+                <h3>Icon:</h3>
                 <div id="icon-grid">
                     <button class="profile-icon"></button>
                     <button class="profile-icon"></button>
@@ -171,6 +172,10 @@
                         <label><input type="radio" name="key-action-type" value="0"><span class="mdi mdi-keyboard"></span><span>Combinaison</span></label>
                         <label><input type="radio" name="key-action-type" value="1"><span class="mdi mdi-microsoft-windows"></span><span>Système</span></label>
                         <label><input type="radio" name="key-action-type" value="2"><span class="mdi mdi-midi"></span><span>Midi</span></label>
+                        <div class="action-help">
+                            <span class="mdi mdi-help-circle"></span>
+                            <span class="text-action-help">Choisisez un icon qui va apparaître sur le profile et le Marcopad</span>
+                        </div>
                     </div>
 
 
