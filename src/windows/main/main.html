@@ -79,7 +79,7 @@
                 <div id="icon-profile-picker">
                     <h3>Icon:</h3>
                     <span class="mdi" id="profile-icon-preview"></span>
-                    <input type="text" id="profile-icon-name" oninput="updateProfileIconPreview();">
+                    <input type="text" id="profile-icon-name" oninput="updateProfileIconPreview(false);" onfocusout="updateProfileIconPreview(true);">
                 </div>
 
                 <div>
@@ -95,23 +95,23 @@
                 <h3>Élément à afficher sur l'écran: </h3>
                 <div id="display-selector">
                     <div class="display-radio">
-                        <input type="radio" name="display-text-selector" id="display-text-0" value="0" checked>
+                        <input type="radio" name="display-text-selector" id="display-text-0" value="0" onchange="displayTypeSelected()" checked>
                         <label for="display-text-0">Titre Musique</label>
                     </div>
 
                     <div class="display-radio">
-                        <input type="radio" name="display-text-selector" id="display-text-1" value="1">
+                        <input type="radio" name="display-text-selector" id="display-text-1" value="1" onchange="displayTypeSelected()">
                         <label for="display-text-1">Profil Actuel</label>
                     </div>
                     <div class="display-radio">
-                        <input type="radio" name="display-text-selector" id="display-text-2" value="2">
+                        <input type="radio" name="display-text-selector" id="display-text-2" value="2" onchange="displayTypeSelected()">
                         <label for="display-text-2">Date / Heures</label>
                     </div>
                     <div class="display-radio">
-                        <input type="radio" name="display-text-selector" id="display-text-3" value="3">
+                        <input type="radio" name="display-text-selector" id="display-text-3" value="3" onchange="displayTypeSelected()">
                         <div id="display-div-custom">
                             <label for="display-text-3">Custom</label>
-                            <input type="text" id="display-text-custom" placeholder="Texte Personalisé" maxlength="100">
+                            <input type="text" id="display-text-custom" placeholder="Texte Personalisé" maxlength="100" onfocusout="displayTypeSelected();">
                         </div>
 
                     </div>

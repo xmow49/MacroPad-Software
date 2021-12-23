@@ -34,6 +34,17 @@ function disableMacropadButtons(state) { //disable all encoders/keys buttons whe
 }
 
 disableMacropadButtons(true);
+updateProfileOverviewIcon();
+
+function updateProfileOverviewIcon() {
+    for (var i = 0; i < 6; i++) {
+        var icon = readFromConfig("profiles." + i + ".icon");
+        if (icon == null) { //if profile icon is not set
+            icon = "mdi-numeric-" + (parseInt(i) + 1) + "-box"; //set default icon
+        }
+        document.getElementById("profil-list").getElementsByTagName("button")[i].className = "mdi " + icon;
+    }
+}
 
 function editProfilePopup() { //when edit profile button is clicked
     if (profileEditorEnabled) {
@@ -49,11 +60,8 @@ function editProfilePopup() { //when edit profile button is clicked
 
         //disable edit mode for all encoders/keys buttons
         disableMacropadButtons(true);
+        updateProfileOverviewIcon();
 
-        for (var i = 0; i < 6; i++) {
-            var icon = "mdi-" + readFromConfig("profiles." + i + ".icon");
-            document.getElementById("profil-list").getElementsByTagName("button")[i].className = "mdi " + icon;
-        }
 
 
     } else {
@@ -171,17 +179,19 @@ function updateProfileGui() {
 
     // --------------------- Profile Color ------------------------------
     var color = readFromConfig("profiles." + currentProfile + ".color"); //get profile color from config
+    var colorHEX;
     if (color == null) { //if profile color is not set
-        color = "#000000"; //set default color (black)
+        colorHEX = "#000000"; //set default color (black)
+    } else {
+        colorHEX = rgbToHex(color[0], color[1], color[2]); //convert to hex color
     }
-    color = rgbToHex(color[0], color[1], color[2]); //convert to hex color
-    document.getElementById("color-picker").value = color; //display color in color picker
+    document.getElementById("color-picker").value = colorHEX; //display color in color picker
 
     // --------------------- Profile Icon ------------------------------
 
     var icon = readFromConfig("profiles." + currentProfile + ".icon"); //get profile icon from config
     if (icon == null) { //if profile icon is not set
-        icon = defaultProfileIcon; //set default icon
+        icon = "mdi-numeric-" + (parseInt(currentProfile) + 1) + "-box"; //set default icon
     }
 
     document.getElementById("profile-icon-preview").className = "mdi"; //remove all icons from preview
@@ -460,7 +470,7 @@ function keyCombinationCapture(oEvent) {
     captureCount++;
 }
 
-function updateProfileIconPreview() {
+function updateProfileIconPreview(saveInConfig) {
     var icon = document.getElementById("profile-icon-name"); //text input field for the icon name
     var span = document.getElementById("profile-icon-preview"); //span to display the icon
     span.className = "mdi"; //reset the class
@@ -468,6 +478,28 @@ function updateProfileIconPreview() {
 
     //save to the config file
     //get the current profile
+    if (saveInConfig) {
+        var currentProfile = document.getElementById("profile-editor-selector").value;
+        saveToConfig("profiles." + currentProfile + ".icon", "mdi-" + icon.value);
+    }
+}
+
+function displayTypeSelected() {
     var currentProfile = document.getElementById("profile-editor-selector").value;
-    saveToConfig("profiles." + currentProfile + ".icon", icon.value);
+    var radios = document.getElementsByName('display-text-selector');
+    var type = -1;
+    for (var i = 0, length = radios.length; i < length; i++) {
+        if (radios[i].checked) {
+            type = radios[i].value;
+            break;
+        }
+    }
+    var value = "";
+    if (type == 3) {
+        value = document.getElementById("display-text-custom").value;
+    }
+
+    saveToConfig("profiles." + currentProfile + ".display.type", type);
+    saveToConfig("profiles." + currentProfile + ".display.value", value);
+
 }
