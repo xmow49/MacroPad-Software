@@ -7,6 +7,7 @@
     --header-size: 28px;
     --font-size-small: 12px;
     --font-size-medium: 20px;
+    --font-size-icon: 30px;
 }
 
 input,
@@ -48,6 +49,7 @@ h2,
 h3,
 h4,
 input,
+select,
 label {
     font-family: var(--font-master);
     font-style: normal;
@@ -72,7 +74,8 @@ h4 {
     padding: 0px;
 }
 
-input {
+input,
+select {
     border: var(--font-master-color) solid 2px;
     border-radius: calc(var(--border-radius-button) / 2);
 }

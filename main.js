@@ -39,7 +39,7 @@ const schema = {
                             "1": {
                                 "type": "object",
                                 "properties": {
-                                    "action": {
+                                    "type": {
                                         "type": "integer"
                                     }
                                 }
@@ -47,7 +47,7 @@ const schema = {
                             "2": {
                                 "type": "object",
                                 "properties": {
-                                    "action": {
+                                    "type": {
                                         "type": "integer"
                                     }
                                 }
@@ -60,7 +60,7 @@ const schema = {
                             "0": {
                                 "type": "object",
                                 "properties": {
-                                    "action": {
+                                    "type": {
                                         "type": "integer"
                                     }
                                 }
@@ -68,7 +68,7 @@ const schema = {
                             "1": {
                                 "type": "object",
                                 "properties": {
-                                    "action": {
+                                    "type": {
                                         "type": "integer"
                                     }
                                 }
@@ -76,7 +76,7 @@ const schema = {
                             "2": {
                                 "type": "object",
                                 "properties": {
-                                    "action": {
+                                    "type": {
                                         "type": "integer"
                                     }
                                 }
@@ -84,7 +84,7 @@ const schema = {
                             "3": {
                                 "type": "object",
                                 "properties": {
-                                    "action": {
+                                    "type": {
                                         "type": "integer"
                                     }
                                 }
@@ -92,7 +92,7 @@ const schema = {
                             "4": {
                                 "type": "object",
                                 "properties": {
-                                    "action": {
+                                    "type": {
                                         "type": "integer"
                                     }
                                 }
@@ -100,7 +100,7 @@ const schema = {
                             "5": {
                                 "type": "object",
                                 "properties": {
-                                    "action": {
+                                    "type": {
                                         "type": "integer"
                                     }
                                 }

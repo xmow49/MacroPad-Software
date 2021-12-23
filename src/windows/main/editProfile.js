@@ -2,7 +2,7 @@ const { contextBridge } = require("electron");
 const { cp } = require("original-fs");
 
 var profileEditorEnabled = false;
-
+var defaultProfileIcon = "mdi-account-circle";
 
 function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -36,8 +36,6 @@ function disableMacropadButtons(state) { //disable all encoders/keys buttons whe
 disableMacropadButtons(true);
 
 function editProfilePopup() { //when edit profile button is clicked
-    //updateEditGUI();
-    updateProfileGui();
     if (profileEditorEnabled) {
         //disable the profile editor
         profileEditorEnabled = false;
@@ -52,9 +50,15 @@ function editProfilePopup() { //when edit profile button is clicked
         //disable edit mode for all encoders/keys buttons
         disableMacropadButtons(true);
 
+        for (var i = 0; i < 6; i++) {
+            var icon = "mdi-" + readFromConfig("profiles." + i + ".icon");
+            document.getElementById("profil-list").getElementsByTagName("button")[i].className = "mdi " + icon;
+        }
+
 
     } else {
         //enable the profile editor
+        updateProfileGui();
         profileEditorEnabled = true;
         document.getElementById("normal-view").className = "disable";
         document.getElementById("profil-list").className = "disable";
@@ -146,29 +150,45 @@ function changeProfile() {
 }
 
 function updateProfileGui() {
-    var input = document.getElementById("profile-name");
-    var currentProfile = document.getElementById("profile-editor-selector").value;
-    var profileName = readFromConfig("profiles." + currentProfile + ".name");
-    if (profileName == null) {
-        profileName = "Profil " + (parseInt(currentProfile) + 1);
-    }
-    input.value = profileName
+    var input = document.getElementById("profile-name"); //profile name input
+    var currentProfile = document.getElementById("profile-editor-selector").value; //current profile
+    var profileName = readFromConfig("profiles." + currentProfile + ".name"); //profile name from config
 
-    for (var i = 0; i < 6; i++) {
-        var profileName = readFromConfig("profiles." + i + ".name");
-        if (profileName == null) {
-            profileName = "Profil " + (parseInt(i) + 1);
+    // --------------------- Profile Name ------------------------------
+    if (profileName == null) { //if profile name is not set
+        profileName = "Profil " + (parseInt(currentProfile) + 1); //set default name
+    }
+    input.value = profileName //display profile name
+
+    // --------------------- Profile List ------------------------------
+    for (var i = 0; i < 6; i++) { //for all profiles
+        var profileName = readFromConfig("profiles." + i + ".name"); //get profile name from config
+        if (profileName == null) { //if profile name is not set
+            profileName = "Profil " + (parseInt(i) + 1); //set default name
         }
-        document.getElementById('profile-editor-selector').getElementsByTagName('option')[i].innerHTML = profileName;
+        document.getElementById('profile-editor-selector').getElementsByTagName('option')[i].innerHTML = profileName; //display profile name in list
     }
 
-    var color = readFromConfig("profiles." + currentProfile + ".color");
-    if (color == null) {
-        color = "#000000";
+    // --------------------- Profile Color ------------------------------
+    var color = readFromConfig("profiles." + currentProfile + ".color"); //get profile color from config
+    if (color == null) { //if profile color is not set
+        color = "#000000"; //set default color (black)
     }
-    color = rgbToHex(color[0], color[1], color[2]);
-    document.getElementById("color-picker").value = color;
+    color = rgbToHex(color[0], color[1], color[2]); //convert to hex color
+    document.getElementById("color-picker").value = color; //display color in color picker
 
+    // --------------------- Profile Icon ------------------------------
+
+    var icon = readFromConfig("profiles." + currentProfile + ".icon"); //get profile icon from config
+    if (icon == null) { //if profile icon is not set
+        icon = defaultProfileIcon; //set default icon
+    }
+
+    document.getElementById("profile-icon-preview").className = "mdi"; //remove all icons from preview
+    document.getElementById("profile-icon-preview").classList.add(icon); //display icon in profile icon
+    // remove mdi- from icon name
+    icon = icon.replace("mdi-", "");
+    document.getElementById("profile-icon-name").value = icon; //display icon name in profile icon name input
 
 }
 
@@ -199,15 +219,18 @@ function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
         if (currentActionType == null) { //if no radio is checked
             currentActionType = -1;
         }
-        saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".action", parseInt(currentActionType));
+        saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".type", parseInt(currentActionType));
 
         //------------save value ------------
         if (currentActionType == 2) { //key combination
+            var valuesToSave = [];
             for (var i = 0; i < 3; i++) {
                 var strValues = document.getElementById("encoder-edit-key-" + i + "-values").innerHTML; //get the values of the key combination
                 var values = strValues.split(","); //tranform in array
-                saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".values." + i, parseInt(values[0])); //save the values
+                valuesToSave.push(parseInt(values[0]));
             }
+            console.log(valuesToSave);
+            saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".values", valuesToSave); //save the values
         }
 
 
@@ -219,7 +242,7 @@ function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
     //---------------------------------------------Load values from the config -------------------------------------------------
     currentEncoderEdit = newEncoderId; //store the new encoder id
 
-    var newActionType = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".action");
+    var newActionType = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".type");
     if (newActionType == null) newActionType = -1;
     //load new action values
     for (var i = 0; i < actionType.length; i++) {
@@ -271,12 +294,12 @@ function editKeyBtn(newKeyId) { //when a edit key button is clicked
         if (value == null) {
             value = -1;
         }
-        saveToConfig("profiles." + currentProfile + ".keys." + currentKeyEdit + ".action", parseInt(value));
+        saveToConfig("profiles." + currentProfile + ".keys." + currentKeyEdit + ".type", parseInt(value));
     }
     currentKeyEdit = newKeyId; //store the new encoder id
 
     //Read value from config
-    var value = readFromConfig("profiles." + currentProfile + ".keys." + newKeyId + ".action");
+    var value = readFromConfig("profiles." + currentProfile + ".keys." + newKeyId + ".type");
     if (value == null) value = -1;
     //load new action values
     for (var i = 0; i < actionType.length; i++) {
@@ -438,8 +461,13 @@ function keyCombinationCapture(oEvent) {
 }
 
 function updateProfileIconPreview() {
-    var icon = document.getElementById("profile-icon-name");
-    var span = document.getElementById("profile-icon-preview");
-    span.className = "mdi";
-    span.classList.add("mdi-" + icon.value);
+    var icon = document.getElementById("profile-icon-name"); //text input field for the icon name
+    var span = document.getElementById("profile-icon-preview"); //span to display the icon
+    span.className = "mdi"; //reset the class
+    span.classList.add("mdi-" + icon.value); //add the icon class
+
+    //save to the config file
+    //get the current profile
+    var currentProfile = document.getElementById("profile-editor-selector").value;
+    saveToConfig("profiles." + currentProfile + ".icon", icon.value);
 }

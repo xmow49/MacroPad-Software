@@ -149,6 +149,7 @@
     margin: var(--profil-button-margin);
     border-radius: var(--profil-button-border-radius);
     padding: var(--profil-button-padding);
+    font-size: var(--font-size-icon);
 }
 
 #profil-list.disable {
