@@ -1,1 +1,0 @@
-import { IconPickerModule } from 'ngx-icon-picker';

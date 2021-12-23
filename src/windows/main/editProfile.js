@@ -4,6 +4,20 @@ const { cp } = require("original-fs");
 var profileEditorEnabled = false;
 
 
+function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    var array = [];
+    for (var i = 1; i < 4; i++) {
+        array.push(parseInt(result[i], 16));
+    }
+    return array;
+}
+
+function rgbToHex(r, g, b) {
+    return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+
 function disableMacropadButtons(state) { //disable all encoders/keys buttons when edit mode is disabled
     // for all encoder buttons
     var encoders = [...document.getElementsByClassName("encoder")];
@@ -100,6 +114,16 @@ function getActionValue(type) {
 }
 
 
+
+function updateProfileColor() {
+    var color = document.getElementById("color-picker").value;
+    var rgb = hexToRgb(color);
+    //save to config
+    var currentProfile = document.getElementById("profile-editor-selector").value;
+    saveToConfig("profiles." + currentProfile + ".color", rgb);
+
+}
+
 //------------------------- Profile Name ---------------------------------
 
 function saveProfileName() {
@@ -137,9 +161,16 @@ function updateProfileGui() {
         }
         document.getElementById('profile-editor-selector').getElementsByTagName('option')[i].innerHTML = profileName;
     }
+
+    var color = readFromConfig("profiles." + currentProfile + ".color");
+    if (color == null) {
+        color = "#000000";
+    }
+    color = rgbToHex(color[0], color[1], color[2]);
+    document.getElementById("color-picker").value = color;
+
+
 }
-
-
 
 
 //-------------------------  ---------------------------------
@@ -404,4 +435,11 @@ function keyCombinationCapture(oEvent) {
 
 
     captureCount++;
+}
+
+function updateProfileIconPreview() {
+    var icon = document.getElementById("profile-icon-name");
+    var span = document.getElementById("profile-icon-preview");
+    span.className = "mdi";
+    span.classList.add("mdi-" + icon.value);
 }

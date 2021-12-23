@@ -46,7 +46,9 @@ button>span::before {
 h1,
 h2,
 h3,
-h4 {
+h4,
+input,
+label {
     font-family: var(--font-master);
     font-style: normal;
     font-weight: normal;
@@ -68,6 +70,11 @@ h3 {
 h4 {
     margin: 0px;
     padding: 0px;
+}
+
+input {
+    border: var(--font-master-color) solid 2px;
+    border-radius: calc(var(--border-radius-button) / 2);
 }
 
 header {

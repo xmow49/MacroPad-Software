@@ -1,17 +1,23 @@
-#icon-grid {
+/* #icon-grid {
     display: grid;
     grid-template-columns: repeat(6, 1fr);
     grid-auto-rows: auto auto auto;
     width: 100px;
-}
+} */
 
-.profile-icon {
+
+/* .profile-icon {
     width: 50px;
     height: 50px;
     margin: 0px;
-}
+} */
 
 #color-selector {}
+
+#profile-color-picker {
+    display: flex;
+    align-items: center;
+}
 
 input[type="color"] {
     -webkit-appearance: none;
@@ -64,8 +70,6 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 #profile-editor-selector {
     width: 175px;
     height: 30px;
-    border: var(--font-master-color) solid 2px;
-    border-radius: calc(var(--border-radius-button) / 2);
     font-family: var(--font-master);
     font-size: var(--font-size-medium);
 }
@@ -73,8 +77,6 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 #profile-name {
     width: 175px;
     height: 30px;
-    border: var(--font-master-color) solid 2px;
-    border-radius: calc(var(--border-radius-button) / 2);
     font-family: var(--font-master);
     font-size: var(--font-size-medium);
 }
@@ -266,4 +268,38 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     width: 30px;
     height: 30px;
     padding: 0px;
+}
+
+#icon-profile-picker {
+    display: flex;
+    align-items: center;
+}
+
+#profile-icon-preview {
+    width: 40px;
+    height: 40px;
+    font-size: 30px;
+    text-align: center;
+    margin: 5px;
+}
+
+#display-div-custom {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#display-selector {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: auto auto auto;
+}
+
+.display-radio {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    margin: 5px;
 }
