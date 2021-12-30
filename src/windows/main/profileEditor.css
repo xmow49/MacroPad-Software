@@ -239,6 +239,12 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     transition: all 0.3s;
 }
 
+.encoder-action-info-text {
+    margin-top: 50px;
+    text-align: center;
+    width: 20em;
+}
+
 
 /* ---------- /select action -------- */
 

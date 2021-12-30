@@ -109,7 +109,7 @@ function saveActionType() {
 
 }
 
-function getActionValue(type) {
+function getActionValue(type) { //get the value of the radio
     if (type == "encoder" || type == "key") {
         var actionType = document.getElementsByName(type + "-action-type"); // get all input elements
     } else {
@@ -329,67 +329,50 @@ function editKeyBtn(newKeyId) { //when a edit key button is clicked
 }
 
 
+function updateActionSelectorGUI(Newvalue, type) { //update the action selector gui
+    //type: 0 --> encoder
+    //type: 1 --> key
+    var className;
+    if (type == 0) {
+        className = "encoder";
+    } else {
+        className = "key";
+    }
+    for (var i = -1; i <= 2; i++) { //for all action types
+        if (i == Newvalue) { //if the new value is the current value
+            document.getElementsByClassName("action-selector" + i)[type].classList.add('checked'); //select the action type
+            document.getElementsByClassName(className + i)[0].classList.remove("disable"); //enable the div
+        } else {
+            document.getElementsByClassName("action-selector" + i)[type].classList.remove('checked'); //unselect the action type
+            document.getElementsByClassName(className + i)[0].classList.add("disable"); //disable the div
+
+        }
+    }
+
+}
+
 function updateEditGUI(type, id) { //update the gui when an encoder or key changes action, value ....
     if (type == "encoder") {
         document.getElementById("edit-encoder").className = ""; //enable the edit encoder menu
         document.getElementById("edit-key").className = "disable"; //disable the edit key menu
 
         var value = getActionValue("encoder");
-
+        updateActionSelectorGUI(parseInt(value), 0); //select on the gui
         if (value == "-1") {
-            document.getElementById("encoder-master-volume").className = "disable";
-            document.getElementById("encoder-software-volume").className = "disable";
-            document.getElementById("encoder-custom").className = "disable";
-
-            document.getElementById('action-selector-1').classList.add('checked');
-            document.getElementById('action-selector0').classList.remove('checked');
-            document.getElementById('action-selector1').classList.remove('checked');
-            document.getElementById('action-selector2').classList.remove('checked');
-
             document.getElementById('help-text').innerHTML = "L'encoder est désactivé, il ne fera rien.";
 
-
-
         } else if (value == "0") {
-            document.getElementById("encoder-master-volume").className = "";
-            document.getElementById("encoder-software-volume").className = "disable";
-            document.getElementById("encoder-custom").className = "disable";
             document.getElementById('help-text').innerHTML = "L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.";
 
-            document.getElementById('action-selector-1').classList.remove('checked');
-            document.getElementById('action-selector0').classList.add('checked');
-            document.getElementById('action-selector1').classList.remove('checked');
-            document.getElementById('action-selector2').classList.remove('checked');
-
         } else if (value == "1") {
-            console.log(value);
-            document.getElementById("encoder-master-volume").className = "disable";
-            document.getElementById("encoder-software-volume").className = "";
-            document.getElementById("encoder-custom").className = "disable";
             document.getElementById('help-text').innerHTML = "L'encoder va controler le volume du logiciel choisi ci-dessous. Lors d'un appuis, le son se mute.";
             displayAllSoundSoftwaresInSelector();
 
-
-            document.getElementById('action-selector-1').classList.remove('checked');
-            document.getElementById('action-selector0').classList.remove('checked');
-            document.getElementById('action-selector1').classList.add('checked');
-            document.getElementById('action-selector2').classList.remove('checked');
-
         } else if (value == "2") {
-            document.getElementById("encoder-master-volume").className = "disable";
-            document.getElementById("encoder-software-volume").className = "disable";
-            document.getElementById("encoder-custom").className = "";
             document.getElementById('help-text').innerHTML = "Choisisez manuellement les actions de l'encoder";
 
-            document.getElementById('action-selector-1').classList.remove('checked');
-            document.getElementById('action-selector0').classList.remove('checked');
-            document.getElementById('action-selector1').classList.remove('checked');
-            document.getElementById('action-selector2').classList.add('checked');
-
         } else {
-            document.getElementById("encoder-master-volume").className = "disable";
-            document.getElementById("encoder-software-volume").className = "disable";
-            document.getElementById("encoder-custom").className = "disable";
+
 
         }
         if (id != -1) { //update the encoder id on the gui
@@ -400,17 +383,26 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
         document.getElementById("edit-key").className = ""; //enable the edit key menu
         document.getElementById("edit-encoder").className = "disable"; //disable the edit encoder menu
         document.getElementById("current-edition").innerHTML = "Key " + (id + 1);
-    } else if (type == "empty") {
 
-        document.getElementById("edit-encoder").className = "disable"; //disable the edit encoder menu
-        document.getElementById("edit-key").className = "disable"; //disable the edit key menu
-        clearEditButton();
+        var value = getActionValue("key"); //get the value of the radio
+        updateActionSelectorGUI(parseInt(value), 1); //select on the gui
+
+        if (value == "-1") {
+
+
+
+
+        } else if (type == "empty") {
+
+            document.getElementById("edit-encoder").className = "disable"; //disable the edit encoder menu
+            document.getElementById("edit-key").className = "disable"; //disable the edit key menu
+            clearEditButton();
+        }
+
     }
 
+
 }
-
-
-
 
 function displayAllSoundSoftwaresInSelector() {
     var strSoftwareList = IPC.sendSync("get-softwares-names");
@@ -432,14 +424,15 @@ function displayAllSoundSoftwaresInSelector() {
 }
 
 
-var captureType = [-1, -1];
-var captureKey = [-1, -1, -1];
-var captureCount = 0;
-var maxCaptureCount = 0;
+var captureType = [-1, -1]; //0 --> type of key (encoder or key), 1 --> action number
+var captureKey = [-1, -1, -1]; //store the captured key
+var captureCount = 0; //count the number of key pressed 
+var maxCaptureCount = 0; //max number of key pressed
 
 function startKeyCombinationCapture(type, action, maxCount) {
     document.addEventListener("keydown", keyCombinationCapture);
     captureType = [type, action];
+    captureKey = [-1, -1, -1];
     maxCaptureCount = maxCount;
     captureCount = 0;
 }
@@ -449,25 +442,53 @@ function stopKeyCombinationCapture() {
 }
 
 function keyCombinationCapture(oEvent) {
-    if (captureCount < maxCaptureCount) {
+    if (captureCount < maxCaptureCount) { //if the number of key pressed is less than the max number of key pressed
+        var charCode = (typeof oEvent.which == "number") ? oEvent.which : oEvent.keyCode; //get the key pressed in char code
+        //if the key is not in the array
+        if (captureKey.indexOf(charCode) == -1) {
+            captureKey[captureCount] = charCode; //add the key to the array
+            captureCount++; //increment the number of key pressed
+        } else {
+            return;
+        }
+        console.log(captureKey);
+
+
         if (captureType[0] == "encoder") {
-            console.log("keyCombinationCapture");
-            var charCode = (typeof oEvent.which == "number") ? oEvent.which : oEvent.keyCode
-            var label = "encoder-edit-key-" + captureType[1];
-            document.getElementById(label).innerHTML = keycodesToStr[charCode];
-            captureKey[captureCount] = charCode;
+            var label = "encoder-edit-key-" + captureType[1]; //get the label
+            document.getElementById(label).innerHTML = keycodesToStr[charCode]; //display the key
+
+
+            //create stored value
             var strKey = "";
             for (var i = 0; i < maxCaptureCount; i++) {
                 strKey += captureKey[i] + ",";
             }
-            document.getElementById(label + "-values").innerHTML = strKey;
+            document.getElementById(label + "-values").innerHTML = strKey; //store value on html
+        }
+        if (captureType[0] == "key") {
+            var label = "key-edit-combination"; //get the label
+            //create stored value
+            var strKey = "";
+            for (var i = 0; i < maxCaptureCount; i++) {
+                strKey += captureKey[i] + ",";
+            }
+
+            var GUIKey = keycodesToStr[captureKey[0]];
+            for (var i = 1; i < captureCount; i++) {
+                GUIKey += " + " + keycodesToStr[captureKey[i]];
+                console.log(captureKey[i]);
+            }
+
+            document.getElementById(label).innerHTML = GUIKey; //display the key
+            document.getElementById(label + "-values").innerHTML = strKey; //store value on html
         }
     } else {
         stopKeyCombinationCapture();
     }
 
 
-    captureCount++;
+
 }
 
 function updateProfileIconPreview(saveInConfig) {

@@ -141,10 +141,10 @@
 
 
                     <div class="action-selector" id="encoder-action-selector" onchange="updateEditGUI('encoder', -1);">
-                        <label id="action-selector-1"><input type="radio" name="encoder-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
-                        <label id="action-selector0"><input type="radio" name="encoder-action-type" value="0"><span class="mdi mdi-volume-source"></span><span>Volume</span></label>
-                        <label id="action-selector1"><input type="radio" name="encoder-action-type" value="1"><span class="mdi mdi-monitor"></span><span>Logiciel</span></label>
-                        <label id="action-selector2"><input type="radio" name="encoder-action-type" value="2"><span class="mdi mdi-pencil"></span><span>Custom</span></label>
+                        <label class="action-selector-1"><input type="radio" name="encoder-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
+                        <label class="action-selector0"><input type="radio" name="encoder-action-type" value="0"><span class="mdi mdi-volume-source"></span><span>Volume</span></label>
+                        <label class="action-selector1"><input type="radio" name="encoder-action-type" value="1"><span class="mdi mdi-monitor"></span><span>Logiciel</span></label>
+                        <label class="action-selector2"><input type="radio" name="encoder-action-type" value="2"><span class="mdi mdi-pencil"></span><span>Custom</span></label>
                         <div class="action-help">
                             <span class="mdi mdi-help-circle"></span>
                             <span id="help-text" class="text-action-help">L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.</span>
@@ -152,19 +152,24 @@
                     </div>
 
                     <!-- affichage pour chaque action-->
-                    <div id="encoder-master-volume">
-
+                    <div class="encoder-1">
+                        <h4 class="encoder-action-info-text">Cet encoder est désactivé.</h4>
                     </div>
 
-                    <div id="encoder-software-volume">
-                        <h4>Choisir un logiciel</h4>
+
+                    <div class="encoder0">
+                        <h4 class="encoder-action-info-text">Cet encoder contrôle le volume principal du PC.</h4>
+                    </div>
+
+                    <div class="encoder1" style="margin-top: 50px;">
+                        <h4 style="text-align: center;">Choisir un logiciel</h4>
                         <div id="software-div-selector">
                             <select id="software-volume-selector"></select>
                             <button onclick="displayAllSoundSoftwaresInSelector();">Actualiser</button>
                         </div>
                     </div>
 
-                    <div id="encoder-custom" class="disable">
+                    <div class="encoder2" class="disable">
                         <!-- encoder key turn left -->
                         <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
                         <div class="key-selector">
@@ -184,7 +189,7 @@
                         <!-- encoder key press -->
                         <h3><span class="mdi mdi-bullseye"></span> Clic Encoder</h3>
                         <div class="key-selector">
-                            <label id="encoder-edit-key-2" onclick="startKeyCombinationCapture('encoder', 2, 1);"></label>
+                            <label class="key-combination" id="encoder-edit-key-2" onclick="startKeyCombinationCapture('encoder', 2, 1);"></label>
                             <span id="encoder-edit-key-2-values" style="display: none;"></span>
                             <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
                         </div>
@@ -195,10 +200,10 @@
                 <div id="edit-key" class="disable">
 
                     <div class="action-selector" id="key-action-selector" onchange="updateEditGUI('key', -1);">
-                        <label><input type="radio" name="key-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
-                        <label><input type="radio" name="key-action-type" value="0"><span class="mdi mdi-keyboard"></span><span>Combinaison</span></label>
-                        <label><input type="radio" name="key-action-type" value="1"><span class="mdi mdi-microsoft-windows"></span><span>Système</span></label>
-                        <label><input type="radio" name="key-action-type" value="2"><span class="mdi mdi-midi"></span><span>Midi</span></label>
+                        <label class="action-selector-1"><input type="radio" name="key-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
+                        <label class="action-selector0"><input type="radio" name="key-action-type" value="0"><span class="mdi mdi-keyboard"></span><span>Combinaison</span></label>
+                        <label class="action-selector1"><input type="radio" name="key-action-type" value="1"><span class="mdi mdi-microsoft-windows"></span><span>Système</span></label>
+                        <label class="action-selector2"><input type="radio" name="key-action-type" value="2"><span class="mdi mdi-midi"></span><span>Midi</span></label>
                         <div class="action-help">
                             <span class="mdi mdi-help-circle"></span>
                             <span class="text-action-help">Choisisez un icon qui va apparaître sur le profile et le Marcopad</span>
@@ -206,7 +211,31 @@
                     </div>
 
 
-                    <button>Choisir</button>
+
+                    <!-- DISABLE -->
+                    <div class="key-1" style="margin-top: 50px;">
+                        <h4 class="key-action-info-text">Cette key est désactivée.</h4>
+                    </div>
+
+                    <!-- KEY COMBINATION -->
+                    <div class="key0">
+                        <div class="key-selector">
+                            <label id="key-edit-combination" onclick="startKeyCombinationCapture('key', 0, 3);"></label>
+                            <span id="key-edit-combination-values" style="display: none;"></span>
+                            <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
+                        </div>
+                    </div>
+
+                    <div class="key1" style="margin-top: 50px;">
+
+
+                    </div>
+
+                    <div class="key2" style="margin-top: 50px;">
+
+                    </div>
+
+
                 </div>
             </div>
 
