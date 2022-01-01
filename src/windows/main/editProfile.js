@@ -101,7 +101,7 @@ function clearEditButton() { //remove edit icon (pen) from all encoders and keys
 
 }
 
-var currentEncoderEdit = -1;
+var currentEdit = -1;
 var currentKeyEdit = -1;
 
 function saveActionType() {
@@ -151,7 +151,7 @@ function saveProfileName() {
 
 
 function changeProfile() {
-    currentEncoderEdit = -1;
+    currentEdit = -1;
     currentKeyEdit = -1;
     clearEditButton();
     updateProfileGui();
@@ -205,15 +205,17 @@ function updateProfileGui() {
 
 //-------------------------  ---------------------------------
 
-function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
+function onEditButton(type, newId) { //when a edit encoder or key button is clicked
+    //type: encoder or key
+    var configKey = type + "s";
     currentKeyEdit = -1; //disable edit on key
     var currentProfile = document.getElementById("profile-editor-selector").value;
-    var actionType = document.getElementsByName("encoder-action-type"); // get all input elements
+    var actionType = document.getElementsByName(type + "-action-type"); // get all input elements
 
     //---------------------------------------------Save old values in the config -------------------------------------------------
 
 
-    if (currentEncoderEdit == -1) { //if no previous encoder is in edition mode set the new encoder in edition mode
+    if (currentEdit == -1) { //if no previous encoder is in edition mode set the new encoder in edition mode
 
     } else {
         //save old values in the config
@@ -229,30 +231,38 @@ function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
         if (currentActionType == null) { //if no radio is checked
             currentActionType = -1;
         }
-        saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".type", parseInt(currentActionType));
+        saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".type", parseInt(currentActionType));
 
         //------------save value ------------
-        if (currentActionType == 2) { //key combination
-            var valuesToSave = [];
-            for (var i = 0; i < 3; i++) {
-                var strValues = document.getElementById("encoder-edit-key-" + i + "-values").innerHTML; //get the values of the key combination
-                var values = strValues.split(","); //tranform in array
-                valuesToSave.push(parseInt(values[0]));
+        if (type == "encoder") {
+            if (currentActionType == 2) { //key combination
+                var valuesToSave = [];
+                for (var i = 0; i < 3; i++) {
+                    var strValues = document.getElementById(type + "-edit-key-" + i + "-values").innerHTML; //get the values of the key combination
+                    var values = strValues.split(","); //tranform in array
+                    valuesToSave.push(parseInt(values[0]));
+                }
+                console.log(valuesToSave);
+                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the values
             }
-            console.log(valuesToSave);
-            saveToConfig("profiles." + currentProfile + ".encoders." + currentEncoderEdit + ".values", valuesToSave); //save the values
+        } else if (type == "key") {
+            if (currentActionType == 0) { //key combination
+                var strValues = document.getElementById(type + "-edit-combination-values").innerHTML; //get the values of the key combination
+                console.log(strValues);
+                var valuesToSave = strValues.split(","); //tranform in array
+                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the values
+            }
         }
-
-
-
     }
-
     //---------------------------------------------End of save old values in the config -------------------------------------------------
 
-    //---------------------------------------------Load values from the config -------------------------------------------------
-    currentEncoderEdit = newEncoderId; //store the new encoder id
 
-    var newActionType = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".type");
+
+
+    //---------------------------------------------Load values from the config -------------------------------------------------
+    currentEdit = newId; //store the new encoder id
+
+    var newActionType = readFromConfig("profiles." + currentProfile + "." + configKey + "." + newId + ".type");
     if (newActionType == null) newActionType = -1;
     //load new action values
     for (var i = 0; i < actionType.length; i++) {
@@ -263,70 +273,79 @@ function editEncoderBtn(newEncoderId) { //when a edit encoder button is clicked
         }
     }
 
-    if (newActionType == 2) { //if key combination
-        var newValues = [];
-        for (var i = 0; i < 3; i++) {
-            newValues[i] = readFromConfig("profiles." + currentProfile + ".encoders." + newEncoderId + ".values." + i);
-            if (newValues[i] == null) newValues[i] = -1;
-            console.log(newValues);
-            document.getElementById("encoder-edit-key-" + i).innerHTML = keycodesToStr[newValues[i]];
-            document.getElementById("encoder-edit-key-" + i + "-values").innerHTML = newValues[i];
+    if (type == "encoder") {
+        if (newActionType == 2) { //if key combination
+            var newValues = [];
+            for (var i = 0; i < 3; i++) {
+                newValues[i] = readFromConfig("profiles." + currentProfile + "." + configKey + "." + newId + ".values." + i);
+                if (newValues[i] == null) newValues[i] = -1;
+                console.log(newValues);
+                document.getElementById(type + "-edit-key-" + i).innerHTML = keycodesToStr[newValues[i]];
+                document.getElementById(type + "-edit-key-" + i + "-values").innerHTML = newValues[i];
+            }
         }
-
+    } else if (type == "key") {
+        if (newActionType == 0) { //if key combination
+            var newValues = readFromConfig("profiles." + currentProfile + "." + configKey + "." + newId + ".values");
+            if (newValues == null) newValues = -1;
+            document.getElementById(type + "-edit-combination-values").innerHTML = newValues;
+        }
     }
 
 
 
+
+
     clearEditButton();
-    document.getElementById("encoderIcon" + newEncoderId).className = editButtonIcon; //dispplay the edit icon (pen) on the new encoder
+    document.getElementById(type + "Icon" + newId).className = editButtonIcon; //dispplay the edit icon (pen) on the new encoder
     //display the gui
-    updateEditGUI("encoder", newEncoderId);
+    updateEditGUI(type, newId);
     //---------------------------------------------End of load values from the config -------------------------------------------------
 
 }
 
-function editKeyBtn(newKeyId) { //when a edit key button is clicked
-    currentEncoderEdit = -1; //disable edit on encoder
-    var currentProfile = document.getElementById("profile-editor-selector").value;
-    var actionType = document.getElementsByName("key-action-type"); // get all input elements
-    if (currentKeyEdit == -1) { //if no previous key is in edition mode set the new key in edition mode
+// function editKeyBtn(newKeyId) { //when a edit key button is clicked
+//     currentEdit = -1; //disable edit on encoder
+//     var currentProfile = document.getElementById("profile-editor-selector").value;
+//     var actionType = document.getElementsByName("key-action-type"); // get all input elements
+//     if (currentKeyEdit == -1) { //if no previous key is in edition mode set the new key in edition mode
 
-    } else {
-        //save old values in the config
+//     } else {
+//         //save old values in the config
 
-        var value;
-        for (var i = 0; i < actionType.length; i++) {
-            if (actionType[i].checked) {
-                value = actionType[i].value;
-            }
-        }
+//         var value;
+//         for (var i = 0; i < actionType.length; i++) {
+//             if (actionType[i].checked) {
+//                 value = actionType[i].value;
+//             }
+//         }
 
-        if (value == null) {
-            value = -1;
-        }
-        saveToConfig("profiles." + currentProfile + ".keys." + currentKeyEdit + ".type", parseInt(value));
-    }
-    currentKeyEdit = newKeyId; //store the new encoder id
+//         if (value == null) {
+//             value = -1;
+//         }
+//         saveToConfig("profiles." + currentProfile + ".keys." + currentKeyEdit + ".type", parseInt(value));
+//     }
+//     currentKeyEdit = newKeyId; //store the new encoder id
 
-    //Read value from config
-    var value = readFromConfig("profiles." + currentProfile + ".keys." + newKeyId + ".type");
-    if (value == null) value = -1;
-    //load new action values
-    for (var i = 0; i < actionType.length; i++) {
-        if (actionType[i].value == value) {
-            actionType[i].checked = true;
-        } else {
-            actionType[i].checked = false;
-        }
-    }
+//     //Read value from config
+//     var value = readFromConfig("profiles." + currentProfile + ".keys." + newKeyId + ".type");
+//     if (value == null) value = -1;
+//     //load new action values
+//     for (var i = 0; i < actionType.length; i++) {
+//         if (actionType[i].value == value) {
+//             actionType[i].checked = true;
+//         } else {
+//             actionType[i].checked = false;
+//         }
+//     }
 
-    clearEditButton();
-    document.getElementById("keyIcon" + newKeyId).className = editButtonIcon;
-    //display the gui
-    updateEditGUI("key", newKeyId);
+//     clearEditButton();
+//     document.getElementById("keyIcon" + newKeyId).className = editButtonIcon;
+//     //display the gui
+//     updateEditGUI("key", newKeyId);
 
 
-}
+// }
 
 
 function updateActionSelectorGUI(Newvalue, type) { //update the action selector gui
@@ -391,6 +410,18 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
 
 
 
+
+        } else if (value == "0") {
+            var keys = document.getElementById("key-edit-combination-values").innerHTML;
+            keys = keys.split(",");
+            var GUIKey = keycodesToStr[keys[0]];
+            for (var i = 1; i < 3; i++) {
+                var value = keycodesToStr[keys[i]];
+                if (value != null) {
+                    GUIKey += " + " + value;
+                }
+            }
+            document.getElementById("key-edit-combination").innerHTML = GUIKey;
 
         } else if (type == "empty") {
 

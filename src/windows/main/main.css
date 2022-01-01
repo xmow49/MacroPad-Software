@@ -15,6 +15,7 @@ button,
 textarea,
  :focus {
     outline: none;
+    cursor: pointer;
 }
 
 *,
@@ -23,7 +24,7 @@ textarea,
     -webkit-user-select: none;
     -webkit-user-drag: none;
     -webkit-app-region: no-drag;
-    cursor: default;
+    /* cursor: default; */
 }
 
 button:disabled,
@@ -31,7 +32,15 @@ button[disabled] {
     background: var(--button-color);
 }
 
-button {
+button,
+input,
+label {
+    cursor: pointer
+}
+
+button>*,
+input>*,
+label>* {
     cursor: pointer
 }
 
