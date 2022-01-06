@@ -244,12 +244,24 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                 }
                 console.log(valuesToSave);
                 saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the values
+            } else if (currentActionType == 1) { //software vomlume
+                var valuesToSave = [];
+                valuesToSave[0] = document.getElementById("software-volume-selector").value;
+                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the value
             }
         } else if (type == "key") {
             if (currentActionType == 0) { //key combination
                 var strValues = document.getElementById(type + "-edit-combination-values").innerHTML; //get the values of the key combination
                 console.log(strValues);
                 var valuesToSave = strValues.split(","); //tranform in array
+                //keep only 3 values
+                if (valuesToSave.length > 3) {
+                    valuesToSave.splice(3, valuesToSave.length - 3);
+                }
+                // transduce the values in int
+                for (var i = 0; i < valuesToSave.length; i++) {
+                    valuesToSave[i] = parseInt(valuesToSave[i]);
+                }
                 saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the values
             }
         }
@@ -283,6 +295,14 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                 document.getElementById(type + "-edit-key-" + i).innerHTML = keycodesToStr[newValues[i]];
                 document.getElementById(type + "-edit-key-" + i + "-values").innerHTML = newValues[i];
             }
+        }
+        if (newActionType == 1) { //if software volume
+            var newValue = readFromConfig("profiles." + currentProfile + "." + configKey + "." + newId + ".values");
+            displayAllSoundSoftwaresInSelector(); //display all sound softwares in selector
+            if (newValue == null || newValue[0] == null || newValue[0] == "") {} else {
+                document.getElementById("software-volume-selector").value = newValue[0]; //select the value from the config
+            }
+
         }
     } else if (type == "key") {
         if (newActionType == 0) { //if key combination
@@ -385,7 +405,6 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
 
         } else if (value == "1") {
             document.getElementById('help-text').innerHTML = "L'encoder va controler le volume du logiciel choisi ci-dessous. Lors d'un appuis, le son se mute.";
-            displayAllSoundSoftwaresInSelector();
 
         } else if (value == "2") {
             document.getElementById('help-text').innerHTML = "Choisisez manuellement les actions de l'encoder";
