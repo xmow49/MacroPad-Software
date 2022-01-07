@@ -2,7 +2,6 @@ const { contextBridge } = require("electron");
 const { cp } = require("original-fs");
 
 var profileEditorEnabled = false;
-var defaultProfileIcon = "mdi-account-circle";
 
 function hexToRgb(hex) {
     var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -50,6 +49,7 @@ function editProfilePopup() { //when edit profile button is clicked
     if (profileEditorEnabled) {
         //disable the profile editor
         profileEditorEnabled = false;
+
         document.getElementById("normal-view").className = "";
         document.getElementById("profil-list").className = "";
         document.getElementsByClassName("profile-editor")[0].className = "popup profile-editor disable";
@@ -59,6 +59,7 @@ function editProfilePopup() { //when edit profile button is clicked
         document.getElementById("macropad").className = "connectPopup";
 
         //disable edit mode for all encoders/keys buttons
+        clearEditButton();
         disableMacropadButtons(true);
         updateProfileOverviewIcon();
 
@@ -102,12 +103,6 @@ function clearEditButton() { //remove edit icon (pen) from all encoders and keys
 }
 
 var currentEdit = -1;
-var currentKeyEdit = -1;
-
-function saveActionType() {
-
-
-}
 
 function getActionValue(type) { //get the value of the radio
     if (type == "encoder" || type == "key") {
@@ -124,7 +119,6 @@ function getActionValue(type) { //get the value of the radio
     }
     return -1;
 }
-
 
 
 function updateProfileColor() {
@@ -147,7 +141,6 @@ function saveProfileName() {
     saveToConfig("profiles." + currentProfile + ".name", profileName);
     updateProfileGui();
 }
-
 
 
 function changeProfile() {
@@ -323,50 +316,6 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
     //---------------------------------------------End of load values from the config -------------------------------------------------
 
 }
-
-// function editKeyBtn(newKeyId) { //when a edit key button is clicked
-//     currentEdit = -1; //disable edit on encoder
-//     var currentProfile = document.getElementById("profile-editor-selector").value;
-//     var actionType = document.getElementsByName("key-action-type"); // get all input elements
-//     if (currentKeyEdit == -1) { //if no previous key is in edition mode set the new key in edition mode
-
-//     } else {
-//         //save old values in the config
-
-//         var value;
-//         for (var i = 0; i < actionType.length; i++) {
-//             if (actionType[i].checked) {
-//                 value = actionType[i].value;
-//             }
-//         }
-
-//         if (value == null) {
-//             value = -1;
-//         }
-//         saveToConfig("profiles." + currentProfile + ".keys." + currentKeyEdit + ".type", parseInt(value));
-//     }
-//     currentKeyEdit = newKeyId; //store the new encoder id
-
-//     //Read value from config
-//     var value = readFromConfig("profiles." + currentProfile + ".keys." + newKeyId + ".type");
-//     if (value == null) value = -1;
-//     //load new action values
-//     for (var i = 0; i < actionType.length; i++) {
-//         if (actionType[i].value == value) {
-//             actionType[i].checked = true;
-//         } else {
-//             actionType[i].checked = false;
-//         }
-//     }
-
-//     clearEditButton();
-//     document.getElementById("keyIcon" + newKeyId).className = editButtonIcon;
-//     //display the gui
-//     updateEditGUI("key", newKeyId);
-
-
-// }
-
 
 function updateActionSelectorGUI(Newvalue, type) { //update the action selector gui
     //type: 0 --> encoder

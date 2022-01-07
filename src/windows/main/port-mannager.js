@@ -170,3 +170,37 @@ function connectPopupSave() {
     document.getElementById("connect-macropad").style.display = "none";
     updatePopupBackgroud()
 }
+
+
+function sendConfig() {
+    console.log(SerialPort.list());
+
+    if (macropadConnectionStatus) { //if connected
+        for (var profileNumber = 0; profileNumber < 6; profileNumber++) { //for each profile
+
+            if (readFromConfig("profiles." + profileNumber) != null) { //if profile is not empty
+                var profileName = readFromConfig("profiles." + profileNumber + ".name"); //get the profile name
+                var profileColor = readFromConfig("profiles." + profileNumber + ".color"); //get the profile color
+                var profileEncoders = readFromConfig("profiles." + profileNumber + ".encoders"); //get the profile encoders
+                var profileKeys = readFromConfig("profiles." + profileNumber + ".keys"); //get the profile keys 
+
+                if (profileName != null) { //if profile name is not empty
+                    console.log("set-name " + profileNumber + " " + profileName);
+                    serialPortConnection.write("set-name " + profileNumber + " " + profileName); //send the name to the macropad
+                }
+
+                if (profileColor != null) { //if profile color is not empty
+                    var colorString = "";
+                    for (var i = 0; i < profileColor.length; i++) {
+                        colorString += profileColor[i] + " ";
+                    }
+                    console.log("set-color " + profileNumber + " " + colorString);
+                    serialPortConnection.write("set-color " + profileNumber + " " + colorString); //send the color to the macropad
+                }
+
+
+            } else {}
+        }
+    }
+
+}
