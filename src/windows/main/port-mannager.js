@@ -67,17 +67,39 @@ function responsesFromPort(data) {
     if (macropadConnectionStatus) {
         //key annimation when macropad key is pressed
         if (stringFromSerial.includes("K")) {
-            var msg = stringFromSerial.substr(0, 1); //keep the key id
+            var msg = stringFromSerial.replace("K", ""); //keep only the key code
+            var keyCode = parseInt(msg);
+            msg = "key" + keyCode;
             try { //try to find the button with key id
-                let button = document.getElementById("key" + msg);
-                console.log(button);
+                var button = document.getElementById(msg);
                 button.style.transform = "scale(.9)"; //animate the button
                 setTimeout(function() { //wait 0.3s and stop the animation
                     button.style.transform = "scale(1)";
                 }, 300);
             } catch (e) {}
+        } else if (stringFromSerial.includes("1")) {
+            ack = true;
         }
-        console.log(stringFromSerial);
+
+
+
+
+        //for each caracter in the string, display it in the console
+        // for (var i = 0; i < stringFromSerial.length; i++) {
+        //     var char = stringFromSerial.charAt(i);
+        //     //display the char and ascii code in the console
+        //     console.log(char + " : " + stringFromSerial.charCodeAt(i));
+        // }
+
+        stringFromSerial = stringFromSerial.replace(/[\n\r]+/g, '');
+
+        if (stringFromSerial == "1") {
+            ack = true;
+        }
+
+
+
+        console.log("From MacroPad: " + stringFromSerial);
     }
 }
 
@@ -121,6 +143,7 @@ var scanInProgress = false;
 var currentTestingPort;
 var checkInterval;
 var testToDoCount;
+var ack = false //acknowledgement from the macropad
 
 function scanSerialsPorts() {
     if (scanInProgress) {
@@ -173,7 +196,7 @@ function connectPopupSave() {
 }
 
 
-function sendConfig() {
+async function sendConfig() {
     console.log(SerialPort.list());
 
     if (macropadConnectionStatus) { //if connected
@@ -188,6 +211,7 @@ function sendConfig() {
                 if (profileName != null) { //if profile name is not empty
                     console.log("B " + profileNumber + " \"" + profileName);
                     serialPortConnection.write("B " + profileNumber + " \"" + profileName); //send the name to the macropad
+                    await waitACK();
                 }
 
                 if (profileColor != null) { //if profile color is not empty
@@ -197,6 +221,7 @@ function sendConfig() {
                     }
                     console.log("C " + profileNumber + " " + colorString);
                     serialPortConnection.write("C " + profileNumber + " " + colorString); //send the color to the macropad
+                    await waitACK();
                 }
 
                 if (profileEncoders != null) { //if profile encoders is not empty
@@ -207,12 +232,37 @@ function sendConfig() {
                         if (encoderValues == null) encoderValues = [0, 0, 0];
                         console.log("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]);
                         serialPortConnection.write("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]); //send the encoder to the macropad
+                        await waitACK(); //wait for the acknowledgement from the macropad
                     }
+                }
 
+                if (profileKeys != null) { //if profile keys is not empty
+                    for (var nKey = 0; nKey < 6; nKey++) { //for each key
+                        var keyType = readFromConfig("profiles." + profileNumber + ".keys." + nKey + ".type"); //get the key type
+                        var keyValues = readFromConfig("profiles." + profileNumber + ".keys." + nKey + ".values"); //get the key values
+                        if (keyType == null) keyType = 0;
+                        if (keyValues == null) keyValues = [0, 0, 0];
+                        console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
+                        serialPortConnection.write("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]); //send the key to the macropad
+                        await waitACK(); //wait for the acknowledgement from the macropad
+                    }
                 }
 
             } else {}
         }
     }
 
+}
+
+
+function waitACK() { //wait for the acknowledgement from the macropad
+    return new Promise(function(resolve, reject) { //return a promise
+        ack = false; //acknowledgement not received
+        var checkInterval = window.setInterval(function() { //check every 100ms
+            if (ack) { //if the acknowledgement is received
+                clearInterval(checkInterval); //stop the check
+                resolve(); //resolve the promise
+            }
+        }, 100);
+    });
 }
