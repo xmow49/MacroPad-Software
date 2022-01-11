@@ -49,7 +49,7 @@ var macropadConnectionStatus = false;
 
 function responsesFromPort(data) {
     var stringFromSerial = data.toString();
-    if (data.includes("pong")) { //its a Macropad
+    if (data.includes("P")) { //its a Macropad
         // Here, the macropad is connected and a pong is received
         pingResponse = true;
         macropadConnectionStatus = true;
@@ -66,17 +66,18 @@ function responsesFromPort(data) {
 
     if (macropadConnectionStatus) {
         //key annimation when macropad key is pressed
-        if (stringFromSerial.includes("Key")) {
-            var msg = stringFromSerial.toLowerCase(); //get the key
-            msg = msg.substr(msg.indexOf('key'), 4); //keep the key id
+        if (stringFromSerial.includes("K")) {
+            var msg = stringFromSerial.substr(0, 1); //keep the key id
             try { //try to find the button with key id
-                let button = document.getElementById(msg);
+                let button = document.getElementById("key" + msg);
+                console.log(button);
                 button.style.transform = "scale(.9)"; //animate the button
                 setTimeout(function() { //wait 0.3s and stop the animation
                     button.style.transform = "scale(1)";
                 }, 300);
             } catch (e) {}
         }
+        console.log(stringFromSerial);
     }
 }
 
@@ -108,7 +109,7 @@ function connectToPort(port) {
                 responsesFromPort(data); //and send it to this function to check the ping 
             })
             setTimeout(function() { //wait 0.5s and send a ping to the macropad
-                serialPortConnection.write("ping");
+                serialPortConnection.write("P");
             }, 500);
         }
         baudRate: 9600;
@@ -185,8 +186,8 @@ function sendConfig() {
                 var profileKeys = readFromConfig("profiles." + profileNumber + ".keys"); //get the profile keys 
 
                 if (profileName != null) { //if profile name is not empty
-                    console.log("set-name " + profileNumber + " " + profileName);
-                    serialPortConnection.write("set-name " + profileNumber + " " + profileName); //send the name to the macropad
+                    console.log("B " + profileNumber + " \"" + profileName);
+                    serialPortConnection.write("B " + profileNumber + " \"" + profileName); //send the name to the macropad
                 }
 
                 if (profileColor != null) { //if profile color is not empty
@@ -194,10 +195,21 @@ function sendConfig() {
                     for (var i = 0; i < profileColor.length; i++) {
                         colorString += profileColor[i] + " ";
                     }
-                    console.log("set-color " + profileNumber + " " + colorString);
-                    serialPortConnection.write("set-color " + profileNumber + " " + colorString); //send the color to the macropad
+                    console.log("C " + profileNumber + " " + colorString);
+                    serialPortConnection.write("C " + profileNumber + " " + colorString); //send the color to the macropad
                 }
 
+                if (profileEncoders != null) { //if profile encoders is not empty
+                    for (var nEncoder = 0; nEncoder < 6; nEncoder++) { //for each encoder
+                        var encoderType = readFromConfig("profiles." + profileNumber + ".encoders." + nEncoder + ".type"); //get the encoder type
+                        var encoderValues = readFromConfig("profiles." + profileNumber + ".encoders." + nEncoder + ".values"); //get the encoder values
+                        if (encoderType == null) encoderType = 0;
+                        if (encoderValues == null) encoderValues = [0, 0, 0];
+                        console.log("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]);
+                        serialPortConnection.write("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]); //send the encoder to the macropad
+                    }
+
+                }
 
             } else {}
         }
