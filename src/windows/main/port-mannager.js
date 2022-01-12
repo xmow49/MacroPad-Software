@@ -217,6 +217,7 @@ async function sendConfig() {
                 if (profileColor != null) { //if profile color is not empty
                     var colorString = "";
                     for (var i = 0; i < profileColor.length; i++) {
+                        if (profileColor[i] == null) profileColor[i] = 0;
                         colorString += profileColor[i] + " ";
                     }
                     console.log("C " + profileNumber + " " + colorString);
@@ -225,14 +226,27 @@ async function sendConfig() {
                 }
 
                 if (profileEncoders != null) { //if profile encoders is not empty
-                    for (var nEncoder = 0; nEncoder < 6; nEncoder++) { //for each encoder
+                    for (var nEncoder = 0; nEncoder < 3; nEncoder++) { //for each encoder
                         var encoderType = readFromConfig("profiles." + profileNumber + ".encoders." + nEncoder + ".type"); //get the encoder type
                         var encoderValues = readFromConfig("profiles." + profileNumber + ".encoders." + nEncoder + ".values"); //get the encoder values
                         if (encoderType == null) encoderType = 0;
-                        if (encoderValues == null) encoderValues = [0, 0, 0];
-                        console.log("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]);
-                        serialPortConnection.write("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]); //send the encoder to the macropad
-                        await waitACK(); //wait for the acknowledgement from the macropad
+                        if (encoderType == 1) {
+                            //software
+                        } else {
+                            if (encoderValues != null) {
+                                for (var nValue = 0; nValue < 3; nValue++) { //for each value
+                                    if (encoderValues[nValue] == null) encoderValues[nValue] = ""; //if value is empty, set it to empty string
+                                }
+                            }
+
+                            console.log("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]);
+                            serialPortConnection.write("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]); //send the encoder to the macropad
+                            await waitACK(); //wait for the acknowledgement from the macropad
+                        }
+
+
+
+
                     }
                 }
 

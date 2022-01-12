@@ -220,7 +220,6 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                 currentActionType = actionType[i].value;
             }
         }
-
         if (currentActionType == null) { //if no radio is checked
             currentActionType = -1;
         }
@@ -241,6 +240,8 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                 var valuesToSave = [];
                 valuesToSave[0] = document.getElementById("software-volume-selector").value;
                 saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the value
+            } else {
+                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", [-1, -1, -1]); //save the value
             }
         } else if (type == "key") {
             if (currentActionType == 0) { //key combination
@@ -256,6 +257,8 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                     valuesToSave[i] = parseInt(valuesToSave[i]);
                 }
                 saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the values
+            } else {
+                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", [-1, -1, -1]); //save the value
             }
         }
     }
