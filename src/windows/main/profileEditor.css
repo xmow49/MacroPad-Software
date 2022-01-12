@@ -309,3 +309,8 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     padding: 0px;
     margin: 5px;
 }
+
+#system-action {
+    display: flex;
+    flex-direction: column;
+}

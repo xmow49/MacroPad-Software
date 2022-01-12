@@ -257,6 +257,10 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                     valuesToSave[i] = parseInt(valuesToSave[i]);
                 }
                 saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the values
+            } else if (currentActionType == 1) { //type: 1 system action
+                var valuesToSave = [parseInt(lastSelectedSystemActionValue), -1, -1];
+                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the values
+
             } else {
                 saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", [-1, -1, -1]); //save the value
             }
@@ -305,9 +309,15 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
             var newValues = readFromConfig("profiles." + currentProfile + "." + configKey + "." + newId + ".values");
             if (newValues == null) newValues = -1;
             document.getElementById(type + "-edit-combination-values").innerHTML = newValues;
+        } else if (newActionType == 1) { //if system action
+            var newValue = readFromConfig("profiles." + currentProfile + "." + configKey + "." + newId + ".values");
+            if (newValue == null || newValue[0] == null || newValue[0] == "") {} else {
+                lastSelectedSystemActionValue = newValue[0];
+
+                document.getElementsByName("select-system-action")[systemActionValuesToRadioId(newValue[0])].checked = true; //select the value from the config
+            }
         }
     }
-
 
 
 
@@ -524,5 +534,39 @@ function displayTypeSelected() {
 
     saveToConfig("profiles." + currentProfile + ".display.type", type);
     saveToConfig("profiles." + currentProfile + ".display.value", value);
+
+}
+
+
+var lastSelectedSystemActionValue = -1;
+
+function onChangeSystemAction(radio) {
+    var selected = radio.value; //get the selected value
+    lastSelectedSystemActionValue = selected;
+}
+
+
+function systemActionValuesToRadioId(value) { // This function transform system action values from arduino to radio id
+    var toRadioId = {
+        205: 0,
+        233: 1,
+        234: 2,
+        226: 3,
+        181: 4,
+        182: 5,
+        183: 6,
+        179: 7,
+        180: 8,
+        394: 9,
+        402: 10,
+        404: 11,
+        547: 12,
+        551: 13,
+        248: 14,
+        549: 15,
+        554: 16,
+
+    }
+    return toRadioId[value];
 
 }
