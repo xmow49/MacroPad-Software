@@ -29,40 +29,40 @@
 
     <div id="app-container">
 
-        <div>
+        <div class="head">
             <h1 class="software-title">MacroPad Configurator
                 <a id="macropad-id"></a>
             </h1>
             <hr class="ligne">
         </div>
 
-        <div class="backgroud-vector">
-            <svg width="1280" height="455" viewBox="0 0 1280 455" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M0 66.7229L26.6667 60.7163C53.3333 54.7097 106.667 42.6965 160 84.7427C213.333 126.789 266.667 222.894 320 252.927C373.333 282.96 426.667 246.921 480 210.881C533.333 174.842 586.667 138.802 640 156.822C693.333 174.842 746.667 246.921 800 240.914C853.333 234.908 906.667 150.815 960 90.7493C1013.33 30.6833 1066.67 -5.35631 1120 0.650287C1173.33 6.65688 1226.67 54.7097 1253.33 78.7361L1280 102.762V319H1253.33C1226.67 319 1173.33 319 1120 319C1066.67 319 1013.33 319 960 319C906.667 319 853.333 319 800 319C746.667 319 693.333 319 640 319C586.667 319 533.333 319 480 319C426.667 319 373.333 319 320 319C266.667 319 213.333 319 160 319C106.667 319 53.3333 319 26.6667 319H0V66.7229Z" fill="#F2F2F2"/>
-            <rect y="284" width="1280" height="171" fill="#F2F2F2"/>
-            </svg>
-        </div>
+        <div class="backgroud-vector"></div>
 
         <div class="overview">
 
             <div id="normal-view">
+                <div class="top">
+                    <div class="connect">
+                        <button id="connect-status-button" onclick="connectPopup();">Déconnecté<span id="connect-status" class="offline"></span></button>
+                    </div>
+                    <div id="edit">
+                        <button onclick="editProfilePopup();"><span class="mdi mdi-pencil"></span></button>
+                        <button onclick="sendConfig();"><span class="mdi mdi-send"></span></button>
+                    </div>
+
+                </div>
                 <div class="settings">
                     <button><span class="mdi mdi-cog-outline"></span></button>
                 </div>
-                <div class="connect">
-                    <button id="connect-status-button" onclick="connectPopup();">Déconnecté<span id="connect-status" class="offline"></span></button>
-                </div>
+
             </div>
 
-            <div id="edit">
-                <button onclick="editProfilePopup();"><span class="mdi mdi-pencil"></span></button>
-                <button onclick="sendConfig();"><span class="mdi mdi-send"></span></button>
-            </div>
 
-            <div id="left" class="popup profile-editor disable">
-                <div id="profile-editor-actions">
-                    <h3>Choix du profil: </h3>
-                    <select onchange="changeProfile();" name="" id="profile-editor-selector">
+            <div class="editor-menu">
+                <div id="left" class="profile-editor disable">
+                    <div id="profile-editor-actions">
+                        <h3>Choix du profil: </h3>
+                        <select onchange="changeProfile();" name="" id="profile-editor-selector">
                         <option value="0">Profil 1</option select>
                         <option value="1">Profil 2</option>
                         <option value="2">Profil 3</option>
@@ -70,200 +70,202 @@
                         <option value="4">Profil 5</option>
                         <option value="5">Profil 6</option>
                     </select>
-                    <!-- <button>Annuler</button>
+                        <!-- <button>Annuler</button>
                     <button>Enregistrer</button> -->
 
-                </div>
-
-
-                <h3>Nom: <input type="text" id="profile-name" onfocusout="saveProfileName();" maxlength="10"></h3>
-                <div id="icon-profile-picker">
-                    <h3>Icon:</h3>
-                    <span class="mdi" id="profile-icon-preview"></span>
-                    <input type="text" id="profile-icon-name" oninput="updateProfileIconPreview(false);" onfocusout="updateProfileIconPreview(true);">
-                </div>
-
-                <div>
-                    <h3>Couleur du Profil:</h3>
-                    <div id="profile-color-picker">
-                        <h4>Couleur des LEDS et du profil: </h4>
-                        <input type="color" id="color-picker" onfocusout="updateProfileColor();">
                     </div>
 
-                </div>
 
-
-                <h3>Élément à afficher sur l'écran: </h3>
-                <div id="display-selector">
-                    <div class="display-radio">
-                        <input type="radio" name="display-text-selector" id="display-text-0" value="0" onchange="displayTypeSelected()" checked>
-                        <label for="display-text-0">Titre Musique</label>
+                    <h3>Nom: <input type="text" id="profile-name" onfocusout="saveProfileName();" maxlength="10"></h3>
+                    <div id="icon-profile-picker">
+                        <h3>Icon:</h3>
+                        <span class="mdi" id="profile-icon-preview"></span>
+                        <input type="text" id="profile-icon-name" oninput="updateProfileIconPreview(false);" onfocusout="updateProfileIconPreview(true);">
                     </div>
 
-                    <div class="display-radio">
-                        <input type="radio" name="display-text-selector" id="display-text-1" value="1" onchange="displayTypeSelected()">
-                        <label for="display-text-1">Profil Actuel</label>
-                    </div>
-                    <div class="display-radio">
-                        <input type="radio" name="display-text-selector" id="display-text-2" value="2" onchange="displayTypeSelected()">
-                        <label for="display-text-2">Date / Heures</label>
-                    </div>
-                    <div class="display-radio">
-                        <input type="radio" name="display-text-selector" id="display-text-3" value="3" onchange="displayTypeSelected()">
-                        <div id="display-div-custom">
-                            <label for="display-text-3">Custom</label>
-                            <input type="text" id="display-text-custom" placeholder="Texte Personalisé" maxlength="100" onfocusout="displayTypeSelected();">
+                    <div>
+                        <h3>Couleur du Profil:</h3>
+                        <div id="profile-color-picker">
+                            <h4>Couleur des LEDS et du profil: </h4>
+                            <input type="color" id="color-picker" onfocusout="updateProfileColor();">
                         </div>
 
                     </div>
-                </div>
 
 
+                    <h3>Élément à afficher sur l'écran: </h3>
+                    <div id="display-selector">
+                        <div class="display-radio">
+                            <input type="radio" name="display-text-selector" id="display-text-0" value="0" onchange="displayTypeSelected()" checked>
+                            <label for="display-text-0">Titre Musique</label>
+                        </div>
 
+                        <div class="display-radio">
+                            <input type="radio" name="display-text-selector" id="display-text-1" value="1" onchange="displayTypeSelected()">
+                            <label for="display-text-1">Profil Actuel</label>
+                        </div>
+                        <div class="display-radio">
+                            <input type="radio" name="display-text-selector" id="display-text-2" value="2" onchange="displayTypeSelected()">
+                            <label for="display-text-2">Date / Heures</label>
+                        </div>
+                        <div class="display-radio">
+                            <input type="radio" name="display-text-selector" id="display-text-3" value="3" onchange="displayTypeSelected()">
+                            <div id="display-div-custom">
+                                <label for="display-text-3">Custom</label>
+                                <input type="text" id="display-text-custom" placeholder="Texte Personalisé" maxlength="100" onfocusout="displayTypeSelected();">
+                            </div>
 
-                </select>
-
-            </div>
-
-            <div id="right" class="popup profile-editor disable">
-
-                <div id="import-image">
-                    <button id="upload-icon">Importer un icon</button>
-                    <div class="action-help">
-                        <span class="mdi mdi-help-circle"></span>
-                        <span class="text-action-help">Choisisez un icon qui va apparaître sur le profile et le Marcopad</span>
-                    </div>
-                </div>
-
-                <h3 id="select-action-title">Selection des actions</h3>
-                <h4 id="current-edition">Cliquez sur une touche pour choisir une action</h4>
-
-                <div id="edit-encoder" class="disable">
-
-
-                    <div class="action-selector" id="encoder-action-selector" onchange="updateEditGUI('encoder', -1);">
-                        <label class="action-selector-1"><input type="radio" name="encoder-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
-                        <label class="action-selector0"><input type="radio" name="encoder-action-type" value="0"><span class="mdi mdi-volume-source"></span><span>Volume</span></label>
-                        <label class="action-selector1"><input type="radio" name="encoder-action-type" value="1"><span class="mdi mdi-monitor"></span><span>Logiciel</span></label>
-                        <label class="action-selector2"><input type="radio" name="encoder-action-type" value="2"><span class="mdi mdi-pencil"></span><span>Custom</span></label>
-                        <div class="action-help">
-                            <span class="mdi mdi-help-circle"></span>
-                            <span id="help-text" class="text-action-help">L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.</span>
                         </div>
                     </div>
 
-                    <!-- affichage pour chaque action-->
-                    <div class="encoder-1">
-                        <h4 class="encoder-action-info-text">Cet encoder est désactivé.</h4>
-                    </div>
 
 
-                    <div class="encoder0">
-                        <h4 class="encoder-action-info-text">Cet encoder contrôle le volume principal du PC.</h4>
-                    </div>
 
-                    <div class="encoder1" style="margin-top: 50px;">
-                        <h4 style="text-align: center;">Choisir un logiciel</h4>
-                        <div id="software-div-selector">
-                            <select id="software-volume-selector"></select>
-                            <button onclick="displayAllSoundSoftwaresInSelector();">Actualiser</button>
-                        </div>
-                    </div>
-
-                    <div class="encoder2" class="disable">
-                        <!-- encoder key turn left -->
-                        <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
-                        <div class="key-selector">
-                            <label id="encoder-edit-key-0" value="" onclick="startKeyCombinationCapture('encoder', 0, 1);"></label>
-                            <span id="encoder-edit-key-0-values" style="display: none;"></span>
-                            <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
-                        </div>
-
-                        <!-- encoder key turn right -->
-                        <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>
-                        <div class="key-selector">
-                            <label id="encoder-edit-key-1" onclick="startKeyCombinationCapture('encoder', 1, 1);"></label>
-                            <span id="encoder-edit-key-1-values" style="display: none;"></span>
-                            <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
-                        </div>
-
-                        <!-- encoder key press -->
-                        <h3><span class="mdi mdi-bullseye"></span> Clic Encoder</h3>
-                        <div class="key-selector">
-                            <label class="key-combination" id="encoder-edit-key-2" onclick="startKeyCombinationCapture('encoder', 2, 1);"></label>
-                            <span id="encoder-edit-key-2-values" style="display: none;"></span>
-                            <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
-                        </div>
-                    </div>
+                    </select>
 
                 </div>
 
-                <div id="edit-key" class="disable">
+                <div id="right" class="profile-editor disable">
 
-                    <div class="action-selector" id="key-action-selector" onchange="updateEditGUI('key', -1);">
-                        <label class="action-selector-1"><input type="radio" name="key-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
-                        <label class="action-selector0"><input type="radio" name="key-action-type" value="0"><span class="mdi mdi-keyboard"></span><span>Combinaison</span></label>
-                        <label class="action-selector1"><input type="radio" name="key-action-type" value="1"><span class="mdi mdi-microsoft-windows"></span><span>Système</span></label>
-                        <label class="action-selector2"><input type="radio" name="key-action-type" value="2"><span class="mdi mdi-midi"></span><span>Midi</span></label>
+                    <div id="import-image">
+                        <button id="upload-icon">Importer un icon</button>
                         <div class="action-help">
                             <span class="mdi mdi-help-circle"></span>
                             <span class="text-action-help">Choisisez un icon qui va apparaître sur le profile et le Marcopad</span>
                         </div>
                     </div>
 
+                    <h3 id="select-action-title">Selection des actions</h3>
+                    <h4 id="current-edition">Cliquez sur une touche pour choisir une action</h4>
+
+                    <div id="edit-encoder" class="disable">
 
 
-                    <!-- DISABLE -->
-                    <div class="key-1" style="margin-top: 50px;">
-                        <h4 class="key-action-info-text">Cette key est désactivée.</h4>
-                    </div>
-
-                    <!-- KEY COMBINATION -->
-                    <div class="key0">
-                        <div class="key-selector">
-                            <label id="key-edit-combination" onclick="startKeyCombinationCapture('key', 0, 3);"></label>
-                            <span id="key-edit-combination-values" style="display: none;"></span>
-                            <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
+                        <div class="action-selector" id="encoder-action-selector" onchange="updateEditGUI('encoder', -1);">
+                            <label class="action-selector-1"><input type="radio" name="encoder-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
+                            <label class="action-selector0"><input type="radio" name="encoder-action-type" value="0"><span class="mdi mdi-volume-source"></span><span>Volume</span></label>
+                            <label class="action-selector1"><input type="radio" name="encoder-action-type" value="1"><span class="mdi mdi-monitor"></span><span>Logiciel</span></label>
+                            <label class="action-selector2"><input type="radio" name="encoder-action-type" value="2"><span class="mdi mdi-pencil"></span><span>Custom</span></label>
+                            <div class="action-help">
+                                <span class="mdi mdi-help-circle"></span>
+                                <span id="help-text" class="text-action-help">L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.</span>
+                            </div>
                         </div>
+
+                        <!-- affichage pour chaque action-->
+                        <div class="encoder-1">
+                            <h4 class="encoder-action-info-text">Cet encoder est désactivé.</h4>
+                        </div>
+
+
+                        <div class="encoder0">
+                            <h4 class="encoder-action-info-text">Cet encoder contrôle le volume principal du PC.</h4>
+                        </div>
+
+                        <div class="encoder1" style="margin-top: 50px;">
+                            <h4 style="text-align: center;">Choisir un logiciel</h4>
+                            <div id="software-div-selector">
+                                <select id="software-volume-selector"></select>
+                                <button onclick="displayAllSoundSoftwaresInSelector();">Actualiser</button>
+                            </div>
+                        </div>
+
+                        <div class="encoder2" class="disable">
+                            <!-- encoder key turn left -->
+                            <h3><span class="mdi mdi-rotate-left"></span> Rotation Gauche:</h3>
+                            <div class="key-selector">
+                                <label id="encoder-edit-key-0" value="" onclick="startKeyCombinationCapture('encoder', 0, 1);"></label>
+                                <span id="encoder-edit-key-0-values" style="display: none;"></span>
+                                <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
+                            </div>
+
+                            <!-- encoder key turn right -->
+                            <h3><span class="mdi mdi-rotate-right"></span> Rotation Droite:</h3>
+                            <div class="key-selector">
+                                <label id="encoder-edit-key-1" onclick="startKeyCombinationCapture('encoder', 1, 1);"></label>
+                                <span id="encoder-edit-key-1-values" style="display: none;"></span>
+                                <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
+                            </div>
+
+                            <!-- encoder key press -->
+                            <h3><span class="mdi mdi-bullseye"></span> Clic Encoder</h3>
+                            <div class="key-selector">
+                                <label class="key-combination" id="encoder-edit-key-2" onclick="startKeyCombinationCapture('encoder', 2, 1);"></label>
+                                <span id="encoder-edit-key-2-values" style="display: none;"></span>
+                                <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
+                            </div>
+                        </div>
+
                     </div>
 
-                    <div class="key1" style="margin-top: 50px;">
-                        <div id="system-action">
-                            <h3>Contrôle des Médias</h3>
+                    <div id="edit-key" class="disable">
+
+                        <div class="action-selector" id="key-action-selector" onchange="updateEditGUI('key', -1);">
+                            <label class="action-selector-1"><input type="radio" name="key-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
+                            <label class="action-selector0"><input type="radio" name="key-action-type" value="0"><span class="mdi mdi-keyboard"></span><span>Combinaison</span></label>
+                            <label class="action-selector1"><input type="radio" name="key-action-type" value="1"><span class="mdi mdi-microsoft-windows"></span><span>Système</span></label>
+                            <label class="action-selector2"><input type="radio" name="key-action-type" value="2"><span class="mdi mdi-midi"></span><span>Midi</span></label>
+                            <div class="action-help">
+                                <span class="mdi mdi-help-circle"></span>
+                                <span class="text-action-help">Choisisez un icon qui va apparaître sur le profile et le Marcopad</span>
+                            </div>
+                        </div>
 
 
-                            <label for="play-pause"><input type="radio" id="play-pause" name="select-system-action" value="205" onclick="onChangeSystemAction(this)">Play/Pause</label>
-                            <label for="vol-up"> <input type="radio" id="vol-up" name="select-system-action" value="233" onclick="onChangeSystemAction(this)">Volume +</label>
-                            <label for="vol-down"> <input type="radio" id="vol-down" name="select-system-action" value="234" onclick="onChangeSystemAction(this)">Volume -</label>
-                            <label for="mute"> <input type="radio" id="mute" name="select-system-action" value="226" onclick="onChangeSystemAction(this)">Mute</label>
-                            <label for="next"><input type="radio" id="next" name="select-system-action" value="181" onclick="onChangeSystemAction(this)">Musique Suivante</label>
-                            <label for="previous"> <input type="radio" id="previous" name="select-system-action" value="182" onclick="onChangeSystemAction(this)">Musique Précédente</label>
-                            <label for="stop"><input type="radio" id="stop" name="select-system-action" value="183" onclick="onChangeSystemAction(this)">Musique Stop</label>
-                            <label for="forward"><input type="radio" id="forward" name="select-system-action" value="179" onclick="onChangeSystemAction(this)">Avance Rapide</label>
-                            <label for="rewind"><input type="radio" id="rewind" name="select-system-action" value="180" onclick="onChangeSystemAction(this)">Retour Arrière</label>
 
-                            <h3>Application Système</h3>
-                            <label for="mail"><input type="radio" id="mail" name="select-system-action" value="394" onclick="onChangeSystemAction(this)">Email</label>
-                            <label for="calculator"><input type="radio" id="calculator" name="select-system-action" value="402" onclick="onChangeSystemAction(this)">Calculatrice</label>
-                            <label for="explorer"><input type="radio" id="explorer" name="select-system-action" value="404" onclick="onChangeSystemAction(this)">Explorateur de Fichiers</label>
+                        <!-- DISABLE -->
+                        <div class="key-1" style="margin-top: 50px;">
+                            <h4 class="key-action-info-text">Cette key est désactivée.</h4>
+                        </div>
 
-                            <h3>Controle du Navigateur WEB:</h3>
-                            <label for="browser"><input type="radio" id="browser" name="select-system-action" value="547" onclick="onChangeSystemAction(this)">Ouvrir le navigateur par défaut</label>
-                            <label for="browser-refresh"><input type="radio" id="browser-refresh" name="select-system-action" value="551" onclick="onChangeSystemAction(this)">Actualiser</label>
-                            <label for="browser-back"> <input type="radio" id="browser-back" name="select-system-action" value="248" onclick="onChangeSystemAction(this)">Page Précédente</label>
-                            <label for="browser-next"><input type="radio" id="browser-next" name="select-system-action" value="549" onclick="onChangeSystemAction(this)">Page Suivante</label>
-                            <label for="browser-bookmarks">  <input type="radio" id="browser-bookmarks" name="select-system-action" value="554" onclick="onChangeSystemAction(this)">Ouvrir les Favoris</label>
+                        <!-- KEY COMBINATION -->
+                        <div class="key0">
+                            <div class="key-selector">
+                                <label id="key-edit-combination" onclick="startKeyCombinationCapture('key', 0, 3);"></label>
+                                <span id="key-edit-combination-values" style="display: none;"></span>
+                                <button id="save-key-combination" onclick="stopKeyCombinationCapture();"><span class="mdi mdi-check"></span></button>
+                            </div>
+                        </div>
+
+                        <div class="key1" style="margin-top: 50px;">
+                            <div id="system-action">
+                                <h3>Contrôle des Médias</h3>
+
+
+                                <label for="play-pause"><input type="radio" id="play-pause" name="select-system-action" value="205" onclick="onChangeSystemAction(this)">Play/Pause</label>
+                                <label for="vol-up"> <input type="radio" id="vol-up" name="select-system-action" value="233" onclick="onChangeSystemAction(this)">Volume +</label>
+                                <label for="vol-down"> <input type="radio" id="vol-down" name="select-system-action" value="234" onclick="onChangeSystemAction(this)">Volume -</label>
+                                <label for="mute"> <input type="radio" id="mute" name="select-system-action" value="226" onclick="onChangeSystemAction(this)">Mute</label>
+                                <label for="next"><input type="radio" id="next" name="select-system-action" value="181" onclick="onChangeSystemAction(this)">Musique Suivante</label>
+                                <label for="previous"> <input type="radio" id="previous" name="select-system-action" value="182" onclick="onChangeSystemAction(this)">Musique Précédente</label>
+                                <label for="stop"><input type="radio" id="stop" name="select-system-action" value="183" onclick="onChangeSystemAction(this)">Musique Stop</label>
+                                <label for="forward"><input type="radio" id="forward" name="select-system-action" value="179" onclick="onChangeSystemAction(this)">Avance Rapide</label>
+                                <label for="rewind"><input type="radio" id="rewind" name="select-system-action" value="180" onclick="onChangeSystemAction(this)">Retour Arrière</label>
+
+                                <h3>Application Système</h3>
+                                <label for="mail"><input type="radio" id="mail" name="select-system-action" value="394" onclick="onChangeSystemAction(this)">Email</label>
+                                <label for="calculator"><input type="radio" id="calculator" name="select-system-action" value="402" onclick="onChangeSystemAction(this)">Calculatrice</label>
+                                <label for="explorer"><input type="radio" id="explorer" name="select-system-action" value="404" onclick="onChangeSystemAction(this)">Explorateur de Fichiers</label>
+
+                                <h3>Controle du Navigateur WEB:</h3>
+                                <label for="browser"><input type="radio" id="browser" name="select-system-action" value="547" onclick="onChangeSystemAction(this)">Ouvrir le navigateur par défaut</label>
+                                <label for="browser-refresh"><input type="radio" id="browser-refresh" name="select-system-action" value="551" onclick="onChangeSystemAction(this)">Actualiser</label>
+                                <label for="browser-back"> <input type="radio" id="browser-back" name="select-system-action" value="248" onclick="onChangeSystemAction(this)">Page Précédente</label>
+                                <label for="browser-next"><input type="radio" id="browser-next" name="select-system-action" value="549" onclick="onChangeSystemAction(this)">Page Suivante</label>
+                                <label for="browser-bookmarks">  <input type="radio" id="browser-bookmarks" name="select-system-action" value="554" onclick="onChangeSystemAction(this)">Ouvrir les Favoris</label>
+
+                            </div>
+                        </div>
+
+                        <div class="key2" style="margin-top: 50px;">
 
                         </div>
-                    </div>
 
-                    <div class="key2" style="margin-top: 50px;">
 
                     </div>
-
-
                 </div>
             </div>
+
 
             <!-- /affichage pour chaque action-->
 

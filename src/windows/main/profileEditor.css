@@ -33,8 +33,15 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 
 /* -------- Profile editor left --------*/
 
+.editor-menu {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
 .profile-editor {
-    position: absolute;
+    /* position: absolute;
     background: none;
     border: none;
     box-shadow: none;
@@ -43,11 +50,11 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     border-radius: 0px;
     width: 380px;
     height: 80%;
-    top: 50px;
+    top: 50px; */
 }
 
 .profile-editor#left {
-    left: 0px;
+    /* left: 0px; */
 }
 
 .profile-editor#right.disable {
@@ -55,11 +62,11 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 }
 
 .profile-editor#right {
-    left: 757px;
+    /* left: 757px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    align-items: center;
+    align-items: center; */
 }
 
 #profile-editor-actions {

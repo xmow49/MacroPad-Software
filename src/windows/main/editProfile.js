@@ -50,10 +50,10 @@ function editProfilePopup() { //when edit profile button is clicked
         //disable the profile editor
         profileEditorEnabled = false;
 
-        document.getElementById("normal-view").className = "";
+        //document.getElementById("normal-view").className = "";
         document.getElementById("profil-list").className = "";
-        document.getElementsByClassName("profile-editor")[0].className = "popup profile-editor disable";
-        document.getElementsByClassName("profile-editor")[1].className = "popup profile-editor disable";
+        document.getElementsByClassName("profile-editor")[0].className = "profile-editor disable";
+        document.getElementsByClassName("profile-editor")[1].className = "profile-editor disable";
 
         document.getElementById("edit").className = "";
         document.getElementById("macropad").className = "connectPopup";
@@ -69,10 +69,10 @@ function editProfilePopup() { //when edit profile button is clicked
         //enable the profile editor
         updateProfileGui();
         profileEditorEnabled = true;
-        document.getElementById("normal-view").className = "disable";
+        //document.getElementById("normal-view").className = "disable";
         document.getElementById("profil-list").className = "disable";
-        document.getElementsByClassName("profile-editor")[0].className = "popup profile-editor";
-        document.getElementsByClassName("profile-editor")[1].className = "popup profile-editor";
+        document.getElementsByClassName("profile-editor")[0].className = "profile-editor";
+        document.getElementsByClassName("profile-editor")[1].className = "profile-editor";
         document.getElementById("edit").className = "active-button";
         document.getElementById("macropad").className = "editor";
 

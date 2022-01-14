@@ -1,13 +1,5 @@
 /* ------------------ Overview ------------------- */
 
-.overview {
-    position: absolute;
-    top: 140px;
-    left: 5%;
-    width: 90%;
-    height: 550px;
-}
-
 .connect button {
     border: none;
     background: none;
@@ -137,9 +129,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    top: 58px;
-    left: calc(var(--macropad-center) - var(--profil-button-size) - 5px);
 }
 
 #profil-list button {
@@ -156,18 +145,35 @@
     display: none;
 }
 
-#macropad {
+
+/* .overview {
     position: absolute;
-    top: 50px;
-    left: var(--macropad-center);
+    top: 140px;
+    left: 5%;
+    width: 90%;
+    height: 550px;
+} */
+
+.overview {
+    margin: 3%;
 }
 
+
+/* center the macropad-container div */
+
 #macropad-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* #macropad-container {
     display: flex;
     flex-direction: left;
     align-items: center;
     justify-content: center;
-}
+} */
 
 
 /* ---- Buttons Icon ---- */
@@ -177,10 +183,11 @@
     --action-button-icon-size: 30px;
 }
 
-#edit {
-    position: absolute;
-    right: 0px;
-    top: 0px;
+.top {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin: 5px;
 }
 
 #edit button {
