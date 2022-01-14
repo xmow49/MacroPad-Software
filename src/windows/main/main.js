@@ -94,3 +94,45 @@ function saveToConfig(key, data) {
 function readFromConfig(key) {
     return IPC.sendSync("get-config", key);
 }
+
+
+
+function onChangeProfile(value) {
+    if (value == null) { // if value is null, get the value
+        var radio = document.getElementsByName("profile-selector"); // get all input elements
+
+        for (var i = 0; i < radio.length; i++) {
+            if (radio[i].checked) {
+                value = radio[i].value;
+            }
+        }
+    }
+
+
+    //-----------update the gui with the new profile-----------
+    for (var i = 0; i < 6; i++) { //for all profiles 
+        if (i == value) { //if the new value is the current value
+            document.getElementById("profile-" + i).classList.add('checked'); //select the action type
+            //document.getElementById(className + i)[0].classList.remove("disable"); //enable the div
+        } else {
+            document.getElementById("profile-" + i).classList.remove('checked'); //unselect the action type
+            //document.getElementById(className + i)[0].classList.add("disable"); //disable the div
+
+        }
+    }
+
+    var profileName = readFromConfig("profiles." + value + ".name"); //get the name of the profile
+    if (profileName == null) {
+        value++;
+        profileName = "Profil " + value;
+        saveToConfig("profiles." + value + ".name", profileName);
+
+    }
+    document.getElementById("macropad-text").innerHTML = profileName; //update the name of the profile
+    //-------------------------------------------------------   
+
+
+}
+setTimeout(function() {
+    onChangeProfile(0); //set the default value
+}, 10);

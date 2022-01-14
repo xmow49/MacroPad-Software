@@ -45,7 +45,7 @@
 }
 
 :root {
-    --profil-button-size: 60px;
+    --profil-button-size: 45px;
     --profil-button-margin-right: 10px;
     --profil-button-margin: 2px;
     --profil-button-border: 2px;
@@ -57,7 +57,7 @@
     --macropad-button-padding: 6px;
     --macropad-grid-padding: 5px;
     --macropad-center: 403px;
-    --macropad-profile-selector-width: 64px;
+    --macropad-profile-selector-width: 50px;
 }
 
 
@@ -122,16 +122,18 @@
     font-size: 18px;
     line-height: 22px;
     color: var(--font-master-invert-color);
+    width: 176px;
+    height: 44px;
 }
 
-#profil-list {
+.profile-selector {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-#profil-list button {
+.profile-selector label {
     width: var(--profil-button-size);
     height: var(--profil-button-size);
     border: var(--profil-button-border) solid var(--font-master-color);
@@ -139,9 +141,11 @@
     border-radius: var(--profil-button-border-radius);
     padding: var(--profil-button-padding);
     font-size: var(--font-size-icon);
+    text-align: center;
+    background: var(--button-color);
 }
 
-#profil-list.disable {
+.profile-selector.disable {
     display: none;
 }
 
@@ -226,3 +230,8 @@
 
 
 /* ---- /Buttons Icon ---- */
+
+.profile-selector .checked {
+    background: var(--button-color-hover);
+    transition: all 0.3s;
+}
