@@ -36,7 +36,7 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 .editor-menu {
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: flex-start;
 }
 
@@ -54,24 +54,29 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 }
 
 .profile-editor#left {
-    /* left: 0px; */
+    width: 300px;
+    display: flex;
+    flex-direction: column;
 }
 
 .profile-editor#right.disable {
     display: none;
 }
 
+.profile-editor#left.disable {
+    display: none;
+}
+
 .profile-editor#right {
-    /* left: 757px;
+    width: 300px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    align-items: center; */
+    align-items: center;
 }
 
 #profile-editor-actions {
-    display: flex;
-    align-items: center;
+    /* display: flex;
+    align-items: center; */
 }
 
 #profile-editor-selector {
@@ -223,6 +228,10 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     display: none;
 }
 
+.profile-selector label input {
+    display: none;
+}
+
 .action-selector .mdi {
     font-size: 30px;
 }
@@ -320,4 +329,18 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 #system-action {
     display: flex;
     flex-direction: column;
+}
+
+.key1 {
+    height: 300px;
+    overflow-y: scroll;
+    border: 3px solid #3C3C3C;
+    border-radius: 10px;
+    padding: 5px;
+}
+
+.editor-title {
+    text-align: center;
+    font-weight: bold;
+    text-decoration: underline;
 }

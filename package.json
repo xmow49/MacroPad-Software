@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@electron/remote": "^2.0.1",
+        "@r-tek/colr_pickr": "^2.0.0",
         "electron-store": "^8.0.1",
         "ngx-icon-picker": "^1.7.0",
         "serialport": "^9.2.4"

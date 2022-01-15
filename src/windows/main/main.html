@@ -7,6 +7,7 @@
     <link href="connectMacropadPopup.css" rel="stylesheet">
     <link href="selectMacropadPopup.css" rel="stylesheet">
     <link href="profileEditor.css" rel="stylesheet">
+    <link href="colorPicker/colorPicker.css" rel="stylesheet">
 
     <link href="overview.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.4.95/css/materialdesignicons.min.css" rel="stylesheet">
@@ -61,15 +62,15 @@
             <div class="editor-menu">
                 <div id="left" class="profile-editor disable">
                     <div id="profile-editor-actions">
-                        <h3>Choix du profil: </h3>
-                        <select onchange="changeProfile();" name="" id="profile-editor-selector">
+                        <h3 class="editor-title">Profil</h3>
+                        <!-- <select onchange="changeProfile();" name="" id="profile-editor-selector">
                         <option value="0">Profil 1</option select>
                         <option value="1">Profil 2</option>
                         <option value="2">Profil 3</option>
                         <option value="3">Profil 4</option>
                         <option value="4">Profil 5</option>
                         <option value="5">Profil 6</option>
-                    </select>
+                    </select> -->
                         <!-- <button>Annuler</button>
                     <button>Enregistrer</button> -->
 
@@ -88,6 +89,7 @@
                         <div id="profile-color-picker">
                             <h4>Couleur des LEDS et du profil: </h4>
                             <input type="color" id="color-picker" onfocusout="updateProfileColor();">
+                            <button id="my_picker"></button>
                         </div>
 
                     </div>
@@ -125,8 +127,44 @@
 
                 </div>
 
-                <div id="right" class="profile-editor disable">
+                <div id="macropad-container">
+                    <div class="profile-selector" id="master-profile" onchange="onChangeProfile();">
+                        <label id="profile-0"><span class="mdi"></span> <input type="radio" name="profile-selector" value="0" checked></label>
+                        <label id="profile-1"><span class="mdi"></span> <input type="radio" name="profile-selector" value="1"></label>
+                        <label id="profile-2"><span class="mdi"></span> <input type="radio" name="profile-selector" value="2"></label>
+                        <label id="profile-3"><span class="mdi"></span> <input type="radio" name="profile-selector" value="3"></label>
+                        <label id="profile-4"><span class="mdi"></span> <input type="radio" name="profile-selector" value="4"></label>
+                        <label id="profile-5"><span class="mdi"></span> <input type="radio" name="profile-selector" value="5"></label>
 
+
+                    </div>
+
+                    <div id="macropad">
+                        <div id="macropad-border">
+                            <div id="macropad-display">
+                                <h4 id="macropad-text">23:30</h4>
+
+                            </div>
+                            <div id="macropad-grid">
+                                <button class="encoder" onclick="onEditButton('encoder', 0);"><span id="encoderIcon0" class="mdi"></span></button>
+                                <button class="encoder" onclick="onEditButton('encoder', 1);"><span id="encoderIcon1" class="mdi"></span></button>
+                                <button class="encoder" onclick="onEditButton('encoder', 2);"><span id="encoderIcon2" class="mdi"></span></button>
+
+                                <button id="key0" class="key" onclick="onEditButton('key', 0);"><span id="keyIcon0" class="mdi"></span></button>
+                                <button id="key1" class="key" onclick="onEditButton('key', 1);"><span id="keyIcon1" class="mdi"></span></button>
+                                <button id="key2" class="key" onclick="onEditButton('key', 2);"><span id="keyIcon2" class="mdi"></span></button>
+                                <button id="key3" class="key" onclick="onEditButton('key', 3);"><span id="keyIcon3" class="mdi"></span></button>
+                                <button id="key4" class="key" onclick="onEditButton('key', 4);"><span id="keyIcon4" class="mdi"></span></button>
+                                <button id="key5" class="key" onclick="onEditButton('key', 5);"><span id="keyIcon5" class="mdi"></span></button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div id="right" class="profile-editor disable">
+                    <h3 class="editor-title">Action</h3>
                     <div id="import-image">
                         <button id="upload-icon">Importer un icon</button>
                         <div class="action-help">
@@ -227,7 +265,7 @@
                             </div>
                         </div>
 
-                        <div class="key1" style="margin-top: 50px;">
+                        <div class="key1">
                             <div id="system-action">
                                 <h3>Contrôle des Médias</h3>
 
@@ -270,37 +308,7 @@
             <!-- /affichage pour chaque action-->
 
 
-            <div id="macropad-container">
-                <div id="profil-list">
-                    <button class="mdi"></button>
-                    <button class="mdi"></button>
-                    <button class="mdi"></button>
-                    <button class="mdi"></button>
-                    <button class="mdi"></button>
-                    <button class="mdi"></button>
-                </div>
-                <div id="macropad">
-                    <div id="macropad-border">
-                        <div id="macropad-display">
-                            <h4>23:30</h4>
-                            <h4>28/10/2021</h4>
-                        </div>
-                        <div id="macropad-grid">
-                            <button class="encoder" onclick="onEditButton('encoder', 0);"><span id="encoderIcon0" class="mdi"></span></button>
-                            <button class="encoder" onclick="onEditButton('encoder', 1);"><span id="encoderIcon1" class="mdi"></span></button>
-                            <button class="encoder" onclick="onEditButton('encoder', 2);"><span id="encoderIcon2" class="mdi"></span></button>
 
-                            <button id="key0" class="key" onclick="onEditButton('key', 0);"><span id="keyIcon0" class="mdi"></span></button>
-                            <button id="key1" class="key" onclick="onEditButton('key', 1);"><span id="keyIcon1" class="mdi"></span></button>
-                            <button id="key2" class="key" onclick="onEditButton('key', 2);"><span id="keyIcon2" class="mdi"></span></button>
-                            <button id="key3" class="key" onclick="onEditButton('key', 3);"><span id="keyIcon3" class="mdi"></span></button>
-                            <button id="key4" class="key" onclick="onEditButton('key', 4);"><span id="keyIcon4" class="mdi"></span></button>
-                            <button id="key5" class="key" onclick="onEditButton('key', 5);"><span id="keyIcon5" class="mdi"></span></button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
 
 
         </div>
@@ -368,5 +376,7 @@
 <script src="port-mannager.js"></script>
 <script src="editProfile.js"></script>
 <script src="keyboard.js"></script>
+<!-- <script src="colorPicker/colorPicker.js"></script> -->
+<!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@r-tek/colr_pickr@2.0.0/build/colr_pickr.min.js"></script> -->
 
 </html>

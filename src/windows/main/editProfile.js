@@ -1,6 +1,7 @@
 const { contextBridge } = require("electron");
 const { cp } = require("original-fs");
 
+
 var profileEditorEnabled = false;
 
 function hexToRgb(hex) {
@@ -41,7 +42,8 @@ function updateProfileOverviewIcon() {
         if (icon == null) { //if profile icon is not set
             icon = "mdi-numeric-" + (parseInt(i) + 1) + "-box"; //set default icon
         }
-        document.getElementById("profil-list").getElementsByTagName("button")[i].className = "mdi " + icon;
+
+        document.getElementById("profile-" + i).className = "mdi " + icon;
     }
 }
 
@@ -51,7 +53,7 @@ function editProfilePopup() { //when edit profile button is clicked
         profileEditorEnabled = false;
 
         //document.getElementById("normal-view").className = "";
-        document.getElementById("profil-list").className = "";
+        //document.getElementById("profil-list").className = "";
         document.getElementsByClassName("profile-editor")[0].className = "profile-editor disable";
         document.getElementsByClassName("profile-editor")[1].className = "profile-editor disable";
 
@@ -70,7 +72,7 @@ function editProfilePopup() { //when edit profile button is clicked
         updateProfileGui();
         profileEditorEnabled = true;
         //document.getElementById("normal-view").className = "disable";
-        document.getElementById("profil-list").className = "disable";
+        //document.getElementById("profil-list").className = "disable";
         document.getElementsByClassName("profile-editor")[0].className = "profile-editor";
         document.getElementsByClassName("profile-editor")[1].className = "profile-editor";
         document.getElementById("edit").className = "active-button";
@@ -110,7 +112,6 @@ function getActionValue(type) { //get the value of the radio
     } else {
         return -1;
     }
-    var currentProfile = document.getElementById("profile-editor-selector").value;
 
     for (var i = 0; i < actionType.length; i++) {
         if (actionType[i].checked) {
@@ -125,7 +126,6 @@ function updateProfileColor() {
     var color = document.getElementById("color-picker").value;
     var rgb = hexToRgb(color);
     //save to config
-    var currentProfile = document.getElementById("profile-editor-selector").value;
     saveToConfig("profiles." + currentProfile + ".color", rgb);
 
 }
@@ -133,7 +133,6 @@ function updateProfileColor() {
 //------------------------- Profile Name ---------------------------------
 
 function saveProfileName() {
-    var currentProfile = document.getElementById("profile-editor-selector").value;
     var profileName = document.getElementById("profile-name").value;
     if (profileName.length == 0) {
         profileName = "Profil " + (parseInt(currentProfile) + 1);
@@ -152,7 +151,6 @@ function changeProfile() {
 
 function updateProfileGui() {
     var input = document.getElementById("profile-name"); //profile name input
-    var currentProfile = document.getElementById("profile-editor-selector").value; //current profile
     var profileName = readFromConfig("profiles." + currentProfile + ".name"); //profile name from config
 
     // --------------------- Profile Name ------------------------------
@@ -167,7 +165,7 @@ function updateProfileGui() {
         if (profileName == null) { //if profile name is not set
             profileName = "Profil " + (parseInt(i) + 1); //set default name
         }
-        document.getElementById('profile-editor-selector').getElementsByTagName('option')[i].innerHTML = profileName; //display profile name in list
+        //document.getElementById('profile-editor-selector').getElementsByTagName('option')[i].innerHTML = profileName; //display profile name in list
     }
 
     // --------------------- Profile Color ------------------------------
@@ -202,7 +200,6 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
     //type: encoder or key
     var configKey = type + "s";
     currentKeyEdit = -1; //disable edit on key
-    var currentProfile = document.getElementById("profile-editor-selector").value;
     var actionType = document.getElementsByName(type + "-action-type"); // get all input elements
 
     //---------------------------------------------Save old values in the config -------------------------------------------------
@@ -512,13 +509,11 @@ function updateProfileIconPreview(saveInConfig) {
     //save to the config file
     //get the current profile
     if (saveInConfig) {
-        var currentProfile = document.getElementById("profile-editor-selector").value;
         saveToConfig("profiles." + currentProfile + ".icon", "mdi-" + icon.value);
     }
 }
 
 function displayTypeSelected() {
-    var currentProfile = document.getElementById("profile-editor-selector").value;
     var radios = document.getElementsByName('display-text-selector');
     var type = -1;
     for (var i = 0, length = radios.length; i < length; i++) {
@@ -567,6 +562,91 @@ function systemActionValuesToRadioId(value) { // This function transform system 
         554: 16,
 
     }
-    return toRadioId[value];
+    if (value == -1) {
+        return 0;
+    } else {
+        return toRadioId[value];
+    }
+
 
 }
+
+var currentProfile = 0;
+
+function onChangeProfile(value) {
+    if (value == null) { // if value is null, get the value
+        var radio = document.getElementsByName("profile-selector"); // get all input elements
+
+        for (var i = 0; i < radio.length; i++) {
+            if (radio[i].checked) {
+                value = radio[i].value;
+            }
+        }
+    }
+
+    //-----------update the gui with the new profile-----------
+    for (var i = 0; i < 6; i++) { //for all profiles 
+        if (i == value) { //if the new value is the current value
+            document.getElementById("profile-" + i).classList.add('checked'); //select the action type
+            //document.getElementById(className + i)[0].classList.remove("disable"); //enable the div
+        } else {
+            document.getElementById("profile-" + i).classList.remove('checked'); //unselect the action type
+            //document.getElementById(className + i)[0].classList.add("disable"); //disable the div
+
+        }
+    }
+
+    currentProfile = value; //update the current profile    
+
+    var profileName = readFromConfig("profiles." + value + ".name"); //get the name of the profile
+    if (profileName == null) {
+        profileName = "Profil " + (parseInt(value) + 1);
+        saveToConfig("profiles." + value + ".name", profileName);
+
+    }
+    document.getElementById("macropad-text").innerHTML = profileName; //update the name of the profile
+    //-------------------------------------------------------   
+
+    if (profileEditorEnabled) {
+        currentEdit = -1;
+        currentKeyEdit = -1;
+        clearEditButton();
+        updateProfileGui();
+    }
+
+}
+
+const pickr = require('@r-tek/colr_pickr');
+
+
+setTimeout(function() {
+    onChangeProfile(0); //set the default value
+
+    const button = document.getElementById('my_picker');
+    let picker = new ColorPicker(button, '#ff0000');
+
+    /**
+     * What do you want to do after you have chosen the color?
+     *
+     * You can specify this in an EventListener, assigned to your button
+     */
+
+    button.addEventListener('colorChange', function(event) {
+        // This will give you the color you selected
+        const color = event.detail.color.hexa;
+
+        // Code to do what you want with that color...
+    });
+
+    /**
+     * You can also change the color yourself via JavaScript
+     *
+     * If you want to change the selected color for an instance without using the picker
+     * You can call the following function
+     *
+     * Parameter 1 [String]: Color
+     * Parameter 2 [HTMLElement]: The button that holds the instance / picker launch button
+     */
+
+    colorPickerComp.colorChange('#ff00ff', button);
+}, 100);
