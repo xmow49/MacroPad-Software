@@ -104,7 +104,7 @@
 
                         <div class="display-radio">
                             <input type="radio" name="display-text-selector" id="display-text-1" value="1" onchange="displayTypeSelected()">
-                            <label for="display-text-1">Profil Actuel</label>
+                            <label for="display-text-1">Nom du Profil</label>
                         </div>
                         <div class="display-radio">
                             <input type="radio" name="display-text-selector" id="display-text-2" value="2" onchange="displayTypeSelected()">
@@ -114,7 +114,7 @@
                             <input type="radio" name="display-text-selector" id="display-text-3" value="3" onchange="displayTypeSelected()">
                             <div id="display-div-custom">
                                 <label for="display-text-3">Custom</label>
-                                <input type="text" id="display-text-custom" placeholder="Texte Personalisé" maxlength="100" onfocusout="displayTypeSelected();">
+                                <input type="text" id="display-text-custom" placeholder="Texte custom" maxlength="100" onfocusout="displayTypeSelected();">
                             </div>
 
                         </div>
@@ -346,6 +346,8 @@
         <div id="connect-macropad" class="popup">
             <h2>Connexion au MacroPad</h2>
             <button onclick="scanSerialsPorts();">Scanner les Ports</button>
+            <button onclick="scanSerialsPorts();">Scanner les Ports</button>
+
             <p id="scan-port-log"></p>
             <progress id="port-scan-progress" class="progress" max="100" value="0"></progress>
 

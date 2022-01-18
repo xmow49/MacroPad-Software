@@ -191,6 +191,34 @@ function updateProfileGui() {
     icon = icon.replace("mdi-", "");
     document.getElementById("profile-icon-name").value = icon; //display icon name in profile icon name input
 
+
+
+    // --------------------- Profile display type ------------------------------
+    var displayType = readFromConfig("profiles." + currentProfile + ".display.type"); //get profile display type from config
+    if (displayType == null) { //if profile display type is not set
+        displayType = 0; //set default display type
+    }
+    var displayValue = readFromConfig("profiles." + currentProfile + ".display.value"); //get profile display value from config
+    if (displayValue == null || displayValue == "") {
+        displayValue = "Texte Personalisé";
+        saveToConfig("profiles." + currentProfile + ".display.value", displayValue);
+    }
+
+    //for all type in the radio, check corresponding to display type
+    var displayTypeRadio = document.getElementsByName("display-text-selector");
+    for (var i = 0; i < displayTypeRadio.length; i++) {
+        if (displayTypeRadio[i].value == displayType) {
+            displayTypeRadio[i].checked = true;
+        } else {
+            displayTypeRadio[i].checked = false;
+        }
+    }
+
+
+    document.getElementById("display-text-custom").value = displayValue; //display display text in profile display type input
+
+
+
 }
 
 
@@ -522,12 +550,9 @@ function displayTypeSelected() {
             break;
         }
     }
-    var value = "";
-    if (type == 3) {
-        value = document.getElementById("display-text-custom").value;
-    }
+    var value = document.getElementById("display-text-custom").value;
 
-    saveToConfig("profiles." + currentProfile + ".display.type", type);
+    saveToConfig("profiles." + currentProfile + ".display.type", parseInt(type));
     saveToConfig("profiles." + currentProfile + ".display.value", value);
 
 }
@@ -583,7 +608,6 @@ function onChangeProfile(value) {
             }
         }
     }
-
     //-----------update the gui with the new profile-----------
     for (var i = 0; i < 6; i++) { //for all profiles 
         if (i == value) { //if the new value is the current value
@@ -595,11 +619,9 @@ function onChangeProfile(value) {
 
         }
     }
-
     currentProfile = value; //update the current profile    
 
-
-
+    //----------------update profile name in the screen----------------
     var profileName = readFromConfig("profiles." + value + ".name"); //get the name of the profile
     if (profileName == null) {
         profileName = "Profil " + (parseInt(value) + 1);
