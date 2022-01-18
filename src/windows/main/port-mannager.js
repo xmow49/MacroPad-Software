@@ -1,6 +1,7 @@
 const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
 var usbDetect = require('usb-detection');
+const { ipcMain } = require('electron');
 usbDetect.startMonitoring();
 
 usbDetect.on('add', function(device) {
@@ -25,8 +26,6 @@ function scanPorts() { //List all serial port and store into availablePorts
     })
     return availablePorts;
 }
-
-
 
 function updateGUIPortList(availablePorts) {
     var portList = document.getElementById("port-list"); //Get the list div
@@ -157,9 +156,9 @@ function connectToPort(port) {
             serialPortConnection.on('data', function(data) { //Add listener for recevied message from serial
                 responsesFromPort(data); //and send it to this function to check the ping 
             })
-            setTimeout(function() { //wait 0.5s and send a ping to the macropad
+            setTimeout(async function() { //wait 0.5s and send a ping to the macropad
                 console.log("SENDING PING");
-                serialPortConnection.write("P");
+                await sendWithACK("P");
             }, 1000);
         }
         baudRate: 9600;
@@ -174,20 +173,21 @@ var testToDoCount;
 var ack = false //acknowledgement from the macropad
 
 function scanSerialsPorts() {
-    if (scanInProgress) {
-        //if already scan, do nothing
-    } else {
+    if (scanInProgress == false && macropadConnectionStatus == false) {
+        console.log("scanSerialsPorts");
         scanInProgress = true; //Scan in progress
         document.getElementById("scan-port-log").innerHTML = "Scan en cours ..."
         var availablePorts = scanPorts(); //Get all ports
         setTimeout(function() {
             updateGUIPortList(availablePorts) //update the list after 100ms
             testToDoCount = availablePorts.length - 1;
-
         }, 100);
+
+
 
         //Start autocheck
         currentTestingPort = -1; //start to the first port
+
         checkInterval = window.setInterval(function() {
             currentTestingPort++;
             if (currentTestingPort > testToDoCount) {
@@ -202,6 +202,7 @@ function scanSerialsPorts() {
                 connectToPort(availablePorts[currentTestingPort]);
             }
         }, 2000);
+        document.getElementById("scan-port-log").innerHTML = ""
         scanInProgress = false;
     }
 }
@@ -211,7 +212,6 @@ function connectPopup() {
     document.getElementById("connect-macropad").style.display = "block";
     updatePopupBackgroud()
 }
-
 
 function connectPopupCancel() {
     document.getElementById("connect-macropad").style.display = "none";
@@ -223,24 +223,27 @@ function connectPopupSave() {
     updatePopupBackgroud()
 }
 
-
 async function sendConfig() {
     if (macropadConnectionStatus) { //if connected
         console.log("---------------------------SENDING CONFIG---------------------------");
         for (var profileNumber = 0; profileNumber < 6; profileNumber++) { //for each profile
-
             if (readFromConfig("profiles." + profileNumber) != null) { //if profile is not empty
                 var profileName = readFromConfig("profiles." + profileNumber + ".name"); //get the profile name
                 var profileColor = readFromConfig("profiles." + profileNumber + ".color"); //get the profile color
                 var profileEncoders = readFromConfig("profiles." + profileNumber + ".encoders"); //get the profile encoders
                 var profileKeys = readFromConfig("profiles." + profileNumber + ".keys"); //get the profile keys 
+                var profileDisplay = readFromConfig("profiles." + profileNumber + ".display"); //get the profile display
 
+
+
+                //---------------------------------SEND PROFILE NAME---------------------------------
                 if (profileName != null) { //if profile name is not empty
                     // console.log("B " + profileNumber + " " + profileName);
                     await sendWithACK("B " + profileNumber + " " + profileName); //send the name to the macropad
 
                 }
 
+                //---------------------------------SEND PROFILE COLOR---------------------------------
                 if (profileColor != null) { //if profile color is not empty
                     var colorString = "";
                     for (var i = 0; i < profileColor.length; i++) {
@@ -251,6 +254,7 @@ async function sendConfig() {
                     await sendWithACK("C " + profileNumber + " " + colorString); //send the color to the macropad
                 }
 
+                //---------------------------------SEND ENCODERS---------------------------------
                 if (profileEncoders != null) { //if profile encoders is not empty
                     for (var nEncoder = 0; nEncoder < 3; nEncoder++) { //for each encoder
                         var encoderType = readFromConfig("profiles." + profileNumber + ".encoders." + nEncoder + ".type"); //get the encoder type
@@ -268,13 +272,11 @@ async function sendConfig() {
                             // console.log("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]);
                             await sendWithACK("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]); //wait for the acknowledgement from the macropad
                         }
-
-
-
-
                     }
                 }
 
+
+                //---------------------------------SEND KEYS---------------------------------
                 if (profileKeys != null) { //if profile keys is not empty
                     for (var nKey = 0; nKey < 6; nKey++) { //for each key
                         var keyType = readFromConfig("profiles." + profileNumber + ".keys." + nKey + ".type"); //get the key type
@@ -287,22 +289,26 @@ async function sendConfig() {
                     }
                 }
 
-                await sendWithACK("S"); //send to the eeprom
-            } else {}
+                if (profileDisplay != null) { //if profile display is not empty
+                    var displayType = readFromConfig("profiles." + profileNumber + ".display.type"); //get the display type
+                    if (displayType == null) displayType = 1;
+                    await sendWithACK("D " + profileNumber + " " + displayType); //send the display to the macropad
+                    //console.log("D " + profileNumber + " " + displayType + " " + displayValues);
+
+                    await sendWithACK("S"); //send to the eeprom
+                } else {}
+            }
+            console.log("---------------------------OK---------------------------");
         }
-        console.log("---------------------------OK---------------------------");
+
     }
-
 }
-
 
 function setCurrentProfile(profileNumber) { // send the profile number to the macropad to set it as current profile
     if (macropadConnectionStatus) { //if connected
         sendWithACK("A " + profileNumber); //wait for the acknowledgement from the macropad
     }
 }
-
-
 
 function sendWithACK(text) { //send a command to the macropad and wait for the acknowledgement
     return new Promise(function(resolve, reject) { //return a promise
@@ -341,4 +347,20 @@ function sendWithACK(text) { //send a command to the macropad and wait for the a
             }
         }, 100);
     });
+}
+
+var musicName = "no";
+async function setTextMusic(software) { //set the music name
+
+    var name = IPC.sendSync('get-music-software', "spotify"); //get the music name
+    name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    console.log("name: " + name);
+    if (name.includes(musicName)) {
+
+    } else {
+        musicName = name;
+        // document.getElementById("macropad-display").innerHTML = "" + data;
+        name.replace(/[\n\r]/g, '');
+        await sendWithACK("T " + name); //send the music name to the macropad
+    }
 }
