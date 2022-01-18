@@ -1,6 +1,13 @@
 const SerialPort = require('serialport');
 const Readline = require('@serialport/parser-readline');
+var usbDetect = require('usb-detection');
+usbDetect.startMonitoring();
 
+usbDetect.on('add', function(device) {
+    if (device.vendorId == "9025" && device.productId == "32822") {
+        scanSerialsPorts();
+    }
+});
 
 
 function scanPorts() { //List all serial port and store into availablePorts
@@ -46,14 +53,46 @@ function updateGUIPortList(availablePorts) {
 
 var pingResponse = false;
 var macropadConnectionStatus = false;
+var macropadInterval;
+
+
 
 function responsesFromPort(data) {
     var stringFromSerial = data.toString();
-    if (data.includes("P")) { //its a Macropad
+    stringFromSerial = stringFromSerial.replace(/\r\n/g, "");
+
+    if (stringFromSerial == "OK" || stringFromSerial == "POK") {
+        ack = true;
+    }
+
+    if (stringFromSerial == "P" || stringFromSerial == "POK") { //its a Macropad
         // Here, the macropad is connected and a pong is received
         pingResponse = true;
-        macropadConnectionStatus = true;
-        console.log("FOUND");
+
+        if (macropadConnectionStatus == false) {
+            macropadConnectionStatus = true;
+            usbDetect.on('remove', function(device) {
+                if (device.vendorId == "9025" && device.productId == "32822") {
+                    macropadConnectionStatus = false;
+                    clearInterval(macropadInterval);
+                    updateOverviewConnectionStatus(false);
+                    console.log("Macropad disconnected");
+                }
+            });
+            macropadInterval = setInterval(async function() {
+                try {
+                    var result = await sendWithACK("P");
+                } catch (result) {
+                    macropadConnectionStatus = false;
+                    clearInterval(macropadInterval);
+                    updateOverviewConnectionStatus(false);
+                    console.log(result);
+                }
+
+
+            }, 10000);
+        }
+
         clearInterval(checkInterval); //stop all check
         document.getElementById("port-" + currentTestingPort).checked = true;
         scanInProgress = false;
@@ -62,10 +101,19 @@ function responsesFromPort(data) {
         progressBar.value = 100;
         progressBar.className = "end"
         updateOverviewConnectionStatus(true);
+
+
+
+
     }
 
     if (macropadConnectionStatus) {
-        //key annimation when macropad key is pressed
+        // for (var i = 0; i < stringFromSerial.length; i++) {
+        //     console.log(stringFromSerial.charCodeAt(i));
+        // }
+
+
+        //good mesg
         if (stringFromSerial.includes("K")) {
             var msg = stringFromSerial.replace("K", ""); //keep only the key code
             var keyCode = parseInt(msg);
@@ -77,28 +125,7 @@ function responsesFromPort(data) {
                     button.style.transform = "scale(1)";
                 }, 300);
             } catch (e) {}
-        } else if (stringFromSerial.includes("1")) {
-            ack = true;
         }
-
-
-
-
-        //for each caracter in the string, display it in the console
-        // for (var i = 0; i < stringFromSerial.length; i++) {
-        //     var char = stringFromSerial.charAt(i);
-        //     //display the char and ascii code in the console
-        //     console.log(char + " : " + stringFromSerial.charCodeAt(i));
-        // }
-
-        stringFromSerial = stringFromSerial.replace(/[\n\r]+/g, '');
-
-        if (stringFromSerial == "1") {
-            ack = true;
-        }
-
-
-
         console.log("From MacroPad: " + stringFromSerial);
     }
 }
@@ -109,12 +136,12 @@ function updateOverviewConnectionStatus(status) {
         document.getElementById("scan-port-log").innerHTML = "Connecté au MacroPad."
         document.getElementById("connect-status").className = "online"; //Change the status to online in the overview menu
         var text = document.getElementById("connect-status-button").innerHTML;
-        text.replace("Déconnecté", "Connecté");
+        text = text.replace("Déconnecté", "Connecté");
         document.getElementById("connect-status-button").innerHTML = text;
     } else {
         document.getElementById("connect-status").className = "offline"; //Change the status to offline in the overview menu
         var text = document.getElementById("connect-status-button").innerHTML;
-        text.replace("Connecté", "Déconnecté");
+        text = text.replace("Connecté", "Déconnecté");
         document.getElementById("connect-status-button").innerHTML = text;
     }
 }
@@ -131,8 +158,9 @@ function connectToPort(port) {
                 responsesFromPort(data); //and send it to this function to check the ping 
             })
             setTimeout(function() { //wait 0.5s and send a ping to the macropad
+                console.log("SENDING PING");
                 serialPortConnection.write("P");
-            }, 500);
+            }, 1000);
         }
         baudRate: 9600;
     });
@@ -174,6 +202,7 @@ function scanSerialsPorts() {
                 connectToPort(availablePorts[currentTestingPort]);
             }
         }, 2000);
+        scanInProgress = false;
     }
 }
 
@@ -185,7 +214,6 @@ function connectPopup() {
 
 
 function connectPopupCancel() {
-
     document.getElementById("connect-macropad").style.display = "none";
     updatePopupBackgroud()
 }
@@ -197,9 +225,8 @@ function connectPopupSave() {
 
 
 async function sendConfig() {
-    console.log(SerialPort.list());
-
     if (macropadConnectionStatus) { //if connected
+        console.log("---------------------------SENDING CONFIG---------------------------");
         for (var profileNumber = 0; profileNumber < 6; profileNumber++) { //for each profile
 
             if (readFromConfig("profiles." + profileNumber) != null) { //if profile is not empty
@@ -209,9 +236,9 @@ async function sendConfig() {
                 var profileKeys = readFromConfig("profiles." + profileNumber + ".keys"); //get the profile keys 
 
                 if (profileName != null) { //if profile name is not empty
-                    console.log("B " + profileNumber + " \"" + profileName);
-                    serialPortConnection.write("B " + profileNumber + " \"" + profileName); //send the name to the macropad
-                    await waitACK();
+                    // console.log("B " + profileNumber + " " + profileName);
+                    await sendWithACK("B " + profileNumber + " " + profileName); //send the name to the macropad
+
                 }
 
                 if (profileColor != null) { //if profile color is not empty
@@ -220,9 +247,8 @@ async function sendConfig() {
                         if (profileColor[i] == null) profileColor[i] = 0;
                         colorString += profileColor[i] + " ";
                     }
-                    console.log("C " + profileNumber + " " + colorString);
-                    serialPortConnection.write("C " + profileNumber + " " + colorString); //send the color to the macropad
-                    await waitACK();
+                    // console.log("C " + profileNumber + " " + colorString);
+                    await sendWithACK("C " + profileNumber + " " + colorString); //send the color to the macropad
                 }
 
                 if (profileEncoders != null) { //if profile encoders is not empty
@@ -239,9 +265,8 @@ async function sendConfig() {
                                 }
                             }
 
-                            console.log("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]);
-                            serialPortConnection.write("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]); //send the encoder to the macropad
-                            await waitACK(); //wait for the acknowledgement from the macropad
+                            // console.log("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]);
+                            await sendWithACK("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]); //wait for the acknowledgement from the macropad
                         }
 
 
@@ -256,26 +281,63 @@ async function sendConfig() {
                         var keyValues = readFromConfig("profiles." + profileNumber + ".keys." + nKey + ".values"); //get the key values
                         if (keyType == null) keyType = 0;
                         if (keyValues == null) keyValues = [0, 0, 0];
-                        console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
-                        serialPortConnection.write("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]); //send the key to the macropad
-                        await waitACK(); //wait for the acknowledgement from the macropad
+                        // console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
+                        await sendWithACK("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]); //send the key to the macropad
+
                     }
                 }
 
+                await sendWithACK("S"); //send to the eeprom
             } else {}
         }
+        console.log("---------------------------OK---------------------------");
     }
 
 }
 
 
-function waitACK() { //wait for the acknowledgement from the macropad
+function setCurrentProfile(profileNumber) { // send the profile number to the macropad to set it as current profile
+    if (macropadConnectionStatus) { //if connected
+        sendWithACK("A " + profileNumber); //wait for the acknowledgement from the macropad
+    }
+}
+
+
+
+function sendWithACK(text) { //send a command to the macropad and wait for the acknowledgement
     return new Promise(function(resolve, reject) { //return a promise
-        ack = false; //acknowledgement not received
+        var ackTimeout;
+        var ntry = 0;
+
+        function send() {
+            ack = false; //acknowledgement not received
+            // console.log("Sending: " + text);
+            serialPortConnection.write(text); //send the command to the macropad
+            createTimeout();
+            ntry++
+
+        }
+
+        function createTimeout() {
+            ackTimeout = window.setTimeout(function() {
+                console.log("ACK TIMEOUT: new try");
+                send();
+            }, 1000);
+        }
+
+        send();
+
         var checkInterval = window.setInterval(function() { //check every 100ms
             if (ack) { //if the acknowledgement is received
+                // console.log("ACK received");
+                window.clearTimeout(ackTimeout); //stop the timeout
                 clearInterval(checkInterval); //stop the check
-                resolve(); //resolve the promise
+                resolve(0); //resolve the promise
+            }
+            if (ntry > 3) {
+                window.clearTimeout(ackTimeout); //stop the timeout
+                clearInterval(checkInterval); //stop the check
+                reject(1); //reject the promise
             }
         }, 100);
     });

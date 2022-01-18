@@ -598,6 +598,8 @@ function onChangeProfile(value) {
 
     currentProfile = value; //update the current profile    
 
+
+
     var profileName = readFromConfig("profiles." + value + ".name"); //get the name of the profile
     if (profileName == null) {
         profileName = "Profil " + (parseInt(value) + 1);
@@ -614,6 +616,7 @@ function onChangeProfile(value) {
         updateProfileGui();
     }
 
+    setCurrentProfile(currentProfile); //send to macropad the new selected profile
 }
 
 const pickr = require('@r-tek/colr_pickr');
