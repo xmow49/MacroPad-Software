@@ -6,7 +6,10 @@ usbDetect.startMonitoring();
 
 usbDetect.on('add', function(device) {
     if (device.vendorId == "9025" && device.productId == "32822") {
-        scanSerialsPorts();
+        setTimeout(function() {
+            scanSerialsPorts();
+        }, 1000);
+
     }
 });
 
@@ -56,7 +59,7 @@ var macropadInterval;
 
 
 
-function responsesFromPort(data) {
+async function responsesFromPort(data) {
     var stringFromSerial = data.toString();
     stringFromSerial = stringFromSerial.replace(/\r\n/g, "");
 
@@ -64,16 +67,24 @@ function responsesFromPort(data) {
         ack = true;
     }
 
+
+    if (stringFromSerial.charAt(0) == "A") { //if the firt char is A, its a profile number
+        var profileNumber = stringFromSerial.charAt(1); //get the profile number
+        profileNumber = parseInt(profileNumber); //convert to int
+        onChangeProfile(profileNumber); //call the function to change the profile in the main window
+    }
+
     if (stringFromSerial == "P" || stringFromSerial == "POK") { //its a Macropad
         // Here, the macropad is connected and a pong is received
         pingResponse = true;
-
-        if (macropadConnectionStatus == false) {
+        if (macropadConnectionStatus == false) { //If the macropad is not connected
             macropadConnectionStatus = true;
             usbDetect.on('remove', function(device) {
                 if (device.vendorId == "9025" && device.productId == "32822") {
                     macropadConnectionStatus = false;
+                    musicName = "none";
                     clearInterval(macropadInterval);
+                    clearInterval(screenTextInterval);
                     updateOverviewConnectionStatus(false);
                     console.log("Macropad disconnected");
                 }
@@ -87,9 +98,14 @@ function responsesFromPort(data) {
                     updateOverviewConnectionStatus(false);
                     console.log(result);
                 }
-
-
             }, 10000);
+
+            await sendWithACK("A"); //get the current profile from the macropad
+
+            updateScreenText(); //start the screen text update
+
+
+
         }
 
         clearInterval(checkInterval); //stop all check
@@ -328,7 +344,7 @@ function sendWithACK(text) { //send a command to the macropad and wait for the a
             ackTimeout = window.setTimeout(function() {
                 console.log("ACK TIMEOUT: new try");
                 send();
-            }, 1000);
+            }, 3000);
         }
 
         send();
@@ -349,18 +365,37 @@ function sendWithACK(text) { //send a command to the macropad and wait for the a
     });
 }
 
-var musicName = "no";
+var musicName = "none";
 async function setTextMusic(software) { //set the music name
 
     var name = IPC.sendSync('get-music-software', "spotify"); //get the music name
     name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    console.log("name: " + name);
     if (name.includes(musicName)) {
 
     } else {
         musicName = name;
         // document.getElementById("macropad-display").innerHTML = "" + data;
         name.replace(/[\n\r]/g, '');
+        document.getElementById("macropad-text").innerHTML = name;
         await sendWithACK("T " + name); //send the music name to the macropad
+    }
+}
+
+var screenTextInterval;
+
+function updateScreenText() {
+    window.clearInterval(screenTextInterval);
+    var displayType = readFromConfig("profiles." + currentProfile + ".display.type"); //get the display type
+    if (displayType == 0 || displayType == 2 || displayType == 3) { //need text on the macropad screen
+        var displayValues = readFromConfig("profiles." + currentProfile + ".display.value"); //get the display values
+        if (displayValues != null) {
+            screenTextInterval = setInterval(function() {
+                    if (currentProfile == 0) {
+                        setTextMusic("spotify"); //-----------------------------------------------------------------------------TODO
+                    }
+                },
+                10000);
+        }
+
     }
 }
