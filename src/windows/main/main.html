@@ -7,10 +7,11 @@
     <link href="connectMacropadPopup.css" rel="stylesheet">
     <link href="selectMacropadPopup.css" rel="stylesheet">
     <link href="profileEditor.css" rel="stylesheet">
-    <link href="colorPicker/colorPicker.css" rel="stylesheet">
-
     <link href="overview.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.4.95/css/materialdesignicons.min.css" rel="stylesheet">
+    <!-- 'nano' theme -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />
+
 
 
 </head>
@@ -85,17 +86,16 @@
                     </div>
 
                     <div>
-                        <h3>Couleur du Profil:</h3>
-                        <div id="profile-color-picker">
-                            <h4>Couleur des LEDS et du profil: </h4>
-                            <input type="color" id="color-picker" onfocusout="updateProfileColor();">
-                            <button id="my_picker"></button>
+                        <div class="profile-color-title">
+                            <h3>Couleur du Profil </h3>
+                            <button id="color-picker" class="color-picker" id="color-picker">toto</button>
                         </div>
+                        <div class="profile-color-picker"></div>
 
                     </div>
 
 
-                    <h3>Élément à afficher sur l'écran: </h3>
+                    <h3>Affichage</h3>
                     <div id="display-selector">
                         <div class="display-radio">
                             <input type="radio" name="display-text-selector" id="display-text-0" value="0" onchange="displayTypeSelected()" checked>
@@ -345,8 +345,7 @@
 
         <div id="connect-macropad" class="popup">
             <h2>Connexion au MacroPad</h2>
-            <button onclick="scanSerialsPorts();">Scanner les Ports</button>
-            <button onclick="scanSerialsPorts();">Scanner les Ports</button>
+            <button id="connect-button" onclick="scanSerialsPorts();">Rechercher un MacroPad</button>
 
             <p id="scan-port-log"></p>
             <progress id="port-scan-progress" class="progress" max="100" value="0"></progress>
@@ -373,11 +372,13 @@
         </div>
     </div>
 </body>
-
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.es5.min.js"></script>
 <script src="main.js"></script>
 <script src="port-mannager.js"></script>
 <script src="editProfile.js"></script>
 <script src="keyboard.js"></script>
+
 <!-- <script src="colorPicker/colorPicker.js"></script> -->
 <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@r-tek/colr_pickr@2.0.0/build/colr_pickr.min.js"></script> -->
 

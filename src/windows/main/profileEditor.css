@@ -344,3 +344,14 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     font-weight: bold;
     text-decoration: underline;
 }
+
+.pcr-app {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+}
+
+.profile-color-title {
+    display: flex;
+    align-items: center
+}

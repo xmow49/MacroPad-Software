@@ -79,6 +79,7 @@ async function responsesFromPort(data) {
         pingResponse = true;
         if (macropadConnectionStatus == false) { //If the macropad is not connected
             macropadConnectionStatus = true;
+            document.getElementById("connect-button").innerHTML = "Se déconnecter";
             usbDetect.on('remove', function(device) {
                 if (device.vendorId == "9025" && device.productId == "32822") {
                     macropadConnectionStatus = false;
@@ -189,17 +190,15 @@ var testToDoCount;
 var ack = false //acknowledgement from the macropad
 
 function scanSerialsPorts() {
-    if (scanInProgress == false && macropadConnectionStatus == false) {
+    if (scanInProgress == false && macropadConnectionStatus == false) { //if the scan is not in progress and the macropad is not connected
         console.log("scanSerialsPorts");
         scanInProgress = true; //Scan in progress
-        document.getElementById("scan-port-log").innerHTML = "Scan en cours ..."
+        document.getElementById("connect-button").innerHTML = "Scan en cours ..."
         var availablePorts = scanPorts(); //Get all ports
         setTimeout(function() {
             updateGUIPortList(availablePorts) //update the list after 100ms
             testToDoCount = availablePorts.length - 1;
         }, 100);
-
-
 
         //Start autocheck
         currentTestingPort = -1; //start to the first port
@@ -220,13 +219,22 @@ function scanSerialsPorts() {
         }, 2000);
         document.getElementById("scan-port-log").innerHTML = ""
         scanInProgress = false;
+    } else if (macropadConnectionStatus == true && scanInProgress == false) {
+        serialPortConnection.close();
+        macropadConnectionStatus = false;
+        document.getElementById("connect-button").innerHTML = "Rechercher un MacroPad";
+        updateOverviewConnectionStatus(false);
     }
 }
 
 
 function connectPopup() {
     document.getElementById("connect-macropad").style.display = "block";
-    updatePopupBackgroud()
+    updatePopupBackgroud();
+    if (macropadConnectionStatus == false) {
+        scanSerialsPorts();
+    }
+
 }
 
 function connectPopupCancel() {

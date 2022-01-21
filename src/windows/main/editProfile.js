@@ -122,13 +122,13 @@ function getActionValue(type) { //get the value of the radio
 }
 
 
-function updateProfileColor() {
-    var color = document.getElementById("color-picker").value;
-    var rgb = hexToRgb(color);
-    //save to config
-    saveToConfig("profiles." + currentProfile + ".color", rgb);
+// function updateProfileColor() {
+//     var color = document.getElementById("color-picker").value;
+//     var rgb = hexToRgb(color);
+//     //save to config
+//     saveToConfig("profiles." + currentProfile + ".color", rgb);
 
-}
+// }
 
 //------------------------- Profile Name ---------------------------------
 
@@ -176,7 +176,12 @@ function updateProfileGui() {
     } else {
         colorHEX = rgbToHex(color[0], color[1], color[2]); //convert to hex color
     }
-    document.getElementById("color-picker").value = colorHEX; //display color in color picker
+
+    console.log(colorHEX);
+    pickr.setColor(colorHEX);
+
+
+    //document.getElementById("color-picker").value = colorHEX; //display color in color picker
 
     // --------------------- Profile Icon ------------------------------
 
@@ -641,37 +646,64 @@ function onChangeProfile(value) {
     setCurrentProfile(currentProfile); //send to macropad the new selected profile
 }
 
-const pickr = require('@r-tek/colr_pickr');
-
 
 setTimeout(function() {
     onChangeProfile(0); //set the default value
+}, 20);
 
-    const button = document.getElementById('my_picker');
-    let picker = new ColorPicker(button, '#ff0000');
+const pickr = Pickr.create({
+    el: '.color-picker',
+    theme: 'nano', // or 'monolith', or 'nano'
+    container: '.profile-color-picker',
 
-    /**
-     * What do you want to do after you have chosen the color?
-     *
-     * You can specify this in an EventListener, assigned to your button
-     */
+    appClass: 'color-picker-cutom',
+    // useAsButton: true,
+    showAlways: true,
+    swatches: [
+        'rgb(244, 67, 54)',
+        'rgb(233, 30, 99)',
+        'rgb(156, 39, 176)',
+        'rgb(103, 58, 183)',
+        'rgb(63, 81, 181)',
+        'rgb(33, 150, 243)',
+        'rgb(3, 169, 244)',
+        'rgb(0, 188, 212)',
+        'rgb(0, 150, 136)',
+        'rgb(76, 175, 80)',
+        'rgb(139, 195, 74)',
+        'rgb(205, 220, 57)',
+        'rgb(255, 235, 59)',
+        'rgb(255, 193, 7)'
+    ],
 
-    button.addEventListener('colorChange', function(event) {
-        // This will give you the color you selected
-        const color = event.detail.color.hexa;
+    components: {
 
-        // Code to do what you want with that color...
-    });
+        // Main components
+        preview: true,
+        // opacity: true,
+        hue: true,
 
-    /**
-     * You can also change the color yourself via JavaScript
-     *
-     * If you want to change the selected color for an instance without using the picker
-     * You can call the following function
-     *
-     * Parameter 1 [String]: Color
-     * Parameter 2 [HTMLElement]: The button that holds the instance / picker launch button
-     */
+        // Input / output Options
+        interaction: {
+            // hex: true,
+            // rgba: true,
+            // hsla: true,
+            // hsva: true,
+            // cmyk: true,
+            input: true,
+            // clear: true,
+            // save: true
+        }
+    }
 
-    colorPickerComp.colorChange('#ff00ff', button);
-}, 100);
+});
+
+pickr.on('change', (source, instance) => {
+    pickr.setColor(source.toHEXA().toString());
+});
+
+pickr.on('changestop', (source, instance) => {
+    var rgb = hexToRgb(instance._color.toHEXA());
+    pickr.setColor(instance._color.toHEXA().toString());
+    saveToConfig("profiles." + currentProfile + ".color", rgb);
+});
