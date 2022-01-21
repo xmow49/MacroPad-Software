@@ -322,7 +322,7 @@ async function sendConfig() {
                     await sendWithACK("S"); //send to the eeprom
                 } else {}
             }
-            console.log("---------------------------OK---------------------------");
+            console.log("Profile " + profileNumber + " sent");
         }
 
     }

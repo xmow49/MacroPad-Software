@@ -42,8 +42,7 @@ function updateProfileOverviewIcon() {
         if (icon == null) { //if profile icon is not set
             icon = "mdi-numeric-" + (parseInt(i) + 1) + "-box"; //set default icon
         }
-
-        document.getElementById("profile-" + i).className = "mdi " + icon;
+        document.getElementById("profile-" + i).querySelector("span").className = "mdi " + icon;
     }
 }
 
@@ -52,13 +51,11 @@ function editProfilePopup() { //when edit profile button is clicked
         //disable the profile editor
         profileEditorEnabled = false;
 
-        //document.getElementById("normal-view").className = "";
-        //document.getElementById("profil-list").className = "";
-        document.getElementsByClassName("profile-editor")[0].className = "profile-editor disable";
-        document.getElementsByClassName("profile-editor")[1].className = "profile-editor disable";
+        document.getElementsByClassName("profile-editor")[0].className = "profile-editor disable"; //disable left editor menu
+        document.getElementsByClassName("profile-editor")[1].className = "profile-editor disable"; //disable right editor menu
 
-        document.getElementById("edit").className = "";
-        document.getElementById("macropad").className = "connectPopup";
+        document.getElementById("edit").className = ""; //edit button --> remove active-button class
+        document.getElementById("macropad").className = "connectPopup"; //remove macropad button hover action
 
         //disable edit mode for all encoders/keys buttons
         clearEditButton();
@@ -122,13 +119,6 @@ function getActionValue(type) { //get the value of the radio
 }
 
 
-// function updateProfileColor() {
-//     var color = document.getElementById("color-picker").value;
-//     var rgb = hexToRgb(color);
-//     //save to config
-//     saveToConfig("profiles." + currentProfile + ".color", rgb);
-
-// }
 
 //------------------------- Profile Name ---------------------------------
 
@@ -177,12 +167,7 @@ function updateProfileGui() {
         colorHEX = rgbToHex(color[0], color[1], color[2]); //convert to hex color
     }
 
-    console.log(colorHEX);
-    pickr.setColor(colorHEX);
-
-
-    //document.getElementById("color-picker").value = colorHEX; //display color in color picker
-
+    pickr.setColor(colorHEX); //set color in color picker
     // --------------------- Profile Icon ------------------------------
 
     var icon = readFromConfig("profiles." + currentProfile + ".icon"); //get profile icon from config

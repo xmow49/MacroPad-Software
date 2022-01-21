@@ -8,6 +8,8 @@
     <link href="selectMacropadPopup.css" rel="stylesheet">
     <link href="profileEditor.css" rel="stylesheet">
     <link href="overview.css" rel="stylesheet">
+    <link href="settings.css" rel="stylesheet">
+
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.4.95/css/materialdesignicons.min.css" rel="stylesheet">
     <!-- 'nano' theme -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/themes/nano.min.css" />
@@ -370,14 +372,88 @@
             </div>
 
         </div>
+
+        <div id="settings" class="popup">
+            <h2>Paramètres</h2>
+            <div class="settings-list">
+                <!-- language -->
+                <div class="settings-item">
+                    <h3>Langue</h3>
+                    <select id="select-language">
+                        <option value="fr">Français</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+                <!-- DarkMode -->
+                <div id="dark-mode" class="settings-item">
+                    <h3>Mode sombre</h3>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                      </label>
+                </div>
+                <!-- Backgroud -->
+                <div id="backgroud-start" class="settings-item">
+                    <div class="settings-menu-text">
+                        <h3>Démarrage Automatique</h3>
+                        <h4>Lancer le logiciel automatiquement en tache de fond au démarrage</h4>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                      </label>
+                </div>
+
+                <!-- Import -->
+                <div id="export-imort-config" class="settings-item">
+                    <div class="settings-menu-text">
+                        <h3>Exporter/Importer la Configuration</h3>
+                        <h4>Sauvgrader/Restaurer tous les données du logiciel</h4>
+                    </div>
+                </div>
+
+                <!-- Update -->
+                <div id="do-update" class="settings-item">
+                    <div class="settings-menu-text">
+                        <h3>Mises à Jours</h3>
+                        <h4>Obtenez la dernière version du MacroPad et du logiciel</h4>
+                    </div>
+                </div>
+
+
+                <!-- Reset -->
+                <div id="hard-reset" class="settings-item">
+                    <div class="settings-menu-text">
+                        <h3>Réinitialiser le MacroPad</h3>
+                        <h4>Efface tous les paramètres du logiciel et du MacroPad</h4>
+                    </div>
+                </div>
+
+                <!-- About -->
+                <div id="about" class="settings-item">
+                    <div class="settings-menu-text">
+                        <h3>À Propos</h3>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <!-- <div class="actions">
+                <button onclick="settingsPopupCancel();">Annuler</button>
+                <button onclick="settingsPopupSave();">Enregistrer</button>
+            </div> -->
+
+        </div>
     </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.es5.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/@simonwep/pickr/dist/pickr.es5.min.js"></script> -->
 <script src="main.js"></script>
 <script src="port-mannager.js"></script>
 <script src="editProfile.js"></script>
 <script src="keyboard.js"></script>
+
 
 <!-- <script src="colorPicker/colorPicker.js"></script> -->
 <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@r-tek/colr_pickr@2.0.0/build/colr_pickr.min.js"></script> -->
