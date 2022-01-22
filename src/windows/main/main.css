@@ -165,7 +165,7 @@ span {
     /* Location of the box */
     padding: 20px;
     left: 50px;
-    top: 100px;
+    top: 200px;
     width: 87%;
     /* overflow: hidden; */
     /* Fallback color */
@@ -234,7 +234,7 @@ span {
 /* ---- Popup Update----- */
 
 #update-available {
-    position: relative;
+    /* position: relative; */
     display: none;
 }
 

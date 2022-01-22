@@ -27,24 +27,37 @@ var updatePopup = document.getElementById("update-available");
 
 if (updateAvailable()) {
     updatePopup.style.display = "block";
+
+
 }
+
+function closeAllPopups() {
+    var allPopups = document.getElementsByClassName("popup");
+    for (var i = 0; i < allPopups.length; i++) {
+        if (!allPopups[i].classList.contains("disable")) {
+            document.getElementsByClassName("popup")[i].style.display = "none";
+        }
+    }
+    updatePopupBackground();
+}
+
 
 function updatePopupChanglogBtn() {
     IPC.send("open-link", "https://github.com/xmow49/MacroPad-Software/releases")
-    updatePopupBackgroud()
+    updatePopupBackground()
 }
 
 function updatePopupSkipBtn() {
     updatePopup.style.display = "none";
     document.getElementById("select-macropad").style.display = "block";
-    updatePopupBackgroud()
+    updatePopupBackground()
 
 
 }
 
 function updatePopupUpdateBtn() {
     document.getElementById("select-macropad").style.display = "block";
-    updatePopupBackgroud()
+    updatePopupBackground()
 }
 
 //------------------ /Update Popup -------------------
@@ -57,7 +70,7 @@ var selectPopup = document.getElementById("select-macropad");
 function selectMacropad(id) {
     selectPopup.style.display = "none";
     document.getElementById("connect-macropad").style.display = "block";
-    updatePopupBackgroud()
+    updatePopupBackground()
 }
 
 //------------------ /Select Macroad Popup -------------------
@@ -67,18 +80,14 @@ function selectMacropad(id) {
 
 var popups = [...document.getElementsByClassName("popup")];
 
-function updatePopupBackgroud() {
-
-    console.log(popups);
+function updatePopupBackground() {
     var popupBackground = false
     popups.forEach(i => {
         if (i.style.display === "block") {
             popupBackground = true;
         }
-        console.log(popupBackground);
     });
 
-    console.log(popupBackground);
     if (popupBackground) {
         document.getElementById("popup-backgroud").className = "enable";
     } else {

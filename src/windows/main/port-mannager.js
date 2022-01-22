@@ -230,8 +230,8 @@ function scanSerialsPorts() {
 
 function connectPopup() {
     document.getElementById("connect-macropad").style.display = "block";
-    updatePopupBackgroud();
-    if (macropadConnectionStatus == false) {
+    updatePopupBackground();
+    if (macropadConnectionStatus == false && scanInProgress == false) {
         scanSerialsPorts();
     }
 
@@ -239,12 +239,12 @@ function connectPopup() {
 
 function connectPopupCancel() {
     document.getElementById("connect-macropad").style.display = "none";
-    updatePopupBackgroud()
+    updatePopupBackground()
 }
 
 function connectPopupSave() {
     document.getElementById("connect-macropad").style.display = "none";
-    updatePopupBackgroud()
+    updatePopupBackground()
 }
 
 async function sendConfig() {
