@@ -65,6 +65,17 @@ input:checked+.slider:before {
     align-items: center;
     justify-content: space-between;
     border-bottom: solid 2px var(--font-master-color);
+    height: 80px;
+}
+
+.settings-item>* {
+    margin: 10px;
+}
+
+.settings-item:hover {
+    background-color: var(--button-color-hover);
+    transition: 0.2s;
+    cursor: pointer;
 }
 
 .settings-menu-text {
@@ -80,4 +91,14 @@ input:checked+.slider:before {
 
 #settings h2 {
     font-weight: bold;
+}
+
+.settings-head {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: solid 2px var(--font-master-color);
+}
+
+.settings-head h2 {
+    border: none;
 }

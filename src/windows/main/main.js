@@ -94,3 +94,11 @@ function saveToConfig(key, data) {
 function readFromConfig(key) {
     return IPC.sendSync("get-config", key);
 }
+
+function toggleSettings() {
+    if (document.getElementById("settings").classList.contains("disable")) {
+        document.getElementById("settings").classList.remove("disable");
+    } else {
+        document.getElementById("settings").classList.add("disable");
+    }
+}
