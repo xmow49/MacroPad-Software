@@ -105,9 +105,10 @@ function readFromConfig(key) {
 }
 
 function toggleSettings() {
-    if (document.getElementById("settings").classList.contains("disable")) {
-        document.getElementById("settings").classList.remove("disable");
+    if (document.getElementById("settings").style.display === "block") {
+        document.getElementById("settings").style.display = "none";
     } else {
-        document.getElementById("settings").classList.add("disable");
+        document.getElementById("settings").style.display = "block";
     }
+    updatePopupBackground();
 }

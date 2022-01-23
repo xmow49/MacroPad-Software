@@ -6,6 +6,11 @@ const { exec } = require("child_process");
 const Store = require('electron-store');
 const autoStart = require('auto-launch');
 
+let tray = null //background tray icon
+let mainWindow; //main window 
+let loadingScreen;
+
+app.allowRendererProcessReuse = false //for Serial port
 
 
 const schema = {
@@ -114,13 +119,33 @@ const schema = {
     }
 };
 
-let tray = null //background tray icon
 
 function createTray() {
     const icon = path.join(__dirname, 'src/imgs/icon.png') // required.
-    const trayicon = nativeImage.createFromPath(icon)
-    tray = new Tray(trayicon.resize({ width: 16 }))
+    let trayicon = nativeImage.createFromPath(icon)
+    trayicon = trayicon.resize({ width: 16 })
+    tray = new Tray(trayicon)
+
     const contextMenu = Menu.buildFromTemplate([{
+            label: 'MacoPad Software',
+            icon: trayicon,
+            enabled: false // icon greyed out
+        },
+        { type: 'separator' },
+
+        {
+            label: 'Profil',
+            submenu: [
+                { label: 'Profil 1', type: 'checkbox', checked: true },
+                { label: 'Profil 2', type: 'checkbox' },
+                { label: 'Profil 3', type: 'checkbox' },
+                { label: 'Profil 4', type: 'checkbox' },
+                { label: 'Profil 5', type: 'checkbox' },
+                { label: 'Profil 6', type: 'checkbox' },
+            ]
+        },
+        { type: 'separator' },
+        {
             label: 'Show App',
             click: () => {
                 mainWindow.show();
@@ -132,14 +157,17 @@ function createTray() {
                 app.quit() // actually quit the app.
             }
         },
-    ])
-
+    ]);
+    tray.setTitle('MacroPad Software');
+    tray.setToolTip('MacroPad Software');
     tray.setContextMenu(contextMenu)
+    tray.on('click', function(event) {
+        mainWindow.show();
+    });
 }
 
 const config = new Store({ schema });
 
-app.allowRendererProcessReuse = false //Serial port
 
 function readBounds(i) {
     const bounds = [];
@@ -148,10 +176,10 @@ function readBounds(i) {
     bounds[2] = config.get('windows.main.x');
     bounds[3] = config.get('windows.main.y');
     bounds[4] = config.get('windows.main.maximized');
+    console.log(bounds);
     return bounds[i];
 }
 
-let mainWindow;
 
 function createWindow() {
     // Create the browser window.
@@ -160,6 +188,7 @@ function createWindow() {
         height: readBounds(1),
         minHeight: 720,
         minWidth: 1280,
+        icon: path.join(__dirname, 'src/imgs/icon.png'),
 
         x: readBounds(2),
         y: readBounds(3),
@@ -256,8 +285,6 @@ function createWindow() {
 }
 
 
-
-let loadingScreen;
 const createLoadingScreen = () => {
     /// create a browser window
 
@@ -305,8 +332,6 @@ app.whenReady().then(() => {
     });
 
 })
-
-
 
 
 // explicitly with Cmd + Q.

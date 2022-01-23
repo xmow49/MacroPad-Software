@@ -363,7 +363,7 @@
 
         </div>
 
-        <div id="settings" class="popup disable">
+        <div id="settings" class="popup" style="display: none;">
             <div class="settings-head">
                 <h2>Paramètres</h2>
                 <button onclick="toggleSettings();">X</button>
@@ -371,7 +371,7 @@
 
             <div class="settings-list">
                 <!-- language -->
-                <div class="settings-item">
+                <div id="language" class="settings-item" onclick="settingItemClicked(this)">
                     <h3>Langue</h3>
                     <select id="select-language">
                         <option value="fr">Français</option>
@@ -379,7 +379,7 @@
                     </select>
                 </div>
                 <!-- DarkMode -->
-                <div id="dark-mode" class="settings-item">
+                <div id="dark-mode" class="settings-item" onclick="settingItemClicked(this)">
                     <h3>Mode sombre</h3>
                     <label class="switch">
                         <input type="checkbox">
@@ -387,7 +387,7 @@
                       </label>
                 </div>
                 <!-- Backgroud -->
-                <div id="backgroud-start" class="settings-item">
+                <div id="backgroud-start" class="settings-item" onclick="settingItemClicked(this)">
                     <div class="settings-menu-text">
                         <h3>Démarrage Automatique</h3>
                         <h4>Lancer le logiciel automatiquement en tache de fond au démarrage</h4>
@@ -399,7 +399,7 @@
                 </div>
 
                 <!-- Import -->
-                <div id="export-imort-config" class="settings-item">
+                <div id="export-imort-config" class="settings-item" onclick="settingItemClicked(this)">
                     <div class="settings-menu-text">
                         <h3>Exporter/Importer la Configuration</h3>
                         <h4>Sauvgrader/Restaurer tous les données du logiciel</h4>
@@ -408,7 +408,7 @@
                 </div>
 
                 <!-- Update -->
-                <div id="do-update" class="settings-item">
+                <div id="do-update" class="settings-item" onclick="settingItemClicked(this)">
                     <div class="settings-menu-text">
                         <h3>Mises à Jours</h3>
                         <h4>Obtenez la dernière version du MacroPad et du logiciel</h4>
@@ -418,7 +418,7 @@
 
 
                 <!-- Reset -->
-                <div id="hard-reset" class="settings-item">
+                <div id="hard-reset" class="settings-item" onclick="settingItemClicked(this)">
                     <div class="settings-menu-text">
                         <h3>Réinitialiser le MacroPad</h3>
                         <h4>Efface tous les paramètres du logiciel et du MacroPad</h4>
@@ -427,7 +427,7 @@
                 </div>
 
                 <!-- About -->
-                <div id="about" class="settings-item">
+                <div id="about" class="settings-item" onclick="settingItemClicked(this)">
                     <div class="settings-menu-text">
                         <h3>À Propos</h3>
                     </div>
@@ -448,6 +448,8 @@
 <script src="downloaded_contents/colorPicker.js"></script>
 <script src="main.js"></script>
 <script src="port-mannager.js"></script>
+<script src="settings.js"></script>
+
 <script src="editProfile.js"></script>
 <script src="keyboard.js"></script>
 

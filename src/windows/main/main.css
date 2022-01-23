@@ -106,7 +106,8 @@ header {
 }
 
 .navbarButton {
-    padding: 5px;
+    padding: 6px;
+    height: 24px;
     -webkit-app-region: no-drag;
     border: none;
     background: none;

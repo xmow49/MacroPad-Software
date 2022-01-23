@@ -4,6 +4,18 @@ var usbDetect = require('usb-detection');
 const { ipcMain } = require('electron');
 usbDetect.startMonitoring();
 
+var scanInProgress = false;
+var currentTestingPort;
+var checkInterval;
+var testToDoCount;
+var ack = false //acknowledgement from the macropad
+scanSerialsPorts();
+
+var pingResponse = false;
+var macropadConnectionStatus = false;
+var macropadInterval;
+
+
 usbDetect.on('add', function(device) {
     if (device.vendorId == "9025" && device.productId == "32822") {
         setTimeout(function() {
@@ -53,9 +65,6 @@ function updateGUIPortList(availablePorts) {
     });
 }
 
-var pingResponse = false;
-var macropadConnectionStatus = false;
-var macropadInterval;
 
 
 
@@ -183,11 +192,7 @@ function connectToPort(port) {
 
 }
 
-var scanInProgress = false;
-var currentTestingPort;
-var checkInterval;
-var testToDoCount;
-var ack = false //acknowledgement from the macropad
+
 
 function scanSerialsPorts() {
     if (scanInProgress == false && macropadConnectionStatus == false) { //if the scan is not in progress and the macropad is not connected
@@ -226,6 +231,7 @@ function scanSerialsPorts() {
         updateOverviewConnectionStatus(false);
     }
 }
+
 
 
 function connectPopup() {
