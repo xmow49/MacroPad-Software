@@ -4,7 +4,7 @@ const IPC = ipcRenderer;
 
 //------------------ Windows Buttons -------------------
 function closeBtn() {
-    window.close();
+    IPC.send("close");
 }
 
 function minimizeWindowBtn() {

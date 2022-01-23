@@ -1,9 +1,10 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, remote } = require('electron')
+const { app, BrowserWindow, ipcMain, remote, Menu, nativeImage, Tray } = require('electron')
 const path = require('path')
 const shell = require('electron').shell;
 const { exec } = require("child_process");
 const Store = require('electron-store');
+const autoStart = require('auto-launch');
 
 
 
@@ -113,7 +114,28 @@ const schema = {
     }
 };
 
+let tray = null //background tray icon
 
+function createTray() {
+    const icon = path.join(__dirname, 'src/imgs/icon.png') // required.
+    const trayicon = nativeImage.createFromPath(icon)
+    tray = new Tray(trayicon.resize({ width: 16 }))
+    const contextMenu = Menu.buildFromTemplate([{
+            label: 'Show App',
+            click: () => {
+                mainWindow.show();
+            }
+        },
+        {
+            label: 'Quit',
+            click: () => {
+                app.quit() // actually quit the app.
+            }
+        },
+    ])
+
+    tray.setContextMenu(contextMenu)
+}
 
 const config = new Store({ schema });
 
@@ -129,9 +151,11 @@ function readBounds(i) {
     return bounds[i];
 }
 
+let mainWindow;
+
 function createWindow() {
     // Create the browser window.
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: readBounds(0),
         height: readBounds(1),
         minHeight: 720,
@@ -163,14 +187,15 @@ function createWindow() {
         mainWindow.show();
     });
 
-    mainWindow.on("close", () => {
+    ipcMain.on("close", () => {
         console.log("Saving values...");
         config.set("windows.main.width", mainWindow.getBounds().width);
         config.set("windows.main.height", mainWindow.getBounds().height);
         config.set("windows.main.x", mainWindow.getBounds().x);
         config.set("windows.main.y", mainWindow.getBounds().y);
         config.set("windows.main.maximized", mainWindow.isMaximized());
-        console.log("OK");
+        console.log("OK");;
+        mainWindow.hide();
     });
 
 
@@ -223,6 +248,11 @@ function createWindow() {
             event.returnValue = data;
         });
     });
+
+
+    if (!tray) { // if tray hasn't been created already.
+        createTray()
+    }
 }
 
 
@@ -254,20 +284,26 @@ const createLoadingScreen = () => {
 
 
 app.whenReady().then(() => {
-
     createLoadingScreen();
-
 
     setTimeout(() => {
         createWindow();
     }, 1000);
-
 
     app.on('activate', function() {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
+
+    let autoLaunch = new autoStart({
+        name: 'MacroPad',
+        path: app.getPath('exe'),
+    });
+    autoLaunch.isEnabled().then((isEnabled) => {
+        if (!isEnabled) autoLaunch.enable();
+    });
+
 })
 
 
@@ -275,5 +311,6 @@ app.whenReady().then(() => {
 
 // explicitly with Cmd + Q.
 app.on('window-all-closed', function() {
-    if (process.platform !== 'darwin') app.quit()
+    // if (process.platform !== 'darwin') app.dock.hide(); //app.quit()
+
 });

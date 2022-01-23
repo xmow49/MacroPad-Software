@@ -391,19 +391,22 @@ async function setTextMusic(software) { //set the music name
 
 var screenTextInterval;
 
+function checkBeforeDisplay() {
+    var displayType = readFromConfig("profiles." + currentProfile + ".display.type"); //get the display type
+    if (displayType == null) return;
+    if (displayType == 0) {
+        setTextMusic("spotify"); //-----------------------------------------------------------------------------TODO
+    }
+}
+
 function updateScreenText() {
     window.clearInterval(screenTextInterval);
     var displayType = readFromConfig("profiles." + currentProfile + ".display.type"); //get the display type
     if (displayType == 0 || displayType == 2 || displayType == 3) { //need text on the macropad screen
         var displayValues = readFromConfig("profiles." + currentProfile + ".display.value"); //get the display values
         if (displayValues != null) {
-            screenTextInterval = setInterval(function() {
-                    if (currentProfile == 0) {
-                        setTextMusic("spotify"); //-----------------------------------------------------------------------------TODO
-                    }
-                },
-                10000);
+            checkBeforeDisplay();
+            screenTextInterval = setInterval(checkBeforeDisplay, 10000);
         }
-
     }
 }
