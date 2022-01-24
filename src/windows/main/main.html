@@ -374,7 +374,7 @@
                     <!-- language -->
                     <div id="language" class="settings-item" onclick="settingItemClicked(this)">
                         <h3>Langue</h3>
-                        <select id="select-language">
+                        <select id="select-language" onchange="saveLanguage(this);">
                             <option value="fr">Français</option>
                             <option value="en">English</option>
                         </select>
@@ -387,8 +387,8 @@
                             <span class="slider round"></span>
                           </label>
                     </div>
-                    <!-- Backgroud -->
-                    <div id="backgroud-start" class="settings-item switch-item" onclick="settingItemClicked(this)">
+                    <!-- Background -->
+                    <div id="background-start" class="settings-item switch-item" onclick="settingItemClicked(this)">
                         <div class="settings-menu-text">
                             <h3>Démarrage Automatique</h3>
                             <h4>Lancer le logiciel automatiquement en tache de fond au démarrage</h4>
@@ -445,23 +445,28 @@
 
             </div>
 
-            <div id="export-import-settings" class="popup">
+            <div id="export-import-settings" class="popup" style="display: none;">
                 <div class="settings-head">
                     <div class="settings-header-title">
-                        <h2 class="settings-title">Paramètres > </h2>
+                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres > </h2>
                         <h2 class="settings-window">Exporter/Importer Configuration</h2>
                     </div>
-                    <button onclick="toggleSettings();">X</button>
+                    <button onclick="closeAllSettingsPopups();">X</button>
 
                 </div>
-                <div>
-                    <h3>Exporter la Configuration</h3>
-                    <button onclick="exportSettings();">Exporter</button>
+                <div class="content">
+                    <div>
+                        <h3>Exporter la Configuration</h3>
+                        <button onclick="exportSettings();">Exporter</button>
+                    </div>
+                    <hr class="ligne">
+                    <div>
+                        <h3>Importer la Configuration</h3>
+                        <button onclick="importSettings();">Importer</button>
+                    </div>
+
                 </div>
-                <div>
-                    <h3>Importer la Configuration</h3>
-                    <button onclick="importSettings();">Importer</button>
-                </div>
+
 
             </div>
         </div>

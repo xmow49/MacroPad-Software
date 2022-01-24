@@ -1,10 +1,11 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, remote, Menu, nativeImage, Tray } = require('electron')
+const { app, BrowserWindow, ipcMain, remote, Menu, nativeImage, Tray, dialog } = require('electron')
 const path = require('path')
 const shell = require('electron').shell;
 const { exec } = require("child_process");
 const Store = require('electron-store');
 const autoStart = require('auto-launch');
+const fs = require('fs');
 
 let tray = null //background tray icon
 let mainWindow; //main window 
@@ -278,6 +279,35 @@ function createWindow() {
         });
     });
 
+    ipcMain.on('export-settings', function(event) {
+        var dest = dialog.showSaveDialogSync({
+            title: "Export settings",
+            defaultPath: "./MacroPad-Config.json",
+            filters: [{
+                name: 'JSON',
+                extensions: ['json']
+            }]
+        });
+        fs.copyFile(path.join(app.getPath('userData'), "config.json"), dest, (err) => {
+            if (err) throw err;
+            console.log('Config exported!');
+        });
+    });
+
+    ipcMain.on('import-settings', function(event) {
+        var src = dialog.showOpenDialogSync({
+            title: "Import settings",
+            defaultPath: "./MacroPad-Config.json",
+            filters: [{
+                name: 'JSON',
+                extensions: ['json']
+            }]
+        });
+        fs.copyFile(src[0], path.join(app.getPath('userData'), "config.json"), (err) => {
+            if (err) throw err;
+            console.log('Config imported!');
+        });
+    });
 
     if (!tray) { // if tray hasn't been created already.
         createTray()

@@ -103,12 +103,3 @@ function saveToConfig(key, data) {
 function readFromConfig(key) {
     return IPC.sendSync("get-config", key);
 }
-
-function toggleSettings() {
-    if (document.getElementById("settings").style.display === "block") {
-        document.getElementById("settings").style.display = "none";
-    } else {
-        document.getElementById("settings").style.display = "block";
-    }
-    updatePopupBackground();
-}

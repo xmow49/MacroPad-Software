@@ -102,7 +102,7 @@ header {
     padding-top: 4px;
     padding-bottom: 4px;
     background-color: rgb(230, 230, 230);
-    z-index: 9999;
+    z-index: 999999999;
 }
 
 .navbarButton {
@@ -165,7 +165,7 @@ span {
     /* Sit on top */
     /* Location of the box */
     padding: 20px;
-    top: 200px;
+    top: 35px;
     width: 87%;
     /* overflow: hidden; */
     /* Fallback color */
