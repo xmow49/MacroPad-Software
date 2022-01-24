@@ -103,3 +103,7 @@ function saveToConfig(key, data) {
 function readFromConfig(key) {
     return IPC.sendSync("get-config", key);
 }
+
+function openLink(link) {
+    IPC.send("open-link", "https://" + link);
+}

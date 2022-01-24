@@ -166,7 +166,8 @@ span {
     /* Location of the box */
     padding: 20px;
     top: 35px;
-    width: 87%;
+    /* width: 87%; */
+    width: 60%;
     /* overflow: hidden; */
     /* Fallback color */
     background: #FFFFFF;

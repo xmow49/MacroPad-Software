@@ -452,8 +452,8 @@
                         <h2 class="settings-window">Exporter/Importer Configuration</h2>
                     </div>
                     <button onclick="closeAllSettingsPopups();">X</button>
-
                 </div>
+
                 <div class="content">
                     <div>
                         <h3>Exporter la Configuration</h3>
@@ -464,16 +464,86 @@
                         <h3>Importer la Configuration</h3>
                         <button onclick="importSettings();">Importer</button>
                     </div>
+                </div>
+            </div>
 
+            <div id="do-update-settings" class="popup" style="display: none;">
+                <div class="settings-head">
+                    <div class="settings-header-title">
+                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres > </h2>
+                        <h2 class="settings-window">Mises à Jours</h2>
+                    </div>
+                    <button onclick="closeAllSettingsPopups();">X</button>
                 </div>
 
+                <div class="content">
+                    <div>
+                        <h3>Logiciel MacroPad</h3>
+                        <h4>Version Actuelle: 1.0</h4>
+                        <h4>Dernière Version: 1.0</h4>
 
+                        <button onclick="">Vérifier les Mises à Jours</button>
+                    </div>
+                    <hr class="ligne">
+                    <div>
+                        <h3>Firmware MacroPad</h3>
+                        <h4>Version Actuelle: 1.0</h4>
+                        <h4>Dernière Version: 1.0</h4>
+                        <button onclick="">Vérifier les Mises à Jours</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="hard-reset-settings" class="popup" style="display: none;">
+                <div class="settings-head">
+                    <div class="settings-header-title">
+                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres > </h2>
+                        <h2 class="settings-window">Réinitialiser le MacroPad</h2>
+                    </div>
+                    <button onclick="closeAllSettingsPopups();">X</button>
+                </div>
+
+                <div class="content">
+                    <h3 style="width: 600px;">Etes vous sur de vouloir effacer la configuration du MacroPad et du logiciel ?</h3>
+                    <h3 style="color: red;">Cette action est iréversible.</h3>
+                    <button id="hard-reset-button" onclick="hardReset();">Effacer la configuration</button>
+                </div>
+            </div>
+
+
+            <div id="about-settings" class="popup" style="display: none;">
+                <div class="settings-head">
+                    <div class="settings-header-title">
+                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres > </h2>
+                        <h2 class="settings-window">À Propos</h2>
+                    </div>
+                    <button onclick="closeAllSettingsPopups();">X</button>
+                </div>
+
+                <div class="content">
+                    <img src="../../imgs/icon.png" alt="logo" style="width: 100px">
+                    <h3>MacroPad Software</h3>
+
+                    <h4>Version: 1.0</h4>
+                    <h4>Développé par: <a href="#" onclick="openLink('github.com/xmow49/')">Dorian Benech</a> & Noah Justeau</h4>
+                    <h4>Copyright ©
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script> GammaTroniques </h4>
+                    <h4 onclick="IPC.send('open-link', 'mailto:contact@gammatroniques.fr');"><a href="#">contact@gammatroniques.fr</a></h4>
+                    <h4 onclick="openLink('gammatroniques.fr')"><a href="#">https://gammatroniques.fr</a></h4>
+                    <h4 onclick="openLink('youtube.com/gammatroniques')"><a href="#">https://youtube.com/gammatroniques</a></h4>
+                </div>
             </div>
         </div>
 
     </div>
+    <!-- <localized-text key="hello_world"></localized-text>
+    <localized-text key="hello_world" lang="ja"></localized-text> -->
 </body>
 <script src="downloaded_contents/colorPicker.js"></script>
+<script src="downloaded_contents/localizer.js"></script>
+
 <script src="main.js"></script>
 <script src="port-mannager.js"></script>
 <script src="settings.js"></script>

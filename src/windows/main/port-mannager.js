@@ -416,3 +416,10 @@ function updateScreenText() {
         }
     }
 }
+
+async function hardReset() {
+    if (macropadConnectionStatus) {
+        return await sendWithACK("Z"); //send the reset command to the macropad
+    }
+
+}

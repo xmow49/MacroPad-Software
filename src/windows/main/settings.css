@@ -119,14 +119,36 @@ input:checked+.slider:before {
     display: flex;
 }
 
-#export-import-settings .content {
+#export-import-settings .content,
+#do-update-settings .content {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-#export-import-settings .content>* {
+#export-import-settings .content>*,
+#do-update-settings .content>* {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+#hard-reset-button {
+    border: 2px solid #FF3C3C;
+    box-sizing: border-box;
+    border-radius: var(--border-radius-button);
+}
+
+#hard-reset-settings>.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+#about-settings>.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
