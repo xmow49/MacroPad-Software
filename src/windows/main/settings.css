@@ -1,3 +1,15 @@
+.popup#settings,
+.popup#export-import-settings {
+    width: 60%;
+}
+
+#popup-container {
+    display: flex;
+    align-items: center;
+    align-content: flex-start;
+    justify-content: space-around;
+}
+
 .switch {
     position: relative;
     display: inline-block;
@@ -89,7 +101,7 @@ input:checked+.slider:before {
     margin-top: 0px;
 }
 
-#settings h2 {
+.settings-title {
     font-weight: bold;
 }
 
@@ -101,4 +113,8 @@ input:checked+.slider:before {
 
 .settings-head h2 {
     border: none;
+}
+
+.settings-header-title {
+    display: flex;
 }

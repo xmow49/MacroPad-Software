@@ -305,144 +305,167 @@
             </div>
         </div>
 
-        <div id="popup-backgroud" class="disable" onclick="closeAllPopups();"></div>
-        <div id="update-available" class="popup">
+        <div id="popup-container">
+            <div id="popup-backgroud" class="disable" onclick="closeAllPopups();"></div>
+            <div id="update-available" class="popup">
 
-            <div class="text">
-                <h1>Mise à jour disponible</h1>
-                <p>Une mise à jour est disponible !</p>
-                <p>Merci d'effectuer la mise à jour rapidement.</p>
-                <p>Version actuelle: <a class="current version">1.0</a> </p>
-                <p>Nouvelle version: <a class="nex version">1.2</a></p>
+                <div class="text">
+                    <h1>Mise à jour disponible</h1>
+                    <p>Une mise à jour est disponible !</p>
+                    <p>Merci d'effectuer la mise à jour rapidement.</p>
+                    <p>Version actuelle: <a class="current version">1.0</a> </p>
+                    <p>Nouvelle version: <a class="nex version">1.2</a></p>
+
+                </div>
+                <div class="actions">
+                    <button onclick="updatePopupChanglogBtn();">Voir le changelog</button>
+                    <button onclick="updatePopupSkipBtn();">Plus tard</button>
+                    <button onclick="updatePopupUpdateBtn();">Mettre à jour</button>
+
+                </div>
 
             </div>
-            <div class="actions">
-                <button onclick="updatePopupChanglogBtn();">Voir le changelog</button>
-                <button onclick="updatePopupSkipBtn();">Plus tard</button>
-                <button onclick="updatePopupUpdateBtn();">Mettre à jour</button>
+
+            <div id="select-macropad" class="popup">
+                <h2>Selectionnez votre MacroPad</h2>
+                <div class="macropad-list">
+                    <button id="0" onclick="selectMacropad(0);"><img  src="images/macropad1.png" alt="" width="200"></button>
+                </div>
+                <div class="actions">
+                    <button>Ajouter un MacroPad</button>
+                </div>
+            </div>
+
+            <div id="connect-macropad" class="popup">
+                <h2>Connexion au MacroPad</h2>
+                <button id="connect-button" onclick="scanSerialsPorts();">Rechercher un MacroPad</button>
+
+                <p id="scan-port-log"></p>
+                <progress id="port-scan-progress" class="progress" max="100" value="0"></progress>
+
+                <div class="port-list" id="port-list">
+                    <!-- JS -->
+                </div>
+
+                <div>
+                    <h3>Nom du MacroPad</h3>
+                    <div id="set-name">
+                        <input type="text" id="macropad-name">
+                    </div>
+
+                </div>
+
+                </select>
+
+                <div class="actions">
+                    <button onclick="connectPopupCancel();">Annuler</button>
+                    <button onclick="connectPopupSave();">Enregistrer</button>
+                </div>
 
             </div>
 
+            <div id="settings" class="popup" style="display: none;">
+                <div class="settings-head">
+                    <h2 class="settings-title">Paramètres</h2>
+                    <button onclick="toggleSettings();">X</button>
+                </div>
+
+                <div class="settings-list">
+                    <!-- language -->
+                    <div id="language" class="settings-item" onclick="settingItemClicked(this)">
+                        <h3>Langue</h3>
+                        <select id="select-language">
+                            <option value="fr">Français</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
+                    <!-- DarkMode -->
+                    <div id="dark-mode" class="settings-item switch-item" onclick="settingItemClicked(this)">
+                        <h3>Mode sombre</h3>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                          </label>
+                    </div>
+                    <!-- Backgroud -->
+                    <div id="backgroud-start" class="settings-item switch-item" onclick="settingItemClicked(this)">
+                        <div class="settings-menu-text">
+                            <h3>Démarrage Automatique</h3>
+                            <h4>Lancer le logiciel automatiquement en tache de fond au démarrage</h4>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider round"></span>
+                          </label>
+                    </div>
+
+                    <!-- Import -->
+                    <div id="export-import-config" class="settings-item" onclick="settingItemClicked(this)">
+                        <div class="settings-menu-text">
+                            <h3>Exporter/Importer la Configuration</h3>
+                            <h4>Sauvgrader/Restaurer tous les données du logiciel</h4>
+                        </div>
+                        <h1 class="mdi mdi-chevron-right"></h1>
+                    </div>
+
+                    <!-- Update -->
+                    <div id="do-update" class="settings-item" onclick="settingItemClicked(this)">
+                        <div class="settings-menu-text">
+                            <h3>Mises à Jours</h3>
+                            <h4>Obtenez la dernière version du MacroPad et du logiciel</h4>
+                        </div>
+                        <h1 class="mdi mdi-chevron-right"></h1>
+                    </div>
+
+
+                    <!-- Reset -->
+                    <div id="hard-reset" class="settings-item" onclick="settingItemClicked(this)">
+                        <div class="settings-menu-text">
+                            <h3>Réinitialiser le MacroPad</h3>
+                            <h4>Efface tous les paramètres du logiciel et du MacroPad</h4>
+                        </div>
+                        <h1 class="mdi mdi-chevron-right"></h1>
+                    </div>
+
+                    <!-- About -->
+                    <div id="about" class="settings-item" onclick="settingItemClicked(this)">
+                        <div class="settings-menu-text">
+                            <h3>À Propos</h3>
+                        </div>
+                        <h1 class="mdi mdi-chevron-right"></h1>
+                    </div>
+
+
+
+                </div>
+                <!-- <div class="actions">
+                    <button onclick="settingsPopupCancel();">Annuler</button>
+                    <button onclick="settingsPopupSave();">Enregistrer</button>
+                </div> -->
+
+            </div>
+
+            <div id="export-import-settings" class="popup">
+                <div class="settings-head">
+                    <div class="settings-header-title">
+                        <h2 class="settings-title">Paramètres > </h2>
+                        <h2 class="settings-window">Exporter/Importer Configuration</h2>
+                    </div>
+                    <button onclick="toggleSettings();">X</button>
+
+                </div>
+                <div>
+                    <h3>Exporter la Configuration</h3>
+                    <button onclick="exportSettings();">Exporter</button>
+                </div>
+                <div>
+                    <h3>Importer la Configuration</h3>
+                    <button onclick="importSettings();">Importer</button>
+                </div>
+
+            </div>
         </div>
 
-        <div id="select-macropad" class="popup">
-            <h2>Selectionnez votre MacroPad</h2>
-            <div class="macropad-list">
-                <button id="0" onclick="selectMacropad(0);"><img  src="images/macropad1.png" alt="" width="200"></button>
-            </div>
-            <div class="actions">
-                <button>Ajouter un MacroPad</button>
-            </div>
-        </div>
-
-        <div id="connect-macropad" class="popup">
-            <h2>Connexion au MacroPad</h2>
-            <button id="connect-button" onclick="scanSerialsPorts();">Rechercher un MacroPad</button>
-
-            <p id="scan-port-log"></p>
-            <progress id="port-scan-progress" class="progress" max="100" value="0"></progress>
-
-            <div class="port-list" id="port-list">
-                <!-- JS -->
-            </div>
-
-            <div>
-                <h3>Nom du MacroPad</h3>
-                <div id="set-name">
-                    <input type="text" id="macropad-name">
-                </div>
-
-            </div>
-
-            </select>
-
-            <div class="actions">
-                <button onclick="connectPopupCancel();">Annuler</button>
-                <button onclick="connectPopupSave();">Enregistrer</button>
-            </div>
-
-        </div>
-
-        <div id="settings" class="popup" style="display: none;">
-            <div class="settings-head">
-                <h2>Paramètres</h2>
-                <button onclick="toggleSettings();">X</button>
-            </div>
-
-            <div class="settings-list">
-                <!-- language -->
-                <div id="language" class="settings-item" onclick="settingItemClicked(this)">
-                    <h3>Langue</h3>
-                    <select id="select-language">
-                        <option value="fr">Français</option>
-                        <option value="en">English</option>
-                    </select>
-                </div>
-                <!-- DarkMode -->
-                <div id="dark-mode" class="settings-item" onclick="settingItemClicked(this)">
-                    <h3>Mode sombre</h3>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider round"></span>
-                      </label>
-                </div>
-                <!-- Backgroud -->
-                <div id="backgroud-start" class="settings-item" onclick="settingItemClicked(this)">
-                    <div class="settings-menu-text">
-                        <h3>Démarrage Automatique</h3>
-                        <h4>Lancer le logiciel automatiquement en tache de fond au démarrage</h4>
-                    </div>
-                    <label class="switch">
-                        <input type="checkbox">
-                        <span class="slider round"></span>
-                      </label>
-                </div>
-
-                <!-- Import -->
-                <div id="export-imort-config" class="settings-item" onclick="settingItemClicked(this)">
-                    <div class="settings-menu-text">
-                        <h3>Exporter/Importer la Configuration</h3>
-                        <h4>Sauvgrader/Restaurer tous les données du logiciel</h4>
-                    </div>
-                    <h1 class="mdi mdi-chevron-right"></h1>
-                </div>
-
-                <!-- Update -->
-                <div id="do-update" class="settings-item" onclick="settingItemClicked(this)">
-                    <div class="settings-menu-text">
-                        <h3>Mises à Jours</h3>
-                        <h4>Obtenez la dernière version du MacroPad et du logiciel</h4>
-                    </div>
-                    <h1 class="mdi mdi-chevron-right"></h1>
-                </div>
-
-
-                <!-- Reset -->
-                <div id="hard-reset" class="settings-item" onclick="settingItemClicked(this)">
-                    <div class="settings-menu-text">
-                        <h3>Réinitialiser le MacroPad</h3>
-                        <h4>Efface tous les paramètres du logiciel et du MacroPad</h4>
-                    </div>
-                    <h1 class="mdi mdi-chevron-right"></h1>
-                </div>
-
-                <!-- About -->
-                <div id="about" class="settings-item" onclick="settingItemClicked(this)">
-                    <div class="settings-menu-text">
-                        <h3>À Propos</h3>
-                    </div>
-                    <h1 class="mdi mdi-chevron-right"></h1>
-                </div>
-
-
-
-            </div>
-            <!-- <div class="actions">
-                <button onclick="settingsPopupCancel();">Annuler</button>
-                <button onclick="settingsPopupSave();">Enregistrer</button>
-            </div> -->
-
-        </div>
     </div>
 </body>
 <script src="downloaded_contents/colorPicker.js"></script>

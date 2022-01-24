@@ -643,7 +643,7 @@ const pickr = Pickr.create({
 
     appClass: 'color-picker-cutom',
     // useAsButton: true,
-    showAlways: true,
+    //showAlways: true,
     swatches: [
         'rgb(244, 67, 54)',
         'rgb(233, 30, 99)',
