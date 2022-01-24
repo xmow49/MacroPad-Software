@@ -245,7 +245,6 @@ function createWindow() {
 
     ipcMain.on('open-link', function(event, link) {
         shell.openExternal(link);
-        console.log(event);
     });
 
     ipcMain.on('save-config', function(event, key, data) {
