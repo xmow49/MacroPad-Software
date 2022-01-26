@@ -632,10 +632,6 @@ function onChangeProfile(value) {
 }
 
 
-setTimeout(function() {
-    onChangeProfile(0); //set the default value
-}, 20);
-
 const pickr = Pickr.create({
     el: '.color-picker',
     theme: 'nano', // or 'monolith', or 'nano'
@@ -692,3 +688,8 @@ pickr.on('changestop', (source, instance) => {
     pickr.setColor(instance._color.toHEXA().toString());
     saveToConfig("profiles." + currentProfile + ".color", rgb);
 });
+
+setTimeout(function() {
+    onChangeProfile(0); //set the default value
+    updateProfileGui();
+}, 100);

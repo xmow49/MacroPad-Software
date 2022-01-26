@@ -7,6 +7,20 @@
     <style>
         /* Define the main wrapper style */
         
+        @font-face {
+            font-family: Poppins;
+            src: url(../../fonts/poppins/Poppins-Regular.ttf);
+        }
+        
+        *,
+        *::after,
+        *::before {
+            -webkit-user-select: none;
+            -webkit-user-drag: none;
+            -webkit-app-region: no-drag;
+            /* cursor: default; */
+        }
+        
         .LoaderWrapper {
             position: absolute;
             top: 0;
@@ -22,10 +36,6 @@
             background-color: black;
         }
         
-        .LoaderContent {
-            color: white;
-        }
-        
         #myProgress {
             width: 100%;
             background-color: grey;
@@ -36,14 +46,42 @@
             height: 30px;
             background-color: green;
         }
+        
+        body {
+            -webkit-user-select: none;
+            -webkit-app-region: drag;
+        }
+        
+        h2 {
+            color: white;
+            text-align: center;
+            font-family: Poppins;
+        }
+        
+        .loader-container {
+            position: absolute;
+            display: flex;
+            flex-direction: column;
+            align-content: center;
+            justify-content: center;
+            align-items: center;
+            justify-items: center;
+            box-sizing: border-box;
+            background-color: rgb(24, 23, 23);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+        }
     </style>
 </head>
 
 <body>
-    <div class="LoaderWrapper">
-        <div class="LoaderContent">
-            FLOATING SCREEN!
-        </div>
+    <div class="loader-container">
+        <img src="../../imgs/icon.png" width="100px">
+        <h2>MacroPad Configurator</h2>
+        <progress id="loading" class="progress" max="100" value="0"></progress>
     </div>
 
 
@@ -52,23 +90,22 @@
     </div>
     <script>
         // You can also require other files to run in this process
-        require('./renderer.js');
+        // require('../main/main.js');
         var i = 0;
 
         function move() {
             if (i == 0) {
                 i = 1;
-                var elem = document.getElementById("myBar");
-                var width = 1;
+                var value = 1;
                 var id = setInterval(frame, 10);
 
                 function frame() {
-                    if (width >= 100) {
+                    if (value >= 100) {
                         clearInterval(id);
                         i = 0;
                     } else {
-                        width++;
-                        elem.style.width = width + "%";
+                        value++;
+                        document.getElementById("loading").value = value;
                     }
                 }
             }

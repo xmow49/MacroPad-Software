@@ -268,6 +268,16 @@ function createWindow() {
         });
     });
 
+    ipcMain.on('set-music-software', function(event, software, value) {
+        var path = app.getAppPath();
+        exec("\"" + path + "\\volume_control\\VolumeMixerControl.exe\" changeVolume " + software + " " + value, (error, data, getter) => {
+            //console.log(error);
+            console.log(data);
+            //console.log(getter);
+            event.returnValue = data;
+        });
+    });
+
     ipcMain.on('get-softwares-names', function(event) {
         var path = app.getAppPath();
         exec("\"" + path + "\\volume_control\\VolumeMixerControl.exe\" getSoftwaresNames", (error, data, getter) => {
@@ -329,11 +339,13 @@ const createLoadingScreen = () => {
         })
     );
     loadingScreen.setResizable(false);
+
     loadingScreen.loadURL(
         'file://' + __dirname + './src/windows/loading/loading.html'
     );
     loadingScreen.on('closed', () => (loadingScreen = null));
     loadingScreen.webContents.on('did-finish-load', () => {
+        // loadingScreen.webContents.openDevTools();
         loadingScreen.show();
     });
 };

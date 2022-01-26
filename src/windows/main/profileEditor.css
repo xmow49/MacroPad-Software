@@ -347,9 +347,9 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 }
 
 .pcr-app {
-    position: relative !important;
-    left: 0 !important;
-    top: 0 !important;
+    /* position: relative !important;
+    left: 0 !important; */
+    top: 370px !important;
     z-index: 1 !important;
 }
 

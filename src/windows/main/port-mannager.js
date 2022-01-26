@@ -137,9 +137,7 @@ async function responsesFromPort(data) {
         //     console.log(stringFromSerial.charCodeAt(i));
         // }
 
-
-        //good mesg
-        if (stringFromSerial.includes("K")) {
+        if (stringFromSerial.includes("K")) { //a key is pressed
             var msg = stringFromSerial.replace("K", ""); //keep only the key code
             var keyCode = parseInt(msg);
             msg = "key" + keyCode;
@@ -150,6 +148,49 @@ async function responsesFromPort(data) {
                     button.style.transform = "scale(1)";
                 }, 300);
             } catch (e) {}
+        }
+
+        if (stringFromSerial.charAt(0) == "E") { //a encoder is turned
+            var encoderId = stringFromSerial.charAt(1); //get the encoder id
+            var encoderDirection = stringFromSerial.charAt(2); //get the encoder direction
+            var encoderType = readFromConfig("profiles." + currentProfile + ".encoders." + encoderId + ".type");
+            var encoderValue = readFromConfig("profiles." + currentProfile + ".encoders." + encoderId + ".values");
+
+            if (!(encoderValue == "" || encoderValue == null || encoderType == null || encoderType == "")) { //if the encoder has a value
+                if (encoderType == 1) { //music software encoder
+                    if (encoderDirection == "U") { //if the encoder is turned right --> volume up
+                        IPC.sendSync('set-music-software', encoderValue, 5); //send the volume up command to the music software (5% step)
+                    } else if (encoderDirection == "D") { //if the encoder is turned left --> volume down
+                        IPC.sendSync('set-music-software', encoderValue, -5); //send the volume down command to the music software (5% step)
+                    }
+                }
+            }
+
+            try { //try to find the button with key id
+                var button = document.getElementById("encoder" + encoderId);
+                var icon = document.getElementById("encoderIcon" + encoderId);
+                var iconClass = icon.className;
+
+                if (encoderDirection == "U")
+                    icon.className = "mdi mdi-rotate-right";
+                if (encoderDirection == "D")
+                    icon.className = "mdi mdi-rotate-left";
+
+                button.style.transform = "scale(.9)"; //animate the button
+
+
+                setTimeout(function() { //wait 0.3s and stop the animation
+                    button.style.transform = "scale(1)";
+                    icon.className = iconClass;
+                    if (icon.classList.contains("mdi-rotate-right"))
+                        icon.classList.remove("mdi-rotate-right");
+                    if (icon.classList.contains("mdi-rotate-left"))
+                        icon.classList.remove("mdi-rotate-left");
+                }, 500);
+            } catch (e) {}
+
+
+
         }
         console.log("From MacroPad: " + stringFromSerial);
     }
