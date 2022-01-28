@@ -434,9 +434,19 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
 function displayAllSoundSoftwaresInSelector() {
     var strSoftwareList = IPC.sendSync("get-softwares-names");
     //remove all \n and \r from the string
-    strSoftwareList = strSoftwareList.replace(/\r?\n|\r/g, "");
-    var softwareList = strSoftwareList.split(" ");
+    strSoftwareList = strSoftwareList.replace(/\r/g, "");
+    var softwareAndIDList = strSoftwareList.split("\n");
 
+    var softwareList = [];
+    var idList = [];
+    var classedSoftware = [];
+    for (var i = 0; i < softwareAndIDList.length - 1; i++) {
+        //split the string: "id:name"
+        var temp = softwareAndIDList[i].split(":");
+        softwareList.push(temp[1]);
+        idList.push(temp[0]);
+        classedSoftware[temp[0]] = temp[1];
+    }
     var softwareSelector = document.getElementById("software-volume-selector");
     //clear the software selector
     softwareSelector.innerHTML = "";
@@ -446,10 +456,7 @@ function displayAllSoundSoftwaresInSelector() {
         option.text = softwareList[i];
         softwareSelector.add(option);
     }
-
-    console.log(softwareList);
 }
-
 
 var captureType = [-1, -1]; //0 --> type of key (encoder or key), 1 --> action number
 var captureKey = [-1, -1, -1]; //store the captured key

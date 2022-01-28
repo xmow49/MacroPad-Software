@@ -66,26 +66,24 @@ function updateGUIPortList(availablePorts) {
 }
 
 
-
-
 async function responsesFromPort(data) {
-    var stringFromSerial = data.toString();
-    stringFromSerial = stringFromSerial.replace(/\r\n/g, "");
+    // console.log("From MacroPad: " + data);
 
-    if (stringFromSerial == "OK" || stringFromSerial == "POK") {
+    // console.log("Good message");
+
+    var stringFromSerial = data.toString();
+    // stringFromSerial = stringFromSerial.replace(/\r\n/g, "");
+
+    console.log("From MacroPad: " + stringFromSerial);
+
+    if (stringFromSerial == "OK") {
         ack = true;
     }
 
-
-    if (stringFromSerial.charAt(0) == "A") { //if the firt char is A, its a profile number
-        var profileNumber = stringFromSerial.charAt(1); //get the profile number
-        profileNumber = parseInt(profileNumber); //convert to int
-        onChangeProfile(profileNumber); //call the function to change the profile in the main window
-    }
-
-    if (stringFromSerial == "P" || stringFromSerial == "POK") { //its a Macropad
+    if (stringFromSerial == "P") { //its a Macropad
         // Here, the macropad is connected and a pong is received
         pingResponse = true;
+        ack = true;
         if (macropadConnectionStatus == false) { //If the macropad is not connected
             macropadConnectionStatus = true;
             document.getElementById("connect-button").innerHTML = "Se déconnecter";
@@ -113,24 +111,25 @@ async function responsesFromPort(data) {
             await sendWithACK("A"); //get the current profile from the macropad
 
             updateScreenText(); //start the screen text update
-
-
-
         }
 
         clearInterval(checkInterval); //stop all check
-        document.getElementById("port-" + currentTestingPort).checked = true;
+        //document.getElementById("port-" + currentTestingPort).checked = true;
         scanInProgress = false;
         var progressBar = document.getElementById("port-scan-progress");
         progressBar.max = 100;
         progressBar.value = 100;
         progressBar.className = "end"
         updateOverviewConnectionStatus(true);
-
-
-
-
     }
+
+    if (stringFromSerial.charAt(0) == "A") { //if the firt char is A, its a profile number
+        ack = true;
+        var profileNumber = stringFromSerial.charAt(1); //get the profile number
+        profileNumber = parseInt(profileNumber); //convert to int
+        onChangeProfile(profileNumber); //call the function to change the profile in the main window
+    }
+
 
     if (macropadConnectionStatus) {
         // for (var i = 0; i < stringFromSerial.length; i++) {
@@ -192,8 +191,11 @@ async function responsesFromPort(data) {
 
 
         }
-        console.log("From MacroPad: " + stringFromSerial);
+
     }
+
+
+
 }
 
 
@@ -220,9 +222,13 @@ function connectToPort(port) {
 
         } else { //if connected
             console.log("Connected!");
-            serialPortConnection.on('data', function(data) { //Add listener for recevied message from serial
-                responsesFromPort(data); //and send it to this function to check the ping 
-            })
+            // serialPortConnection.on('data', function(data) { //Add listener for recevied message from serial
+            //     responsesFromPort(data); //and send it to this function to check the ping 
+            // })
+            const parser = serialPortConnection.pipe(new Readline({ delimiter: '\r\n' }));
+            parser.on('data', function(data) {
+                responsesFromPort(data);
+            });
             setTimeout(async function() { //wait 0.5s and send a ping to the macropad
                 console.log("SENDING PING");
                 await sendWithACK("P");
@@ -294,8 +300,12 @@ function connectPopupSave() {
     updatePopupBackground()
 }
 
+var configIsSending = false;
+
 async function sendConfig() {
     if (macropadConnectionStatus) { //if connected
+        configIsSending = true;
+        musicName = "none"; //reset the music name
         console.log("---------------------------SENDING CONFIG---------------------------");
         for (var profileNumber = 0; profileNumber < 6; profileNumber++) { //for each profile
             if (readFromConfig("profiles." + profileNumber) != null) { //if profile is not empty
@@ -371,8 +381,10 @@ async function sendConfig() {
             }
             console.log("Profile " + profileNumber + " sent");
         }
-
+        configIsSending = false;
+        checkBeforeDisplay();
     }
+
 }
 
 function setCurrentProfile(profileNumber) { // send the profile number to the macropad to set it as current profile
@@ -390,6 +402,7 @@ function sendWithACK(text) { //send a command to the macropad and wait for the a
             ack = false; //acknowledgement not received
             // console.log("Sending: " + text);
             serialPortConnection.write(text); //send the command to the macropad
+            console.log("Sending: " + text);
             createTimeout();
             ntry++
 
@@ -416,7 +429,7 @@ function sendWithACK(text) { //send a command to the macropad and wait for the a
                 clearInterval(checkInterval); //stop the check
                 reject(1); //reject the promise
             }
-        }, 100);
+        }, 50);
     });
 }
 
@@ -424,10 +437,8 @@ var musicName = "none";
 async function setTextMusic(software) { //set the music name
 
     var name = IPC.sendSync('get-music-software', "spotify"); //get the music name
-    name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    if (name.includes(musicName)) {
-
-    } else {
+    // name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    if (name.includes(musicName)) {} else {
         musicName = name;
         // document.getElementById("macropad-display").innerHTML = "" + data;
         name.replace(/[\n\r]/g, '');
@@ -439,11 +450,14 @@ async function setTextMusic(software) { //set the music name
 var screenTextInterval;
 
 function checkBeforeDisplay() {
-    var displayType = readFromConfig("profiles." + currentProfile + ".display.type"); //get the display type
-    if (displayType == null) return;
-    if (displayType == 0) {
-        setTextMusic("spotify"); //-----------------------------------------------------------------------------TODO
+    if (!configIsSending) {
+        var displayType = readFromConfig("profiles." + currentProfile + ".display.type"); //get the display type
+        if (displayType == null) return;
+        if (displayType == 0) {
+            setTextMusic("spotify"); //-----------------------------------------------------------------------------TODO
+        }
     }
+
 }
 
 function updateScreenText() {
