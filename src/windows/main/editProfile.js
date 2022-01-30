@@ -2,6 +2,42 @@ const { contextBridge } = require("electron");
 const { cp } = require("original-fs");
 
 
+
+var encodersTemplate = {
+    type: -1,
+    values: [-1, -1, -1]
+}
+
+var keysTemplate = {
+    type: -1,
+    values: [-1, -1, -1]
+}
+
+var profilesTemplete = {
+    name: "",
+    icon: "",
+    color: [0, 0, 0],
+    encoders: [],
+    keys: [],
+    display: {
+        type: -1,
+        values: "",
+    }
+
+}
+var macropadConfig = {
+    profiles: [],
+}
+for (var i = 0; i < 6; i++) {
+    macropadConfig.profiles.push(profilesTemplete); //add 6 profiles to the config
+    macropadConfig.profiles[i].keys.push(keysTemplate); //add 6 keys to the config
+    if (i % 2 == 0) {
+        macropadConfig.profiles[i].encoders.push(encodersTemplate); //add 3 encoders to the config
+    }
+}
+
+
+
 var profileEditorEnabled = false;
 
 function hexToRgb(hex) {
@@ -127,6 +163,7 @@ function saveProfileName() {
     if (profileName.length == 0) {
         profileName = "Profil " + (parseInt(currentProfile) + 1);
     }
+    macropadConfig.profiles[currentProfile].name = profileName;
     saveToConfig("profiles." + currentProfile + ".name", profileName);
     updateProfileGui();
 }
@@ -191,6 +228,7 @@ function updateProfileGui() {
     var displayValue = readFromConfig("profiles." + currentProfile + ".display.value"); //get profile display value from config
     if (displayValue == null || displayValue == "") {
         displayValue = "Texte Personalisé";
+        macropadConfig.profiles[currentProfile].display.value = displayValue;
         saveToConfig("profiles." + currentProfile + ".display.value", displayValue);
     }
 
@@ -394,27 +432,27 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
             document.getElementById("current-edition").innerHTML = "Encoder " + (id + 1);
         }
 
+        macropadConfig.profiles[currentProfile].encoders[currentEdit].type = parseInt(value); //update the config
+
     } else if (type == "key") {
         document.getElementById("edit-key").className = ""; //enable the edit key menu
         document.getElementById("edit-encoder").className = "disable"; //disable the edit encoder menu
         document.getElementById("current-edition").innerHTML = "Key " + (id + 1);
 
         var value = getActionValue("key"); //get the value of the radio
+
         updateActionSelectorGUI(parseInt(value), 1); //select on the gui
 
         if (value == "-1") {
-
-
-
 
         } else if (value == "0") {
             var keys = document.getElementById("key-edit-combination-values").innerHTML;
             keys = keys.split(",");
             var GUIKey = keycodesToStr[keys[0]];
             for (var i = 1; i < 3; i++) {
-                var value = keycodesToStr[keys[i]];
-                if (value != null) {
-                    GUIKey += " + " + value;
+                var temp = keycodesToStr[keys[i]];
+                if (temp != null) {
+                    GUIKey += " + " + temp;
                 }
             }
             document.getElementById("key-edit-combination").innerHTML = GUIKey;
@@ -425,7 +463,7 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
             document.getElementById("edit-key").className = "disable"; //disable the edit key menu
             clearEditButton();
         }
-
+        macropadConfig.profiles[currentProfile].keys[currentEdit].type = parseInt(value); //update the config
     }
 
 
