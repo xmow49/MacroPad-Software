@@ -107,3 +107,28 @@ function readFromConfig(key) {
 function openLink(link) {
     IPC.send("open-link", "https://" + link);
 }
+
+
+
+
+var profileTemplete = {
+    name: "",
+    icon: "",
+    color: [0, 0, 0],
+    encoders: {
+        type: -1,
+        values: [-1, -1, -1]
+    },
+    keys: {
+        type: -1,
+        values: [-1, -1, -1]
+    },
+    displayType: -1,
+
+}
+var macropadConfig = {
+    profile: [],
+}
+for (var i = 0; i < 6; i++) {
+    macropadConfig.profile.push(profileTemplete); //add 6 profiles to the config
+}
