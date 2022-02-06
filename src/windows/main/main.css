@@ -92,22 +92,25 @@ select {
 
 header {
     display: flex;
-    flex-direction: row-reverse;
     -webkit-user-select: none;
     -webkit-app-region: drag;
     width: 100%;
-    height: 20px;
-    justify-content: right;
+    height: var(--header-size);
+    justify-content: space-between;
     align-items: center;
-    padding-top: 4px;
-    padding-bottom: 4px;
     background-color: rgb(230, 230, 230);
     z-index: 999999999;
 }
 
+.navbar-buttons-container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: right;
+}
+
 .navbarButton {
     padding: 6px;
-    height: 24px;
+    height: var(--header-size);
     -webkit-app-region: no-drag;
     border: none;
     background: none;
@@ -146,10 +149,17 @@ span {
 }
 
 .software-title {
-    margin: 2px;
-    margin-left: 5%;
-    line-height: 55px;
+    margin: 0;
+    margin-left: 10px;
+    font-size: 20px;
     color: var(--font-master-color);
+}
+
+.title-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 10px;
 }
 
 .ligne {

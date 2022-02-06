@@ -177,7 +177,6 @@ function readBounds(i) {
     bounds[2] = config.get('windows.main.x');
     bounds[3] = config.get('windows.main.y');
     bounds[4] = config.get('windows.main.maximized');
-    console.log(bounds);
     return bounds[i];
 }
 
@@ -185,15 +184,14 @@ function readBounds(i) {
 function createWindow() {
     // Create the browser window.
     mainWindow = new BrowserWindow({
-        width: readBounds(0),
-        height: readBounds(1),
+        width: 1280,
+        height: 720,
         minHeight: 720,
         minWidth: 1280,
         icon: path.join(__dirname, 'src/imgs/icon.png'),
 
         x: readBounds(2),
         y: readBounds(3),
-        isMaximized: readBounds(4),
         frame: false,
         webPreferences: {
             nodeIntegration: true,
@@ -214,8 +212,12 @@ function createWindow() {
             loadingScreen.close();
         }
         mainWindow.webContents.openDevTools();
+        if (readBounds(4)) { // if maximized from the last session
+            mainWindow.maximize(); // maximize the window
+        }
         mainWindow.show();
     });
+
 
     ipcMain.on("close", () => {
         console.log("Saving values...");
@@ -224,18 +226,16 @@ function createWindow() {
         config.set("windows.main.x", mainWindow.getBounds().x);
         config.set("windows.main.y", mainWindow.getBounds().y);
         config.set("windows.main.maximized", mainWindow.isMaximized());
-        console.log("OK");;
+        console.log("OK");
         mainWindow.hide();
     });
 
-
     ipcMain.on('maximize', () => {
         if (mainWindow.isMaximized()) {
-            mainWindow.restore();
+            mainWindow.unmaximize();
         } else {
             mainWindow.maximize();
         }
-        console.log(mainWindow.isMaximized);
     });
 
     ipcMain.on('minimize', () => {
