@@ -116,6 +116,7 @@ async function responsesFromPort(data) {
         clearInterval(checkInterval); //stop all check
         //document.getElementById("port-" + currentTestingPort).checked = true;
         scanInProgress = false;
+        document.getElementById("scan-loading").style.display = "none"; //hide the loading animation
         var progressBar = document.getElementById("port-scan-progress");
         progressBar.max = 100;
         progressBar.value = 100;
@@ -244,6 +245,7 @@ function connectToPort(port) {
 function scanSerialsPorts() {
     if (scanInProgress == false && macropadConnectionStatus == false) { //if the scan is not in progress and the macropad is not connected
         console.log("scanSerialsPorts");
+        document.getElementById("scan-loading").style.display = "block"; //show the loading animation
         scanInProgress = true; //Scan in progress
         document.getElementById("connect-button").innerHTML = "Scan en cours ..."
         var availablePorts = scanPorts(); //Get all ports
@@ -268,9 +270,12 @@ function scanSerialsPorts() {
                 console.log("Trying: " + availablePorts[currentTestingPort] + ":" + currentTestingPort + "/" + testToDoCount);
                 connectToPort(availablePorts[currentTestingPort]);
             }
-        }, 2000);
-        document.getElementById("scan-port-log").innerHTML = ""
-        scanInProgress = false;
+
+            document.getElementById("scan-port-log").innerHTML = ""
+            scanInProgress = false;
+
+        }, 3000);
+
     } else if (macropadConnectionStatus == true && scanInProgress == false) {
         serialPortConnection.close();
         macropadConnectionStatus = false;

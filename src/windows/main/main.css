@@ -29,7 +29,9 @@ textarea,
 
 button:disabled,
 button[disabled] {
-    background: var(--button-color);
+    color: var(--button-color);
+    background-color: var(--button-color);
+    border-color: var(--font-master-color);
 }
 
 button,

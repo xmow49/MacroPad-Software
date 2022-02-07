@@ -36,6 +36,43 @@ for (var i = 0; i < 6; i++) {
     }
 }
 
+function getConfig() { //get the config from the file to the variable macropadConfig
+    macropadConfig.profiles = {...macropadConfig.profiles, ...readFromConfig("profiles") };
+}
+getConfig();
+
+function storeConfig() {
+    saveToConfig("profiles", macropadConfig.profiles);
+}
+
+
+function getIconFromKey(value) { // This function transform system action values from arduino to radio id
+    var toIcon = {
+        205: "mdi-play-pause",
+        233: "mdi-volume-plus",
+        234: "mdi-volume-minus",
+        226: "mdi-volume-off",
+        181: "mdi-skip-forward",
+        182: "mdi-skip-backward",
+        183: "mdi-stop",
+        179: "mdi-fast-forward",
+        180: "mdi-rewind",
+        394: "mdi-email",
+        402: "mdi-calculator",
+        404: "mdi-folder",
+        547: "mdi-web",
+        551: "mdi-refresh",
+        248: "mdi-arrow-left",
+        549: "mdi-arrow-right",
+        554: "mdi-bookmark",
+    }
+    if (value == -1) {
+        return "";
+    } else {
+        return toIcon[value];
+    }
+}
+
 
 
 var profileEditorEnabled = false;
@@ -74,7 +111,8 @@ updateProfileOverviewIcon();
 
 function updateProfileOverviewIcon() {
     for (var i = 0; i < 6; i++) {
-        var icon = readFromConfig("profiles." + i + ".icon");
+        var icon = macropadConfig.profiles[i].icon;
+
         if (icon == null) { //if profile icon is not set
             icon = "mdi-numeric-" + (parseInt(i) + 1) + "-box"; //set default icon
         }
@@ -98,8 +136,7 @@ function editProfilePopup() { //when edit profile button is clicked
         disableMacropadButtons(true);
         updateProfileOverviewIcon();
 
-
-
+        storeConfig(); //save the config in the file
     } else {
         //enable the profile editor
         updateProfileGui();
@@ -119,7 +156,7 @@ function editProfilePopup() { //when edit profile button is clicked
 
 }
 
-const editButtonIcon = "mdi mdi-pencil";
+const editButtonIcon = "mdi-pencil";
 
 function clearEditButton() { //remove edit icon (pen) from all encoders and keys buttons
     //clear edit mode for all encoder buttons
@@ -164,7 +201,6 @@ function saveProfileName() {
         profileName = "Profil " + (parseInt(currentProfile) + 1);
     }
     macropadConfig.profiles[currentProfile].name = profileName;
-    saveToConfig("profiles." + currentProfile + ".name", profileName);
     updateProfileGui();
 }
 
@@ -178,7 +214,7 @@ function changeProfile() {
 
 function updateProfileGui() {
     var input = document.getElementById("profile-name"); //profile name input
-    var profileName = readFromConfig("profiles." + currentProfile + ".name"); //profile name from config
+    var profileName = macropadConfig.profiles[currentProfile].name;
 
     // --------------------- Profile Name ------------------------------
     if (profileName == null) { //if profile name is not set
@@ -186,17 +222,8 @@ function updateProfileGui() {
     }
     input.value = profileName //display profile name
 
-    // --------------------- Profile List ------------------------------
-    for (var i = 0; i < 6; i++) { //for all profiles
-        var profileName = readFromConfig("profiles." + i + ".name"); //get profile name from config
-        if (profileName == null) { //if profile name is not set
-            profileName = "Profil " + (parseInt(i) + 1); //set default name
-        }
-        //document.getElementById('profile-editor-selector').getElementsByTagName('option')[i].innerHTML = profileName; //display profile name in list
-    }
-
     // --------------------- Profile Color ------------------------------
-    var color = readFromConfig("profiles." + currentProfile + ".color"); //get profile color from config
+    var color = macropadConfig.profiles[currentProfile].color; //get profile color from config
     var colorHEX;
     if (color == null) { //if profile color is not set
         colorHEX = "#000000"; //set default color (black)
@@ -207,7 +234,7 @@ function updateProfileGui() {
     pickr.setColor(colorHEX); //set color in color picker
     // --------------------- Profile Icon ------------------------------
 
-    var icon = readFromConfig("profiles." + currentProfile + ".icon"); //get profile icon from config
+    var icon = macropadConfig.profiles[currentProfile].icon //get profile icon from config
     if (icon == null) { //if profile icon is not set
         icon = "mdi-numeric-" + (parseInt(currentProfile) + 1) + "-box"; //set default icon
     }
@@ -218,18 +245,15 @@ function updateProfileGui() {
     icon = icon.replace("mdi-", "");
     document.getElementById("profile-icon-name").value = icon; //display icon name in profile icon name input
 
-
-
     // --------------------- Profile display type ------------------------------
-    var displayType = readFromConfig("profiles." + currentProfile + ".display.type"); //get profile display type from config
+    var displayType = macropadConfig.profiles[currentProfile].display.type; //get profile display type from config
     if (displayType == null) { //if profile display type is not set
         displayType = 0; //set default display type
     }
-    var displayValue = readFromConfig("profiles." + currentProfile + ".display.value"); //get profile display value from config
+    var displayValue = macropadConfig.profiles[currentProfile].display.value; //get profile display value from config
     if (displayValue == null || displayValue == "") {
         displayValue = "Texte Personalisé";
         macropadConfig.profiles[currentProfile].display.value = displayValue;
-        saveToConfig("profiles." + currentProfile + ".display.value", displayValue);
     }
 
     //for all type in the radio, check corresponding to display type
@@ -264,6 +288,13 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
     if (currentEdit == -1) { //if no previous encoder is in edition mode set the new encoder in edition mode
 
     } else {
+
+        if (document.getElementById("encoderIcon" + currentEdit).classList.contains(editButtonIcon))
+            document.getElementById("encoderIcon" + currentEdit).classList.remove(editButtonIcon); //remove edit button icon from the key
+        if (document.getElementById("keyIcon" + currentEdit).classList.contains(editButtonIcon))
+            document.getElementById("keyIcon" + currentEdit).classList.remove(editButtonIcon); //remove edit button icon from the key
+
+
         //save old values in the config
 
         //------------save action type ------------
@@ -276,10 +307,11 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
         if (currentActionType == null) { //if no radio is checked
             currentActionType = -1;
         }
-        saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".type", parseInt(currentActionType));
 
         //------------save value ------------
         if (type == "encoder") {
+            macropadConfig.profiles[currentProfile].encoders[currentEdit].type = parseInt(currentActionType);
+
             if (currentActionType == 2) { //key combination
                 var valuesToSave = [];
                 for (var i = 0; i < 3; i++) {
@@ -287,19 +319,30 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                     var values = strValues.split(","); //tranform in array
                     valuesToSave.push(parseInt(values[0]));
                 }
-                console.log(valuesToSave);
-                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the values
+                // console.log(valuesToSave);
+
+                macropadConfig.profiles[currentProfile].encoders[currentEdit].values = valuesToSave;
+
             } else if (currentActionType == 1) { //software vomlume
                 var valuesToSave = [];
                 valuesToSave[0] = document.getElementById("software-volume-selector").value;
-                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the value
+
+                macropadConfig.profiles[currentProfile].encoders[currentEdit].values = valuesToSave;
+
             } else {
-                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", [-1, -1, -1]); //save the value
+                macropadConfig.profiles[currentProfile].encoders[currentEdit].values = [-1, -1, -1];
             }
+
+
+
+
+
+
         } else if (type == "key") {
+            macropadConfig.profiles[currentProfile].keys[currentEdit].type = parseInt(currentActionType);
             if (currentActionType == 0) { //key combination
                 var strValues = document.getElementById(type + "-edit-combination-values").innerHTML; //get the values of the key combination
-                console.log(strValues);
+                // console.log(strValues);
                 var valuesToSave = strValues.split(","); //tranform in array
                 //keep only 3 values
                 if (valuesToSave.length > 3) {
@@ -309,14 +352,34 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                 for (var i = 0; i < valuesToSave.length; i++) {
                     valuesToSave[i] = parseInt(valuesToSave[i]);
                 }
-                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the values
+
+                macropadConfig.profiles[currentProfile].keys[currentEdit].values = valuesToSave;
+
             } else if (currentActionType == 1) { //type: 1 system action
                 var valuesToSave = [parseInt(lastSelectedSystemActionValue), -1, -1];
-                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", valuesToSave); //save the values
+
+                var radio = document.getElementsByName("select-system-action");
+                var radioValue;
+                for (var i = 0; i < radio.length; i++) {
+
+                    if (radio[i].checked) {
+                        radioValue = radio[i].value;
+                    }
+                }
+                console.log("mdi " + getIconFromKey(radioValue));
+                document.getElementById("keyIcon" + currentEdit).className = "mdi " + getIconFromKey(radioValue);
+
+
+                macropadConfig.profiles[currentProfile].keys[currentEdit].values = valuesToSave;
 
             } else {
-                saveToConfig("profiles." + currentProfile + "." + configKey + "." + currentEdit + ".values", [-1, -1, -1]); //save the value
+                macropadConfig.profiles[currentProfile].keys[currentEdit].values = [-1, -1, -1];
             }
+
+
+
+
+
         }
     }
     //---------------------------------------------End of save old values in the config -------------------------------------------------
@@ -326,8 +389,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
 
     //---------------------------------------------Load values from the config -------------------------------------------------
     currentEdit = newId; //store the new encoder id
-
-    var newActionType = readFromConfig("profiles." + currentProfile + "." + configKey + "." + newId + ".type");
+    var newActionType = macropadConfig.profiles[currentProfile].encoders[newId].type;
     if (newActionType == null) newActionType = -1;
     //load new action values
     for (var i = 0; i < actionType.length; i++) {
@@ -342,7 +404,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
         if (newActionType == 2) { //if key combination
             var newValues = [];
             for (var i = 0; i < 3; i++) {
-                newValues[i] = readFromConfig("profiles." + currentProfile + "." + configKey + "." + newId + ".values." + i);
+                newValues[i] = macropadConfig.profiles[currentProfile].encoders[newId].values[i];
                 if (newValues[i] == null) newValues[i] = -1;
                 console.log(newValues);
                 document.getElementById(type + "-edit-key-" + i).innerHTML = keycodesToStr[newValues[i]];
@@ -350,7 +412,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
             }
         }
         if (newActionType == 1) { //if software volume
-            var newValue = readFromConfig("profiles." + currentProfile + "." + configKey + "." + newId + ".values");
+            var newValue = macropadConfig.profiles[currentProfile].encoders[newId].values;
             displayAllSoundSoftwaresInSelector(); //display all sound softwares in selector
             if (newValue == null || newValue[0] == null || newValue[0] == "") {} else {
                 document.getElementById("software-volume-selector").value = newValue[0]; //select the value from the config
@@ -359,24 +421,20 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
         }
     } else if (type == "key") {
         if (newActionType == 0) { //if key combination
-            var newValues = readFromConfig("profiles." + currentProfile + "." + configKey + "." + newId + ".values");
+            var newValues = macropadConfig.profiles[currentProfile].keys[newId].values;
             if (newValues == null) newValues = -1;
             document.getElementById(type + "-edit-combination-values").innerHTML = newValues;
         } else if (newActionType == 1) { //if system action
-            var newValue = readFromConfig("profiles." + currentProfile + "." + configKey + "." + newId + ".values");
+            var newValue = macropadConfig.profiles[currentProfile].keys[newId].values;
             if (newValue == null || newValue[0] == null || newValue[0] == "") {} else {
                 lastSelectedSystemActionValue = newValue[0];
-
                 document.getElementsByName("select-system-action")[systemActionValuesToRadioId(newValue[0])].checked = true; //select the value from the config
             }
         }
     }
 
-
-
-
-    clearEditButton();
-    document.getElementById(type + "Icon" + newId).className = editButtonIcon; //dispplay the edit icon (pen) on the new encoder
+    //clearEditButton();
+    document.getElementById(type + "Icon" + newId).classList.add(editButtonIcon); //dispplay the edit icon (pen) on the new encoder
     //display the gui
     updateEditGUI(type, newId);
     //---------------------------------------------End of load values from the config -------------------------------------------------
@@ -572,7 +630,7 @@ function updateProfileIconPreview(saveInConfig) {
     //save to the config file
     //get the current profile
     if (saveInConfig) {
-        saveToConfig("profiles." + currentProfile + ".icon", "mdi-" + icon.value);
+        macropadConfig.profiles[currentProfile].icon = icon.value;
     }
 }
 
@@ -587,8 +645,8 @@ function displayTypeSelected() {
     }
     var value = document.getElementById("display-text-custom").value;
 
-    saveToConfig("profiles." + currentProfile + ".display.type", parseInt(type));
-    saveToConfig("profiles." + currentProfile + ".display.value", value);
+    macropadConfig.profiles[currentProfile].display.type = parseInt(type);
+    macropadConfig.profiles[currentProfile].display.value = value;
 
 }
 
@@ -598,6 +656,7 @@ var lastSelectedSystemActionValue = -1;
 function onChangeSystemAction(radio) {
     var selected = radio.value; //get the selected value
     lastSelectedSystemActionValue = selected;
+
 }
 
 
@@ -657,10 +716,11 @@ function onChangeProfile(value) {
     currentProfile = value; //update the current profile    
 
     //----------------update profile name in the screen----------------
-    var profileName = readFromConfig("profiles." + value + ".name"); //get the name of the profile
+    var profileName = macropadConfig.profiles[value].name; //get the name of the profile
+
     if (profileName == null) {
         profileName = "Profil " + (parseInt(value) + 1);
-        saveToConfig("profiles." + value + ".name", profileName);
+        macropadConfig.profiles[currentProfile].name = profileName;
 
     }
     document.getElementById("macropad-text").innerHTML = profileName; //update the name of the profile
@@ -731,7 +791,7 @@ pickr.on('change', (source, instance) => {
 pickr.on('changestop', (source, instance) => {
     var rgb = hexToRgb(instance._color.toHEXA());
     pickr.setColor(instance._color.toHEXA().toString());
-    saveToConfig("profiles." + currentProfile + ".color", rgb);
+    macropadConfig.profiles[currentProfile].color = rgb;
 });
 
 setTimeout(function() {

@@ -194,6 +194,16 @@
     margin: 5px;
 }
 
+.top .left {
+    display: flex;
+}
+
+.top .left .loader {
+    width: 30px;
+    margin: 5px;
+    display: none;
+}
+
 #edit button {
     width: var(--action-button-size);
     height: var(--action-button-size);
@@ -215,8 +225,8 @@
 
 .settings {
     position: absolute;
-    left: 0px;
-    bottom: 0px;
+    left: 30px;
+    bottom: 30px;
 }
 
 .settings button {

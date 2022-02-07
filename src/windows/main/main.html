@@ -9,6 +9,7 @@
     <link href="profileEditor.css" rel="stylesheet">
     <link href="overview.css" rel="stylesheet">
     <link href="settings.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/loader.css">
 
     <!--  materialdesignicons 6.4.95  -->
     <link rel="stylesheet" href="downloaded_contents/materialdesignicons.css" />
@@ -50,9 +51,18 @@
 
             <div id="normal-view">
                 <div class="top">
-                    <div class="connect">
-                        <button id="connect-status-button" onclick="connectPopup();">Déconnecté <span id="connect-status" class="offline"></span></button>
+                    <div class="left">
+                        <div class="connect">
+                            <button id="connect-status-button" onclick="connectPopup();">Déconnecté <span id="connect-status" class="offline"></span></button>
+                        </div>
+                        <div class="loader" id="scan-loading">
+                            <svg class="circular" viewBox="25 25 50 50">
+                              <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+                            </svg>
+                        </div>
                     </div>
+
+
                     <div id="edit">
                         <button onclick="editProfilePopup();"><span class="mdi mdi-pencil"></span></button>
                         <button onclick="sendConfig();"><span class="mdi mdi-send"></span></button>
