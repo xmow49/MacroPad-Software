@@ -37,13 +37,28 @@ for (var i = 0; i < 6; i++) {
 }
 
 function getConfig() { //get the config from the file to the variable macropadConfig
-    macropadConfig.profiles = {...macropadConfig.profiles, ...readFromConfig("profiles") };
+    console.log(Object.assign({}, macropadConfig.profiles));
+    console.log(readFromConfig("profiles"));
+
+    const merge = require('deepmerge')
+
+    macropadConfig.profiles = merge(Object.assign({}, macropadConfig.profiles), readFromConfig("profiles"))
+
+    console.log(macropadConfig.profiles);
+
+    // console.log(Object.assign(readFromConfig("profiles"), Object.assign(macropadConfig.profiles)));
+
+    // macropadConfig.profiles = {...Object.assign({}, macropadConfig.profiles), ...readFromConfig("profiles") };
+    // console.log(Object.assign({}, macropadConfig.profiles));
 }
 getConfig();
+
 
 function storeConfig() {
     saveToConfig("profiles", macropadConfig.profiles);
 }
+
+
 
 
 function getIconFromKey(value) { // This function transform system action values from arduino to radio id
@@ -72,7 +87,6 @@ function getIconFromKey(value) { // This function transform system action values
         return toIcon[value];
     }
 }
-
 
 
 var profileEditorEnabled = false;
@@ -175,6 +189,8 @@ function clearEditButton() { //remove edit icon (pen) from all encoders and keys
 }
 
 var currentEdit = -1;
+var currentType = "none";
+
 
 function getActionValue(type) { //get the value of the radio
     if (type == "encoder" || type == "key") {
@@ -207,6 +223,7 @@ function saveProfileName() {
 
 function changeProfile() {
     currentEdit = -1;
+    currentType = "none";
     currentKeyEdit = -1;
     clearEditButton();
     updateProfileGui();
@@ -288,11 +305,9 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
     if (currentEdit == -1) { //if no previous encoder is in edition mode set the new encoder in edition mode
 
     } else {
-
-        if (document.getElementById("encoderIcon" + currentEdit).classList.contains(editButtonIcon))
-            document.getElementById("encoderIcon" + currentEdit).classList.remove(editButtonIcon); //remove edit button icon from the key
-        if (document.getElementById("keyIcon" + currentEdit).classList.contains(editButtonIcon))
-            document.getElementById("keyIcon" + currentEdit).classList.remove(editButtonIcon); //remove edit button icon from the key
+        console.log(currentType + "Icon" + currentEdit);
+        if (document.getElementById(currentType + "Icon" + currentEdit).classList.contains(editButtonIcon))
+            document.getElementById(currentType + "Icon" + currentEdit).classList.remove(editButtonIcon); //remove edit button icon from the key
 
 
         //save old values in the config
@@ -389,7 +404,12 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
 
     //---------------------------------------------Load values from the config -------------------------------------------------
     currentEdit = newId; //store the new encoder id
-    var newActionType = macropadConfig.profiles[currentProfile].encoders[newId].type;
+    currentType = type; //store the new encoder type
+
+    if (type == "encoder") var newActionType = macropadConfig.profiles[currentProfile].encoders[newId].type;
+    if (type == "key") var newActionType = macropadConfig.profiles[currentProfile].keys[newId].type;
+
+
     if (newActionType == null) newActionType = -1;
     //load new action values
     for (var i = 0; i < actionType.length; i++) {
@@ -728,6 +748,7 @@ function onChangeProfile(value) {
 
     if (profileEditorEnabled) {
         currentEdit = -1;
+        currentType = "none";
         currentKeyEdit = -1;
         clearEditButton();
         updateProfileGui();
