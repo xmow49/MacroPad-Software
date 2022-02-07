@@ -42,7 +42,7 @@ function getConfig() { //get the config from the file to the variable macropadCo
 
     const merge = require('deepmerge')
 
-    macropadConfig.profiles = merge(Object.assign({}, macropadConfig.profiles), readFromConfig("profiles"))
+    macropadConfig.profiles = merge(macropadConfig.profiles, readFromConfig("profiles"))
 
     console.log(macropadConfig.profiles);
 
@@ -55,7 +55,7 @@ getConfig();
 
 
 function storeConfig() {
-    saveToConfig("profiles", macropadConfig.profiles);
+    saveToConfig("profiles", Object.assign({}, macropadConfig.profiles));
 }
 
 
@@ -126,10 +126,11 @@ updateProfileOverviewIcon();
 function updateProfileOverviewIcon() {
     for (var i = 0; i < 6; i++) {
         var icon = macropadConfig.profiles[i].icon;
-
-        if (icon == null) { //if profile icon is not set
+        console.log(icon);
+        if (icon == "") { //if profile icon is not set
             icon = "mdi-numeric-" + (parseInt(i) + 1) + "-box"; //set default icon
         }
+
         document.getElementById("profile-" + i).querySelector("span").className = "mdi " + icon;
     }
 }
@@ -234,7 +235,7 @@ function updateProfileGui() {
     var profileName = macropadConfig.profiles[currentProfile].name;
 
     // --------------------- Profile Name ------------------------------
-    if (profileName == null) { //if profile name is not set
+    if (profileName == "") { //if profile name is not set
         profileName = "Profil " + (parseInt(currentProfile) + 1); //set default name
     }
     input.value = profileName //display profile name
@@ -252,7 +253,7 @@ function updateProfileGui() {
     // --------------------- Profile Icon ------------------------------
 
     var icon = macropadConfig.profiles[currentProfile].icon //get profile icon from config
-    if (icon == null) { //if profile icon is not set
+    if (icon == "") { //if profile icon is not set
         icon = "mdi-numeric-" + (parseInt(currentProfile) + 1) + "-box"; //set default icon
     }
 
@@ -305,11 +306,8 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
     if (currentEdit == -1) { //if no previous encoder is in edition mode set the new encoder in edition mode
 
     } else {
-        console.log(currentType + "Icon" + currentEdit);
         if (document.getElementById(currentType + "Icon" + currentEdit).classList.contains(editButtonIcon))
             document.getElementById(currentType + "Icon" + currentEdit).classList.remove(editButtonIcon); //remove edit button icon from the key
-
-
         //save old values in the config
 
         //------------save action type ------------
@@ -738,7 +736,7 @@ function onChangeProfile(value) {
     //----------------update profile name in the screen----------------
     var profileName = macropadConfig.profiles[value].name; //get the name of the profile
 
-    if (profileName == null) {
+    if (profileName == "") {
         profileName = "Profil " + (parseInt(value) + 1);
         macropadConfig.profiles[currentProfile].name = profileName;
 

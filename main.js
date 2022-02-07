@@ -167,7 +167,9 @@ function createTray() {
     });
 }
 
-const config = new Store({ schema });
+// const config = new Store({ schema });
+const config = new Store();
+
 
 
 function readBounds(i) {
