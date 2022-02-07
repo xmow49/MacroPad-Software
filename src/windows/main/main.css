@@ -28,10 +28,14 @@ textarea,
 }
 
 button:disabled,
-button[disabled] {
-    color: var(--button-color);
+button:disabled>*::before,
+button[disabled],
+button[disabled]>*,
+button[disabled]>*::before {
+    color: black;
     background-color: var(--button-color);
     border-color: var(--font-master-color);
+    cursor: default;
 }
 
 button,

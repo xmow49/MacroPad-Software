@@ -37,15 +37,12 @@ for (var i = 0; i < 6; i++) {
 }
 
 function getConfig() { //get the config from the file to the variable macropadConfig
-    console.log(Object.assign({}, macropadConfig.profiles));
-    console.log(readFromConfig("profiles"));
-
     const merge = require('deepmerge')
-
-    macropadConfig.profiles = merge(macropadConfig.profiles, readFromConfig("profiles"))
-
-    console.log(macropadConfig.profiles);
-
+    var fromConfig = readFromConfig("profiles");
+    if (fromConfig != null)
+        macropadConfig.profiles = merge(macropadConfig.profiles, fromConfig);
+    else
+        storeConfig();
     // console.log(Object.assign(readFromConfig("profiles"), Object.assign(macropadConfig.profiles)));
 
     // macropadConfig.profiles = {...Object.assign({}, macropadConfig.profiles), ...readFromConfig("profiles") };
@@ -55,7 +52,7 @@ getConfig();
 
 
 function storeConfig() {
-    saveToConfig("profiles", Object.assign({}, macropadConfig.profiles));
+    saveToConfig("profiles", macropadConfig.profiles);
 }
 
 
@@ -146,8 +143,6 @@ function editProfilePopup() { //when edit profile button is clicked
         document.getElementById("edit").className = ""; //edit button --> remove active-button class
         document.getElementById("macropad").className = "connectPopup"; //remove macropad button hover action
 
-        //disable edit mode for all encoders/keys buttons
-        clearEditButton();
         disableMacropadButtons(true);
         updateProfileOverviewIcon();
 
@@ -283,10 +278,12 @@ function updateProfileGui() {
             displayTypeRadio[i].checked = false;
         }
     }
-
-
     document.getElementById("display-text-custom").value = displayValue; //display display text in profile display type input
 
+
+    for (var i = 0; i < macropadConfig.profiles[currentProfile].keys.length; i++) {
+        document.getElementById("keyIcon" + i).className = "mdi " + getIconFromKey(macropadConfig.profiles[currentProfile].keys[i].values[0]);
+    }
 
 
 }
@@ -379,7 +376,6 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                         radioValue = radio[i].value;
                     }
                 }
-                console.log("mdi " + getIconFromKey(radioValue));
                 document.getElementById("keyIcon" + currentEdit).className = "mdi " + getIconFromKey(radioValue);
 
 
