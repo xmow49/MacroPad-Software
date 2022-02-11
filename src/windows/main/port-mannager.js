@@ -153,8 +153,9 @@ async function responsesFromPort(data) {
         if (stringFromSerial.charAt(0) == "E") { //a encoder is turned
             var encoderId = stringFromSerial.charAt(1); //get the encoder id
             var encoderDirection = stringFromSerial.charAt(2); //get the encoder direction
-            var encoderType = readFromConfig("profiles." + currentProfile + ".encoders." + encoderId + ".type");
-            var encoderValue = readFromConfig("profiles." + currentProfile + ".encoders." + encoderId + ".values");
+            var encoderType = macropadConfig.profiles[currentProfile].encoders[encoderId].type; //get the encoder type
+
+            var encoderValue = macropadConfig.profiles[currentProfile].encoders[encoderId].values; //get the encoder values
 
             if (!(encoderValue == "" || encoderValue == null || encoderType == null || encoderType == "")) { //if the encoder has a value
                 if (encoderType == 1) { //music software encoder
@@ -456,7 +457,7 @@ var screenTextInterval;
 
 function checkBeforeDisplay() {
     if (!configIsSending) {
-        var displayType = readFromConfig("profiles." + currentProfile + ".display.type"); //get the display type
+        var displayType = macropadConfig.profiles[currentProfile].display.type; //get the display type
         if (displayType == null) return;
         if (displayType == 0) {
             setTextMusic("spotify"); //-----------------------------------------------------------------------------TODO
@@ -467,9 +468,10 @@ function checkBeforeDisplay() {
 
 function updateScreenText() {
     window.clearInterval(screenTextInterval);
-    var displayType = readFromConfig("profiles." + currentProfile + ".display.type"); //get the display type
+    macropadConfig.profiles[currentProfile].display.type
+    var displayType = macropadConfig.profiles[currentProfile].display.type; //get the display type
     if (displayType == 0 || displayType == 2 || displayType == 3) { //need text on the macropad screen
-        var displayValues = readFromConfig("profiles." + currentProfile + ".display.value"); //get the display values
+        var displayValues = macropadConfig.profiles[currentProfile].display.values; //get the display values
         if (displayValues != null) {
             checkBeforeDisplay();
             screenTextInterval = setInterval(checkBeforeDisplay, 10000);
@@ -481,5 +483,8 @@ async function hardReset() {
     if (macropadConnectionStatus) {
         return await sendWithACK("Z"); //send the reset command to the macropad
     }
+    macropadConfig.profiles = null;
+    storeConfig();
+    window.location.reload();
 
 }

@@ -129,7 +129,7 @@
                             <input type="radio" name="display-text-selector" id="display-text-3" value="3" onchange="displayTypeSelected()">
                             <div id="display-div-custom">
                                 <label for="display-text-3">Custom</label>
-                                <input type="text" id="display-text-custom" placeholder="Texte custom" maxlength="100" onfocusout="displayTypeSelected();">
+                                <input type="text" id="display-text-custom" placeholder="Texte custom" maxlength="100" onfocus="document.getElementsByName('display-text-selector')[3].checked = true;" onfocusout="displayTypeSelected();">
                             </div>
 
                         </div>
@@ -180,13 +180,16 @@
 
                 <div id="right" class="profile-editor disable">
                     <h3 class="editor-title">Action</h3>
-                    <div id="import-image">
+
+                    <!-- WIP -->
+                    <!-- <div id="import-image">
+                        
                         <button id="upload-icon">Importer un icon</button>
                         <div class="action-help">
                             <span class="mdi mdi-help-circle"></span>
                             <span class="text-action-help">Choisisez un icon qui va apparaître sur le profile et le Marcopad</span>
                         </div>
-                    </div>
+                    </div> -->
 
                     <h3 id="select-action-title">Selection des actions</h3>
                     <h4 id="current-edition">Cliquez sur une touche pour choisir une action</h4>

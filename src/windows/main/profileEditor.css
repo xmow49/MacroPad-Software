@@ -357,3 +357,7 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     display: flex;
     align-items: center
 }
+
+#current-edition {
+    text-align: center;
+}

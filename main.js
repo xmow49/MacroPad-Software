@@ -213,7 +213,7 @@ function createWindow() {
         if (loadingScreen) {
             loadingScreen.close();
         }
-        // mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
         if (readBounds(4)) { // if maximized from the last session
             mainWindow.maximize(); // maximize the window
         }
