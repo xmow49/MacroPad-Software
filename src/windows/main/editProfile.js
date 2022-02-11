@@ -20,7 +20,7 @@ var profilesTemplete = {
     encoders: [],
     keys: [],
     display: {
-        type: -1,
+        type: 1,
         values: "",
     }
 
@@ -28,6 +28,7 @@ var profilesTemplete = {
 var macropadConfig = {
     profiles: [],
 }
+
 for (var i = 0; i < 6; i++) {
     macropadConfig.profiles.push(profilesTemplete); //add 6 profiles to the config
     macropadConfig.profiles[i].keys.push(keysTemplate); //add 6 keys to the config
@@ -36,19 +37,41 @@ for (var i = 0; i < 6; i++) {
     }
 }
 
+
+function createConfigFile() {
+    console.log("create config file");
+    saveToConfig("profiles", macropadConfig.profiles);
+}
+
+function initSoftware() {
+    getConfig();
+    onChangeProfile(0); //set the default value
+    updateProfileGui();
+    disableMacropadButtons(true);
+    updateProfileOverviewIcon();
+}
+
+window.addEventListener('load', () => { // when the window loads
+    initSoftware();
+});
+
+
+
+
+
 function getConfig() { //get the config from the file to the variable macropadConfig
     const merge = require('deepmerge')
     var fromConfig = readFromConfig("profiles");
+    // console.log(merge(macropadConfig.profiles, fromConfig));
     if (fromConfig != null)
-        macropadConfig.profiles = merge(macropadConfig.profiles, fromConfig);
-    else
-        storeConfig();
-    // console.log(Object.assign(readFromConfig("profiles"), Object.assign(macropadConfig.profiles)));
+        macropadConfig.profiles = fromConfig;
+    else {
+        createConfigFile();
+        window.location.reload();
+    }
 
-    // macropadConfig.profiles = {...Object.assign({}, macropadConfig.profiles), ...readFromConfig("profiles") };
-    // console.log(Object.assign({}, macropadConfig.profiles));
+
 }
-getConfig();
 
 
 function storeConfig() {
@@ -117,15 +140,19 @@ function disableMacropadButtons(state) { //disable all encoders/keys buttons whe
 
 }
 
-disableMacropadButtons(true);
-updateProfileOverviewIcon();
+
+
+
+
 
 function updateProfileOverviewIcon() {
     for (var i = 0; i < 6; i++) {
         var icon = macropadConfig.profiles[i].icon;
-        console.log(icon);
+
         if (icon == "") { //if profile icon is not set
             icon = "mdi-numeric-" + (parseInt(i) + 1) + "-box"; //set default icon
+            console.log("mdi-numeric-" + (parseInt(i) + 1) + "-box");
+            macropadConfig.profiles[i].icon = icon;
         }
 
         document.getElementById("profile-" + i).querySelector("span").className = "mdi " + icon;
@@ -133,6 +160,7 @@ function updateProfileOverviewIcon() {
 }
 
 function editProfilePopup() { //when edit profile button is clicked
+
     if (profileEditorEnabled) {
         //disable the profile editor
         profileEditorEnabled = false;
@@ -161,9 +189,6 @@ function editProfilePopup() { //when edit profile button is clicked
         //enable edit mode for all encoders/keys buttons
         disableMacropadButtons(false);
     }
-
-
-
 }
 
 const editButtonIcon = "mdi-pencil";
@@ -232,6 +257,7 @@ function updateProfileGui() {
     // --------------------- Profile Name ------------------------------
     if (profileName == "") { //if profile name is not set
         profileName = "Profil " + (parseInt(currentProfile) + 1); //set default name
+        macropadConfig.profiles[currentProfile].name = profileName; //set default name in config
     }
     input.value = profileName //display profile name
 
@@ -250,22 +276,22 @@ function updateProfileGui() {
     var icon = macropadConfig.profiles[currentProfile].icon //get profile icon from config
     if (icon == "") { //if profile icon is not set
         icon = "mdi-numeric-" + (parseInt(currentProfile) + 1) + "-box"; //set default icon
+        macropadConfig.profiles[currentProfile].icon = icon; //set default icon in config
     }
 
     document.getElementById("profile-icon-preview").className = "mdi"; //remove all icons from preview
     document.getElementById("profile-icon-preview").classList.add(icon); //display icon in profile icon
-    // remove mdi- from icon name
-    icon = icon.replace("mdi-", "");
     document.getElementById("profile-icon-name").value = icon; //display icon name in profile icon name input
 
     // --------------------- Profile display type ------------------------------
     var displayType = macropadConfig.profiles[currentProfile].display.type; //get profile display type from config
-    if (displayType == null) { //if profile display type is not set
-        displayType = 0; //set default display type
+    if (isNaN(displayType)) { //if profile display type is not set
+        displayType = 1; //set default display type
+        macropadConfig.profiles[currentProfile].display.type = displayType; //set default display type in config
     }
     var displayValue = macropadConfig.profiles[currentProfile].display.value; //get profile display value from config
-    if (displayValue == null || displayValue == "") {
-        displayValue = "Texte Personalisé";
+    if (displayValue == "") {
+        displayValue = "MacroPad"; //set default display value
         macropadConfig.profiles[currentProfile].display.value = displayValue;
     }
 
@@ -319,7 +345,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
         }
 
         //------------save value ------------
-        if (type == "encoder") {
+        if (currentType == "encoder") {
             macropadConfig.profiles[currentProfile].encoders[currentEdit].type = parseInt(currentActionType);
 
             if (currentActionType == 2) { //key combination
@@ -348,7 +374,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
 
 
 
-        } else if (type == "key") {
+        } else if (currentType == "key") {
             macropadConfig.profiles[currentProfile].keys[currentEdit].type = parseInt(currentActionType);
             if (currentActionType == 0) { //key combination
                 var strValues = document.getElementById(type + "-edit-combination-values").innerHTML; //get the values of the key combination
@@ -384,16 +410,9 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
             } else {
                 macropadConfig.profiles[currentProfile].keys[currentEdit].values = [-1, -1, -1];
             }
-
-
-
-
-
         }
     }
     //---------------------------------------------End of save old values in the config -------------------------------------------------
-
-
 
 
     //---------------------------------------------Load values from the config -------------------------------------------------
@@ -448,7 +467,8 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
     }
 
     //clearEditButton();
-    document.getElementById(type + "Icon" + newId).classList.add(editButtonIcon); //dispplay the edit icon (pen) on the new encoder
+    document.getElementById(type + "Icon" + newId).className = "mdi " + editButtonIcon; //dispplay the edit icon (pen) on the new encoder
+    console.log(type + "Icon" + newId);
     //display the gui
     updateEditGUI(type, newId);
     //---------------------------------------------End of load values from the config -------------------------------------------------
@@ -639,13 +659,14 @@ function updateProfileIconPreview(saveInConfig) {
     var icon = document.getElementById("profile-icon-name"); //text input field for the icon name
     var span = document.getElementById("profile-icon-preview"); //span to display the icon
     span.className = "mdi"; //reset the class
-    span.classList.add("mdi-" + icon.value); //add the icon class
+    span.classList.add(icon.value); //add the icon class
 
     //save to the config file
     //get the current profile
     if (saveInConfig) {
         macropadConfig.profiles[currentProfile].icon = icon.value;
     }
+    updateProfileOverviewIcon(); //update the icon in the profile overview
 }
 
 function displayTypeSelected() {
@@ -661,18 +682,14 @@ function displayTypeSelected() {
 
     macropadConfig.profiles[currentProfile].display.type = parseInt(type);
     macropadConfig.profiles[currentProfile].display.value = value;
-
 }
-
 
 var lastSelectedSystemActionValue = -1;
 
 function onChangeSystemAction(radio) {
     var selected = radio.value; //get the selected value
     lastSelectedSystemActionValue = selected;
-
 }
-
 
 function systemActionValuesToRadioId(value) { // This function transform system action values from arduino to radio id
     var toRadioId = {
@@ -703,6 +720,8 @@ function systemActionValuesToRadioId(value) { // This function transform system 
 
 
 }
+
+
 
 var currentProfile = 0;
 
@@ -803,13 +822,18 @@ pickr.on('change', (source, instance) => {
     pickr.setColor(source.toHEXA().toString());
 });
 
+pickr.on('init', (source, instance) => {
+    updateProfileGui();
+});
+
 pickr.on('changestop', (source, instance) => {
     var rgb = hexToRgb(instance._color.toHEXA());
     pickr.setColor(instance._color.toHEXA().toString());
     macropadConfig.profiles[currentProfile].color = rgb;
 });
 
-setTimeout(function() {
-    onChangeProfile(0); //set the default value
-    updateProfileGui();
-}, 100);
+pickr.on('swatchselect', (source, instance) => {
+    var rgb = hexToRgb(instance._color.toHEXA());
+    pickr.setColor(instance._color.toHEXA().toString());
+    macropadConfig.profiles[currentProfile].color = rgb;
+});
