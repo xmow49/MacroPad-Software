@@ -467,6 +467,7 @@ function checkBeforeDisplay() {
 }
 
 function updateScreenText() {
+    musicName = "none";
     window.clearInterval(screenTextInterval);
     macropadConfig.profiles[currentProfile].display.type
     var displayType = macropadConfig.profiles[currentProfile].display.type; //get the display type
@@ -486,5 +487,35 @@ async function hardReset() {
     macropadConfig.profiles = null;
     storeConfig();
     window.location.reload();
+
+}
+
+
+class sendToMacopad {
+
+    static async profileName(profileID, profileName) {
+        if (macropadConnectionStatus) {
+            await sendWithACK("B " + profileID + " " + profileName); //send the name to the macropad
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    static async profileColor(profileID, color) {
+        if (macropadConnectionStatus) {
+            var colorString = "";
+            for (var i = 0; i < color.length; i++) {
+                if (color[i] == null) color[i] = 0;
+                colorString += color[i] + " ";
+            }
+            // console.log("C " + profileNumber + " " + colorString);
+            await sendWithACK("C " + profileID + " " + colorString); //send the color to the macropad
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
 
 }
