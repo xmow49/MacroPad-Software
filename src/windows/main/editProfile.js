@@ -49,6 +49,7 @@ function initSoftware() {
     updateProfileGui();
     disableMacropadButtons(true);
     updateProfileOverviewIcon();
+    scanSerialsPorts(); //scan for serial ports to connect to the Macropad
 }
 
 window.addEventListener('load', () => { // when the window loads
@@ -239,6 +240,7 @@ function saveProfileName() {
     }
     macropadConfig.profiles[currentProfile].name = profileName;
     updateProfileGui();
+    sendToMacopad.profileName(currentProfile, profileName);
 }
 
 
@@ -767,7 +769,12 @@ function onChangeProfile(value) {
         updateProfileGui();
     }
 
-    setCurrentProfile(currentProfile); //send to macropad the new selected profile
+    if (macropadConnectionStatus) {
+        setCurrentProfile(currentProfile); //send to macropad the new selected profile
+
+        updateScreenText(); //update the text on the screen
+    }
+
 }
 
 
@@ -819,7 +826,7 @@ const pickr = Pickr.create({
 });
 
 pickr.on('change', (source, instance) => {
-    pickr.setColor(source.toHEXA().toString());
+    pickr.setColor(source.toHEXA().toString()); //auto-save the color
 });
 
 pickr.on('init', (source, instance) => {
@@ -828,12 +835,14 @@ pickr.on('init', (source, instance) => {
 
 pickr.on('changestop', (source, instance) => {
     var rgb = hexToRgb(instance._color.toHEXA());
-    pickr.setColor(instance._color.toHEXA().toString());
+    pickr.setColor(instance._color.toHEXA().toString()); //auto-save the color
     macropadConfig.profiles[currentProfile].color = rgb;
+    sendToMacopad.profileColor(currentProfile, rgb);
 });
 
 pickr.on('swatchselect', (source, instance) => {
     var rgb = hexToRgb(instance._color.toHEXA());
-    pickr.setColor(instance._color.toHEXA().toString());
+    pickr.setColor(instance._color.toHEXA().toString()); //auto-save the color
     macropadConfig.profiles[currentProfile].color = rgb;
+    sendToMacopad.profileColor(currentProfile, rgb);
 });
