@@ -262,12 +262,16 @@ function updateOverviewIconInKeys() {
             document.getElementById("encoderIcon" + i).className = "mdi mdi-monitor";
         } else if (macropadConfig.profiles[currentProfile].encoders[i].type == 2) { //custom
             document.getElementById("encoderIcon" + i).className = "mdi mdi-keyboard";
+        } else {
+            document.getElementById("encoderIcon" + i).className = "mdi";
         }
         document.getElementById("encoder" + i).style.background = "";
     }
     for (var i = 0; i < 6; i++) { //for all keys
         if (macropadConfig.profiles[currentProfile].keys[i].type == 1) { //system action
             document.getElementById("keyIcon" + i).className = "mdi " + getIconFromKey(macropadConfig.profiles[currentProfile].keys[i].values[0]);
+        } else {
+            document.getElementById("keyIcon" + i).className = "mdi ";
         }
         document.getElementById("key" + i).style.background = "";
     }
@@ -350,11 +354,9 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
 
     if (currentEdit == -1) { //if no previous encoder is in edition mode set the new encoder in edition mode
         actionType = document.getElementsByName(type + "-action-type"); // get all input elements
-        console.log(type + "-action-type");
 
     } else {
         actionType = document.getElementsByName(currentType + "-action-type"); // get all input elements
-        console.log(currentType + "-action-type");
         if (document.getElementById(currentType + "Icon" + currentEdit).classList.contains(editButtonIcon))
             document.getElementById(currentType + "Icon" + currentEdit).classList.remove(editButtonIcon); //remove edit button icon from the key
         //save old values in the config
@@ -374,10 +376,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
 
         //------------save value ------------
         if (currentType == "encoder") {
-            console.log("save encoder " + currentEdit + " value" + currentActionType);
             macropadConfig.profiles[currentProfile].encoders[currentEdit].type = parseInt(currentActionType);
-            console.log(macropadConfig.profiles[currentProfile].encoders[currentEdit].type);
-
             if (currentActionType == 2) { //key combination
                 // var valuesToSave = [];
                 // for (var i = 0; i < 3; i++) {
@@ -442,11 +441,8 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
     //---------------------------------------------End of save old values in the config -------------------------------------------------
 
     //---------------------------------------------Load values from the config -------------------------------------------------
-
-    console.log("load " + currentEdit + " " + currentType);
     currentEdit = newId; //store the new encoder id
     currentType = type; //store the new encoder type
-    console.log("load " + currentEdit + " " + currentType);
 
     actionType = document.getElementsByName(currentType + "-action-type"); // get all input elements
     var newActionType;
@@ -471,7 +467,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
             for (var i = 0; i < 3; i++) {
                 newValues[i] = macropadConfig.profiles[currentProfile].encoders[newId].values[i];
                 if (newValues[i] == null) newValues[i] = -1;
-                console.log(newValues);
+                // console.log(newValues);
                 document.getElementById(type + "-edit-key-" + i).innerHTML = keycodesToStr[newValues[i]];
             }
         }
@@ -785,9 +781,9 @@ function onChangeProfile(value) {
 
     if (macropadConnectionStatus) {
         setCurrentProfile(currentProfile); //send to macropad the new selected profile
-
         updateScreenText(); //update the text on the screen
     }
+    updateOverviewIconInKeys();
 
 }
 
