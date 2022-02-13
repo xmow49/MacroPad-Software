@@ -61,7 +61,6 @@ window.addEventListener('load', () => { // when the window loads
 
 
 function getConfig() { //get the config from the file to the variable macropadConfig
-    const merge = require('deepmerge')
     var fromConfig = readFromConfig("profiles");
     // console.log(merge(macropadConfig.profiles, fromConfig));
     if (fromConfig != null)
@@ -70,8 +69,6 @@ function getConfig() { //get the config from the file to the variable macropadCo
         createConfigFile();
         window.location.reload();
     }
-
-
 }
 
 
