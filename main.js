@@ -11,6 +11,7 @@ const console = require('console');
 let tray = null //background tray icon
 let mainWindow; //main window 
 let loadingScreen;
+var backgroundMode = false;
 
 app.allowRendererProcessReuse = false //for Serial port
 
@@ -121,6 +122,22 @@ const schema = {
     }
 };
 
+const gotTheLock = app.requestSingleInstanceLock()
+if (!gotTheLock) {
+    app.quit()
+} else {
+    app.on('second-instance', (event, commandLine, workingDirectory) => {
+        // Someone tried to run a second instance, we should focus our window.
+        if (mainWindow) {
+            if (backgroundMode) mainWindow.show();
+            if (mainWindow.isMinimized()) mainWindow.restore()
+            mainWindow.focus()
+        }
+    })
+}
+
+
+
 
 function createTray() {
     const icon = path.join(__dirname, 'src/imgs/icon.png') // required.
@@ -151,6 +168,7 @@ function createTray() {
             label: 'Show App',
             click: () => {
                 mainWindow.show();
+                backgroundMode = false;
             }
         },
         {
@@ -168,6 +186,7 @@ function createTray() {
             mainWindow.maximize(); // maximize the window
         }
         mainWindow.show();
+        backgroundMode = false;
     });
 }
 
@@ -225,6 +244,7 @@ function createWindow() {
                 mainWindow.maximize(); // maximize the window
             }
             mainWindow.show();
+            backgroundMode = false;
         }
 
     });
@@ -239,6 +259,7 @@ function createWindow() {
         config.set("windows.main.maximized", mainWindow.isMaximized());
         console.log("OK");
         mainWindow.hide();
+        backgroundMode = true;
     });
 
     ipcMain.on('maximize', () => {
