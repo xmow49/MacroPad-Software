@@ -338,30 +338,36 @@ function updateProfileGui() {
 
 
 //-------------------------  ---------------------------------
+var currentActionType;
 
 function onEditButton(type, newId) { //when a edit encoder or key button is clicked
     //type: encoder or key
     var configKey = type + "s";
     currentKeyEdit = -1; //disable edit on key
-    var actionType = document.getElementsByName(type + "-action-type"); // get all input elements
-
+    var actionType;
     //---------------------------------------------Save old values in the config -------------------------------------------------
 
 
     if (currentEdit == -1) { //if no previous encoder is in edition mode set the new encoder in edition mode
+        actionType = document.getElementsByName(type + "-action-type"); // get all input elements
+        console.log(type + "-action-type");
 
     } else {
+        actionType = document.getElementsByName(currentType + "-action-type"); // get all input elements
+        console.log(currentType + "-action-type");
         if (document.getElementById(currentType + "Icon" + currentEdit).classList.contains(editButtonIcon))
             document.getElementById(currentType + "Icon" + currentEdit).classList.remove(editButtonIcon); //remove edit button icon from the key
         //save old values in the config
 
         //------------save action type ------------
-        var currentActionType;
+
+
         for (var i = 0; i < actionType.length; i++) { //check all radio and save the checked one
             if (actionType[i].checked) {
                 currentActionType = actionType[i].value;
             }
         }
+        // console.log("currentActionType: " + currentActionType);
         if (currentActionType == null) { //if no radio is checked
             currentActionType = -1;
         }
@@ -370,6 +376,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
         if (currentType == "encoder") {
             console.log("save encoder " + currentEdit + " value" + currentActionType);
             macropadConfig.profiles[currentProfile].encoders[currentEdit].type = parseInt(currentActionType);
+            console.log(macropadConfig.profiles[currentProfile].encoders[currentEdit].type);
 
             if (currentActionType == 2) { //key combination
                 // var valuesToSave = [];
@@ -394,7 +401,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
 
 
         } else if (currentType == "key") {
-            console.log("save key " + currentEdit + " value" + currentActionType);
+            // console.log("save key " + currentEdit + " value" + currentActionType);
             macropadConfig.profiles[currentProfile].keys[currentEdit].type = parseInt(currentActionType);
             if (currentActionType == 0) { //key combination
                 // var strValues = document.getElementById(currentType + "-edit-combination-values").innerHTML; //get the values of the key combination
@@ -434,18 +441,20 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
     }
     //---------------------------------------------End of save old values in the config -------------------------------------------------
 
-
     //---------------------------------------------Load values from the config -------------------------------------------------
+
+    console.log("load " + currentEdit + " " + currentType);
     currentEdit = newId; //store the new encoder id
     currentType = type; //store the new encoder type
+    console.log("load " + currentEdit + " " + currentType);
 
+    actionType = document.getElementsByName(currentType + "-action-type"); // get all input elements
     var newActionType;
 
     if (type == "encoder") newActionType = macropadConfig.profiles[currentProfile].encoders[newId].type;
-    if (type == "key") newActionType = macropadConfig.profiles[currentProfile].keys[newId].type;
+    else if (type == "key") newActionType = macropadConfig.profiles[currentProfile].keys[newId].type;
+    else newActionType = -1;
 
-
-    if (newActionType == null) newActionType = -1;
     //load new action values
     for (var i = 0; i < actionType.length; i++) {
         if (actionType[i].value == newActionType) {
@@ -454,6 +463,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
             actionType[i].checked = false;
         }
     }
+
 
     if (type == "encoder") {
         if (newActionType == 2) { //if key combination
@@ -487,8 +497,8 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
     updateOverviewIconInKeys();
     document.getElementById(type + "Icon" + newId).className = "mdi " + editButtonIcon; //dispplay the edit icon (pen) on the new encoder
     document.getElementById(type + newId).style.background = "var(--button-color-hover)"
-    console.log(type + "Icon" + newId);
-    //display the gui
+        // console.log(type + "Icon" + newId);
+        //display the gui
     updateEditGUI(type, newId);
     //---------------------------------------------End of load values from the config -------------------------------------------------
 
