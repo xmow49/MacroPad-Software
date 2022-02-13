@@ -171,9 +171,10 @@ function editProfilePopup() { //when edit profile button is clicked
 
         document.getElementById("edit").className = ""; //edit button --> remove active-button class
         document.getElementById("macropad").className = "connectPopup"; //remove macropad button hover action
-
+        clearEditButton();
         disableMacropadButtons(true);
         updateProfileOverviewIcon();
+        updateOverviewIconInKeys();
 
         storeConfig(); //save the config in the file
     } else {
@@ -197,12 +198,12 @@ const editButtonIcon = "mdi-pencil";
 function clearEditButton() { //remove edit icon (pen) from all encoders and keys buttons
     //clear edit mode for all encoder buttons
     for (var i = 0; i <= 2; i++) {
-        document.getElementById("encoderIcon" + i).className = "mdi";
+        document.getElementById("encoderIcon" + i).className = document.getElementById("encoderIcon" + i).className.replace(editButtonIcon, "");
     }
 
     //clear edit mode for all key buttons
     for (var i = 0; i <= 5; i++) {
-        document.getElementById("keyIcon" + i).className = "mdi";
+        document.getElementById("keyIcon" + i).className = document.getElementById("keyIcon" + i).className.replace(editButtonIcon, "");
     }
 
     document.getElementById("edit-encoder").className = "disable";
@@ -251,6 +252,30 @@ function changeProfile() {
     clearEditButton();
     updateProfileGui();
 }
+
+
+function updateOverviewIconInKeys() {
+    for (var i = 0; i < 3; i++) {
+        if (macropadConfig.profiles[currentProfile].encoders[i].type == 0) { //master volume
+            document.getElementById("encoderIcon" + i).className = "mdi mdi-volume-source";
+        } else if (macropadConfig.profiles[currentProfile].encoders[i].type == 1) { //software volume
+            document.getElementById("encoderIcon" + i).className = "mdi mdi-monitor";
+        } else if (macropadConfig.profiles[currentProfile].encoders[i].type == 2) { //custom
+            document.getElementById("encoderIcon" + i).className = "mdi mdi-keyboard";
+        }
+        document.getElementById("encoder" + i).style.background = "";
+    }
+    for (var i = 0; i < 6; i++) { //for all keys
+        if (macropadConfig.profiles[currentProfile].keys[i].type == 1) { //system action
+            document.getElementById("keyIcon" + i).className = "mdi " + getIconFromKey(macropadConfig.profiles[currentProfile].keys[i].values[0]);
+        }
+        document.getElementById("key" + i).style.background = "";
+    }
+
+}
+
+
+
 
 function updateProfileGui() {
     var input = document.getElementById("profile-name"); //profile name input
@@ -308,12 +333,7 @@ function updateProfileGui() {
     }
     document.getElementById("display-text-custom").value = displayValue; //display display text in profile display type input
 
-
-    for (var i = 0; i < macropadConfig.profiles[currentProfile].keys.length; i++) {
-        document.getElementById("keyIcon" + i).className = "mdi " + getIconFromKey(macropadConfig.profiles[currentProfile].keys[i].values[0]);
-    }
-
-
+    updateOverviewIconInKeys();
 }
 
 
@@ -348,18 +368,19 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
 
         //------------save value ------------
         if (currentType == "encoder") {
+            console.log("save encoder " + currentEdit + " value" + currentActionType);
             macropadConfig.profiles[currentProfile].encoders[currentEdit].type = parseInt(currentActionType);
 
             if (currentActionType == 2) { //key combination
-                var valuesToSave = [];
-                for (var i = 0; i < 3; i++) {
-                    var strValues = document.getElementById(type + "-edit-key-" + i + "-values").innerHTML; //get the values of the key combination
-                    var values = strValues.split(","); //tranform in array
-                    valuesToSave.push(parseInt(values[0]));
-                }
-                // console.log(valuesToSave);
+                // var valuesToSave = [];
+                // for (var i = 0; i < 3; i++) {
+                //     var strValues = document.getElementById(type + "-edit-key-" + i + "-values").innerHTML; //get the values of the key combination
+                //     var values = strValues.split(","); //tranform in array
+                //     valuesToSave.push(parseInt(values[0]));
+                // }
+                // // console.log(valuesToSave);
 
-                macropadConfig.profiles[currentProfile].encoders[currentEdit].values = valuesToSave;
+                // macropadConfig.profiles[currentProfile].encoders[currentEdit].values = valuesToSave;
 
             } else if (currentActionType == 1) { //software vomlume
                 var valuesToSave = [];
@@ -372,26 +393,23 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
             }
 
 
-
-
-
-
         } else if (currentType == "key") {
+            console.log("save key " + currentEdit + " value" + currentActionType);
             macropadConfig.profiles[currentProfile].keys[currentEdit].type = parseInt(currentActionType);
             if (currentActionType == 0) { //key combination
-                var strValues = document.getElementById(type + "-edit-combination-values").innerHTML; //get the values of the key combination
-                // console.log(strValues);
-                var valuesToSave = strValues.split(","); //tranform in array
-                //keep only 3 values
-                if (valuesToSave.length > 3) {
-                    valuesToSave.splice(3, valuesToSave.length - 3);
-                }
-                // transduce the values in int
-                for (var i = 0; i < valuesToSave.length; i++) {
-                    valuesToSave[i] = parseInt(valuesToSave[i]);
-                }
+                // var strValues = document.getElementById(currentType + "-edit-combination-values").innerHTML; //get the values of the key combination
+                // // console.log(strValues);
+                // var valuesToSave = strValues.split(","); //tranform in array
+                // //keep only 3 values
+                // if (valuesToSave.length > 3) {
+                //     valuesToSave.splice(3, valuesToSave.length - 3);
+                // }
+                // // transduce the values in int
+                // for (var i = 0; i < valuesToSave.length; i++) {
+                //     valuesToSave[i] = parseInt(valuesToSave[i]);
+                // }
 
-                macropadConfig.profiles[currentProfile].keys[currentEdit].values = valuesToSave;
+                // macropadConfig.profiles[currentProfile].keys[currentEdit].values = valuesToSave;
 
             } else if (currentActionType == 1) { //type: 1 system action
                 var valuesToSave = [parseInt(lastSelectedSystemActionValue), -1, -1];
@@ -421,8 +439,10 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
     currentEdit = newId; //store the new encoder id
     currentType = type; //store the new encoder type
 
-    if (type == "encoder") var newActionType = macropadConfig.profiles[currentProfile].encoders[newId].type;
-    if (type == "key") var newActionType = macropadConfig.profiles[currentProfile].keys[newId].type;
+    var newActionType;
+
+    if (type == "encoder") newActionType = macropadConfig.profiles[currentProfile].encoders[newId].type;
+    if (type == "key") newActionType = macropadConfig.profiles[currentProfile].keys[newId].type;
 
 
     if (newActionType == null) newActionType = -1;
@@ -443,7 +463,6 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                 if (newValues[i] == null) newValues[i] = -1;
                 console.log(newValues);
                 document.getElementById(type + "-edit-key-" + i).innerHTML = keycodesToStr[newValues[i]];
-                document.getElementById(type + "-edit-key-" + i + "-values").innerHTML = newValues[i];
             }
         }
         if (newActionType == 1) { //if software volume
@@ -455,11 +474,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
 
         }
     } else if (type == "key") {
-        if (newActionType == 0) { //if key combination
-            var newValues = macropadConfig.profiles[currentProfile].keys[newId].values;
-            if (newValues == null) newValues = -1;
-            document.getElementById(type + "-edit-combination-values").innerHTML = newValues;
-        } else if (newActionType == 1) { //if system action
+        if (newActionType == 1) { //if system action
             var newValue = macropadConfig.profiles[currentProfile].keys[newId].values;
             if (newValue == null || newValue[0] == null || newValue[0] == "") {} else {
                 lastSelectedSystemActionValue = newValue[0];
@@ -468,8 +483,10 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
         }
     }
 
-    //clearEditButton();
+    clearEditButton();
+    updateOverviewIconInKeys();
     document.getElementById(type + "Icon" + newId).className = "mdi " + editButtonIcon; //dispplay the edit icon (pen) on the new encoder
+    document.getElementById(type + newId).style.background = "var(--button-color-hover)"
     console.log(type + "Icon" + newId);
     //display the gui
     updateEditGUI(type, newId);
@@ -539,9 +556,9 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
 
         if (value == "-1") {
 
-        } else if (value == "0") {
-            var keys = document.getElementById("key-edit-combination-values").innerHTML;
-            keys = keys.split(",");
+        } else if (value == "0") { //key combination
+            // var keys = document.getElementById("key-edit-combination-values").innerHTML;
+            var keys = macropadConfig.profiles[currentProfile].keys[currentEdit].values;
             var GUIKey = keycodesToStr[keys[0]];
             for (var i = 1; i < 3; i++) {
                 var temp = keycodesToStr[keys[i]];
@@ -607,6 +624,8 @@ function stopKeyCombinationCapture() {
     document.removeEventListener('keydown', keyCombinationCapture);
 }
 
+
+
 function keyCombinationCapture(oEvent) {
     if (captureCount < maxCaptureCount) { //if the number of key pressed is less than the max number of key pressed
         var charCode = (typeof oEvent.which == "number") ? oEvent.which : oEvent.keyCode; //get the key pressed in char code
@@ -617,37 +636,21 @@ function keyCombinationCapture(oEvent) {
         } else {
             return;
         }
-        console.log(captureKey);
+        // console.log(captureKey);
 
 
         if (captureType[0] == "encoder") {
-            var label = "encoder-edit-key-" + captureType[1]; //get the label
-            document.getElementById(label).innerHTML = keycodesToStr[charCode]; //display the key
-
-
-            //create stored value
-            var strKey = "";
-            for (var i = 0; i < maxCaptureCount; i++) {
-                strKey += captureKey[i] + ",";
-            }
-            document.getElementById(label + "-values").innerHTML = strKey; //store value on html
+            document.getElementById("encoder-edit-key-" + captureType[1]).innerHTML = keycodesToStr[charCode]; //display the key
+            macropadConfig.profiles[currentProfile].encoders[currentEdit].values[captureType[1]] = captureKey[0]; //store the value in the config
         }
         if (captureType[0] == "key") {
-            var label = "key-edit-combination"; //get the label
-            //create stored value
-            var strKey = "";
-            for (var i = 0; i < maxCaptureCount; i++) {
-                strKey += captureKey[i] + ",";
-            }
-
+            macropadConfig.profiles[currentProfile].keys[currentEdit].values = captureKey; //store the value in the config
             var GUIKey = keycodesToStr[captureKey[0]];
             for (var i = 1; i < captureCount; i++) {
                 GUIKey += " + " + keycodesToStr[captureKey[i]];
                 console.log(captureKey[i]);
             }
-
-            document.getElementById(label).innerHTML = GUIKey; //display the key
-            document.getElementById(label + "-values").innerHTML = strKey; //store value on html
+            document.getElementById("key-edit-combination").innerHTML = GUIKey; //display the key
         }
     } else {
         stopKeyCombinationCapture();
@@ -684,6 +687,7 @@ function displayTypeSelected() {
 
     macropadConfig.profiles[currentProfile].display.type = parseInt(type);
     macropadConfig.profiles[currentProfile].display.value = value;
+    sendToMacopad.display(currentProfile, type, value);
 }
 
 var lastSelectedSystemActionValue = -1;

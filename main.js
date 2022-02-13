@@ -260,9 +260,9 @@ function createWindow() {
         event.returnValue = value;
     });
 
-    ipcMain.on('get-music-software', function(event, software) {
+    ipcMain.on('getCurrentMedia', function(event, software) {
         var path = app.getAppPath();
-        exec("\"" + path + "\\volume_control\\VolumeMixerControl.exe\" getMusicSoftware " + software, (error, data, getter) => {
+        exec("\"" + path + "\\volume_control\\VolumeMixerControl.exe\" getCurrentMedia ", (error, data, getter) => {
             //console.log(error);
             console.log(data);
             //console.log(getter);

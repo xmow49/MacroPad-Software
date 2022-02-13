@@ -375,15 +375,13 @@ async function sendConfig() {
 
                     }
                 }
-
+                //---------------------------------SEND Display---------------------------------
                 if (profileDisplay != null) { //if profile display is not empty
                     var displayType = readFromConfig("profiles." + profileNumber + ".display.type"); //get the display type
                     if (displayType == null) displayType = 1;
                     await sendWithACK("D " + profileNumber + " " + displayType); //send the display to the macropad
-                    //console.log("D " + profileNumber + " " + displayType + " " + displayValues);
-
-                    await sendWithACK("S"); //send to the eeprom
                 } else {}
+                await sendWithACK("S"); //send to the eeprom
             }
             console.log("Profile " + profileNumber + " sent");
         }
@@ -442,7 +440,7 @@ function sendWithACK(text) { //send a command to the macropad and wait for the a
 var musicName = "none";
 async function setTextMusic(software) { //set the music name
 
-    var name = IPC.sendSync('get-music-software', "spotify"); //get the music name
+    var name = IPC.sendSync('getCurrentMedia'); //get the music name
     // name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
     if (name.includes(musicName)) {} else {
         musicName = name;
@@ -516,6 +514,16 @@ class sendToMacopad {
             return 0;
         }
     }
+
+
+    static async display(profileID, displayType, displayValues) {
+        if (macropadConnectionStatus) {
+            if (displayType == null) displayType = 1;
+            await sendWithACK("D " + profileID + " " + displayType); //send the display to the macropad
+        }
+    }
+
+
 
 
 }
