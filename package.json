@@ -13,7 +13,7 @@
         "build-installer": "electron-builder"
     },
     "repository": "https://github.com/xmow49/MacroPad-Software",
-    "author": "Dorian Benech",
+    "author": "GammaTroniques",
     "license": "CC0-1.0",
     "build": {
         "appId": "Macropad",

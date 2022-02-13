@@ -262,6 +262,7 @@ function scanSerialsPorts() {
             currentTestingPort++;
             if (currentTestingPort > testToDoCount) {
                 clearInterval(checkInterval);
+                document.getElementById("scan-loading").style.display = "none"; //hide the loading animation
             } else {
                 document.getElementById("scan-port-log").innerHTML = "Test de " + availablePorts[currentTestingPort] + " ...";
                 var progressBar = document.getElementById("port-scan-progress");

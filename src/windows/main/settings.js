@@ -20,6 +20,8 @@ function settingItemClicked(item) {
     } else if (item.id == "about") {
         toggleSettings();
         document.getElementById("about-settings").style.display = "block";
+    } else if (item.id = "background-start") {
+        IPC.send("toggle-background-start");
     }
     updatePopupBackground();
 }

@@ -6,6 +6,7 @@ const { exec } = require("child_process");
 const Store = require('electron-store');
 const autoStart = require('auto-launch');
 const fs = require('fs');
+const console = require('console');
 
 let tray = null //background tray icon
 let mainWindow; //main window 
@@ -163,6 +164,9 @@ function createTray() {
     tray.setToolTip('MacroPad Software');
     tray.setContextMenu(contextMenu)
     tray.on('click', function(event) {
+        if (readBounds(4)) { // if maximized from the last session
+            mainWindow.maximize(); // maximize the window
+        }
         mainWindow.show();
     });
 }
@@ -214,10 +218,15 @@ function createWindow() {
             loadingScreen.close();
         }
         mainWindow.webContents.openDevTools();
-        if (readBounds(4)) { // if maximized from the last session
-            mainWindow.maximize(); // maximize the window
+
+        console.log(app.commandLine.hasSwitch('hidden'));
+        if (!app.commandLine.hasSwitch('hidden')) { // if the app is not hidden
+            if (readBounds(4)) { // if maximized from the last session
+                mainWindow.maximize(); // maximize the window
+            }
+            mainWindow.show();
         }
-        mainWindow.show();
+
     });
 
 
@@ -320,6 +329,10 @@ function createWindow() {
         });
     });
 
+    ipcMain.on('toggle-background-start', function(event) {
+        updateAutoStart();
+    });
+
     if (!tray) { // if tray hasn't been created already.
         createTray()
     }
@@ -337,10 +350,11 @@ const createLoadingScreen = () => {
             /// remove the window frame, so it will become a frameless window
             frame: false,
             /// and set the transparency, to remove any window background color
-            transparent: true
+            transparent: true,
+            show: false
         })
     );
-    loadingScreen.setResizable(false);
+
 
     loadingScreen.loadURL(
         'file://' + __dirname + './src/windows/loading/loading.html'
@@ -348,16 +362,27 @@ const createLoadingScreen = () => {
     loadingScreen.on('closed', () => (loadingScreen = null));
     loadingScreen.webContents.on('did-finish-load', () => {
         // loadingScreen.webContents.openDevTools();
-        loadingScreen.show();
+        if (!app.commandLine.hasSwitch('hidden')) { // if the app is not hidden
+            loadingScreen.setResizable(false);
+            loadingScreen.show();
+        }
+
     });
 };
 
+
+var autoLaunch = new autoStart({
+    name: 'MacroPad',
+    path: app.getPath('exe'),
+    isHidden: true
+});
 
 app.whenReady().then(() => {
     createLoadingScreen();
 
     setTimeout(() => {
         createWindow();
+        console.log("App ready!");
     }, 1000);
 
     app.on('activate', function() {
@@ -366,19 +391,32 @@ app.whenReady().then(() => {
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
 
-    let autoLaunch = new autoStart({
-        name: 'MacroPad',
-        path: app.getPath('exe'),
-    });
-    autoLaunch.isEnabled().then((isEnabled) => {
-        if (!isEnabled) autoLaunch.enable();
-    });
+    updateAutoStart();
+
+
 
 })
-
 
 // explicitly with Cmd + Q.
 app.on('window-all-closed', function() {
     // if (process.platform !== 'darwin') app.dock.hide(); //app.quit()
 
 });
+
+function updateAutoStart() {
+    //Computer\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
+    var configAutoStart = config.get("settings.background-start");
+    if (configAutoStart == null) configAutoStart = false;
+    if (configAutoStart) {
+        autoLaunch.enable();
+        autoLaunch.isEnabled().then((isEnabled) => {
+            if (!isEnabled) autoLaunch.enable();
+        });
+    } else {
+        autoLaunch.disable();
+        autoLaunch.isEnabled().then((isEnabled) => {
+            if (isEnabled) autoLaunch.disable();
+        });
+    }
+
+}
