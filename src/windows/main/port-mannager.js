@@ -182,7 +182,7 @@ async function responsesFromPort(data) {
 
                 setTimeout(function() { //wait 0.3s and stop the animation
                     button.style.transform = "scale(1)";
-                    icon.className = iconClass;
+                    updateOverviewIconInKeys();
                     if (icon.classList.contains("mdi-rotate-right"))
                         icon.classList.remove("mdi-rotate-right");
                     if (icon.classList.contains("mdi-rotate-left"))
@@ -521,6 +521,15 @@ class sendToMacopad {
         if (macropadConnectionStatus) {
             if (displayType == null) displayType = 1;
             await sendWithACK("D " + profileID + " " + displayType); //send the display to the macropad
+        }
+    }
+
+    static async key(profileID, keyNumber, keyType, keyValues) {
+        if (macropadConnectionStatus) {
+            if (keyType == null) keyType = 0;
+            if (keyValues == null) keyValues = [0, 0, 0];
+            // console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
+            await sendWithACK("K " + profileID + " " + keyNumber + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]); //send the key to the macropad
         }
     }
 

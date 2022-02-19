@@ -625,6 +625,7 @@ function startKeyCombinationCapture(type, action, maxCount) {
 
 function stopKeyCombinationCapture() {
     document.removeEventListener('keydown', keyCombinationCapture);
+    sendToMacopad.key(currentProfile, currentEdit, captureType[1], captureKey);
 }
 
 
