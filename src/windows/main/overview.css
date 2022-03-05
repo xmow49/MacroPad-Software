@@ -114,6 +114,7 @@
     border-radius: 8px;
     border: none;
     text-align: center;
+    overflow: hidden;
 }
 
 #macropad-display h4 {
@@ -124,6 +125,14 @@
     color: var(--font-master-invert-color);
     width: 176px;
     height: 44px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#macropad-display h4.scroll {
+    animation: slide-left 5s linear infinite;
 }
 
 .profile-selector {
@@ -244,4 +253,13 @@
 .profile-selector .checked {
     background: var(--button-color-hover);
     transition: all 0.3s;
+}
+
+@keyframes slide-left {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(-105%);
+    }
 }

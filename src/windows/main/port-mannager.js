@@ -369,6 +369,12 @@ async function sendConfig() {
                     for (var nKey = 0; nKey < 6; nKey++) { //for each key
                         var keyType = readFromConfig("profiles." + profileNumber + ".keys." + nKey + ".type"); //get the key type
                         var keyValues = readFromConfig("profiles." + profileNumber + ".keys." + nKey + ".values"); //get the key values
+                        if (keyType == 0) { // key combination
+                            for (var nValue = 0; nValue < 3; nValue++) {
+                                keyValues[nValue] = keycodeToKeyboard(keyValues[nValue]);
+                            }
+                        }
+
                         if (keyType == null) keyType = 0;
                         if (keyValues == null) keyValues = [0, 0, 0];
                         // console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
@@ -448,6 +454,11 @@ async function setTextMusic(software) { //set the music name
         // document.getElementById("macropad-display").innerHTML = "" + data;
         name.replace(/[\n\r]/g, '');
         document.getElementById("macropad-text").innerHTML = name;
+        if (name.length >= 15) {
+            document.getElementById("macropad-text").classList.add("scroll");
+        } else {
+            document.getElementById("macropad-text").classList.remove("scroll");
+        }
         await sendWithACK("T " + name); //send the music name to the macropad
     }
 }
@@ -526,10 +537,16 @@ class sendToMacopad {
 
     static async key(profileID, keyNumber, keyType, keyValues) {
         if (macropadConnectionStatus) {
+            var tempValues = [...keyValues];
+            if (keyType == 0) { // key combination
+                for (var nValue = 0; nValue < 3; nValue++) {
+                    tempValues[nValue] = keycodeToKeyboard(tempValues[nValue]);
+                }
+            }
             if (keyType == null) keyType = 0;
             if (keyValues == null) keyValues = [0, 0, 0];
             // console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
-            await sendWithACK("K " + profileID + " " + keyNumber + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]); //send the key to the macropad
+            await sendWithACK("K " + profileID + " " + keyNumber + " " + keyType + " " + tempValues[0] + " " + tempValues[1] + " " + tempValues[2]); //send the key to the macropad
         }
     }
 

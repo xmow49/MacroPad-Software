@@ -165,12 +165,12 @@
                                 <button id="encoder1" class="encoder" onclick="onEditButton('encoder', 1);"><span id="encoderIcon1" class="mdi"></span></button>
                                 <button id="encoder2" class="encoder" onclick="onEditButton('encoder', 2);"><span id="encoderIcon2" class="mdi"></span></button>
 
-                                <button id="key0" class="key" onclick="onEditButton('key', 0);"><span id="keyIcon0" class="mdi"></span></button>
-                                <button id="key1" class="key" onclick="onEditButton('key', 1);"><span id="keyIcon1" class="mdi"></span></button>
-                                <button id="key2" class="key" onclick="onEditButton('key', 2);"><span id="keyIcon2" class="mdi"></span></button>
-                                <button id="key3" class="key" onclick="onEditButton('key', 3);"><span id="keyIcon3" class="mdi"></span></button>
-                                <button id="key4" class="key" onclick="onEditButton('key', 4);"><span id="keyIcon4" class="mdi"></span></button>
-                                <button id="key5" class="key" onclick="onEditButton('key', 5);"><span id="keyIcon5" class="mdi"></span></button>
+                                <button id="key0" class="key" onclick="onEditButton('key', 0);"><span id="keyIcon0" class="mdi"><!--<p id="keyText0">--></p></span></button>
+                                <button id="key1" class="key" onclick="onEditButton('key', 1);"><span id="keyIcon1" class="mdi"><!--<p id="keyText1">--></p></span></button>
+                                <button id="key2" class="key" onclick="onEditButton('key', 2);"><span id="keyIcon2" class="mdi"><!--<p id="keyText2">--></p></span></button>
+                                <button id="key3" class="key" onclick="onEditButton('key', 3);"><span id="keyIcon3" class="mdi"><!--<p id="keyText3">--></p></span></button>
+                                <button id="key4" class="key" onclick="onEditButton('key', 4);"><span id="keyIcon4" class="mdi"><!--<p id="keyText4">--></p></span></button>
+                                <button id="key5" class="key" onclick="onEditButton('key', 5);"><span id="keyIcon5" class="mdi"><!--<p id="keyText5">--></p></span></button>
                             </div>
                         </div>
 
@@ -195,7 +195,6 @@
                     <h4 id="current-edition">Cliquez sur une touche pour choisir une action</h4>
 
                     <div id="edit-encoder" class="disable">
-
 
                         <div class="action-selector" id="encoder-action-selector" onchange="updateEditGUI('encoder', -1);">
                             <label class="action-selector-1"><input type="radio" name="encoder-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
@@ -260,7 +259,7 @@
                             <label class="action-selector2"><input type="radio" name="key-action-type" value="2"><span class="mdi mdi-midi"></span><span>Midi</span></label>
                             <div class="action-help">
                                 <span class="mdi mdi-help-circle"></span>
-                                <span class="text-action-help">Choisisez un icon qui va apparaître sur le profile et le Marcopad</span>
+                                <span id="help-key-text" class="text-action-help">L'encoder va controler le volume principal du systeme. Lors d'un appuis, le son se mute.</span>
                             </div>
                         </div>
 

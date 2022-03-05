@@ -267,8 +267,20 @@ function updateOverviewIconInKeys() {
     for (var i = 0; i < 6; i++) { //for all keys
         if (macropadConfig.profiles[currentProfile].keys[i].type == 1) { //system action
             document.getElementById("keyIcon" + i).className = "mdi " + getIconFromKey(macropadConfig.profiles[currentProfile].keys[i].values[0]);
+        } else if (macropadConfig.profiles[currentProfile].keys[i].type == 0) { //key combination
+            document.getElementById("keyIcon" + i).className = "mdi ";
+            var strKeys = "";
+            for (var j = 0; j < 3; j++) {
+                if (macropadConfig.profiles[currentProfile].keys[i].values[j] != -1) {
+                    strKeys += keycodesToStr[macropadConfig.profiles[currentProfile].keys[i].values[j]] + " + ";
+                }
+            }
+            document.getElementById("keyIcon" + i).className = "mdi mdi-keyboard";
+            // document.getElementById("keyIcon" + i).innerHTML = strKeys;
+            // document.getElementById("keyIcon" + i).style.fontSize = "20px";
         } else {
             document.getElementById("keyIcon" + i).className = "mdi ";
+
         }
         document.getElementById("key" + i).style.background = "";
     }
@@ -279,9 +291,10 @@ function updateOverviewIconInKeys() {
 
 
 function updateProfileGui() {
+    stopKeyCombinationCapture();
     var input = document.getElementById("profile-name"); //profile name input
     var profileName = macropadConfig.profiles[currentProfile].name;
-
+    document.getElementById("current-edition").style.display = "block";
     // --------------------- Profile Name ------------------------------
     if (profileName == "") { //if profile name is not set
         profileName = "Profil " + (parseInt(currentProfile) + 1); //set default name
@@ -437,6 +450,14 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
     }
     //---------------------------------------------End of save old values in the config -------------------------------------------------
 
+    if (macropadConnectionStatus == true) {
+        if (currentType == "key") {
+            sendToMacopad.key(currentProfile, currentEdit, macropadConfig.profiles[currentProfile].keys[currentEdit].type, macropadConfig.profiles[currentProfile].keys[currentEdit].values);
+        } else if (currentType == "encoder") {
+            sendToMacopad.encoder(currentProfile, currentEdit, macropadConfig.profiles[currentProfile].encoders[currentEdit].type, macropadConfig.profiles[currentProfile].encoders[currentEdit].values);
+        }
+    }
+
     //---------------------------------------------Load values from the config -------------------------------------------------
     currentEdit = newId; //store the new encoder id
     currentType = type; //store the new encoder type
@@ -543,7 +564,7 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
 
         }
         if (id != -1) { //update the encoder id on the gui
-            document.getElementById("current-edition").innerHTML = "Encoder " + (id + 1);
+            document.getElementById("current-edition").style.display = "none";
         }
 
         macropadConfig.profiles[currentProfile].encoders[currentEdit].type = parseInt(value); //update the config
@@ -551,15 +572,17 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
     } else if (type == "key") {
         document.getElementById("edit-key").className = ""; //enable the edit key menu
         document.getElementById("edit-encoder").className = "disable"; //disable the edit encoder menu
-        document.getElementById("current-edition").innerHTML = "Key " + (id + 1);
+        document.getElementById("current-edition").style.display = "none";
 
         var value = getActionValue("key"); //get the value of the radio
 
         updateActionSelectorGUI(parseInt(value), 1); //select on the gui
 
         if (value == "-1") {
-
+            document.getElementById('help-key-text').innerHTML = "La touche est désactivée, elle ne fera rien.";
         } else if (value == "0") { //key combination
+            document.getElementById('help-key-text').innerHTML = "Choisisez une combinaison de touches.";
+            console.log("key combination");
             // var keys = document.getElementById("key-edit-combination-values").innerHTML;
             var keys = macropadConfig.profiles[currentProfile].keys[currentEdit].values;
             var GUIKey = keycodesToStr[keys[0]];
@@ -571,6 +594,10 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
             }
             document.getElementById("key-edit-combination").innerHTML = GUIKey;
 
+        } else if (value == "1") { //system action
+            document.getElementById('help-key-text').innerHTML = "Choisisez une action système parmi la liste ci-dessous.";
+        } else if (value == "2") { //MIDI
+            document.getElementById('help-key-text').innerHTML = "WIP, ne fonctionne pas";
         } else if (type == "empty") {
 
             document.getElementById("edit-encoder").className = "disable"; //disable the edit encoder menu

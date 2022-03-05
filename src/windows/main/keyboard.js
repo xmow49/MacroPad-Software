@@ -5,6 +5,9 @@ All value are converted to decimal and increment by 100 to differentiate it from
 */
 function keycodeToKeyboard(key) { // This function transform keycodes from javascript to a keyboard code for the arduino
     var toArduinoCode = {
+        8: 42, //backspace
+        9: 43, //tab
+        12: 156, //clear
         13: 40, //KEY_ENTER or KEY_RETURN
         16: 225, //KEY_LEFT_SHIFT
         17: 224, //KEY_LEFT_CTRL
@@ -12,6 +15,7 @@ function keycodeToKeyboard(key) { // This function transform keycodes from javas
         19: 72, //KEY_PAUSE
         20: 57, //KEY_CAPS_LOCK 
         27: 41, //KEY_ESC
+        32: 44, //KEY_SPACE
         33: 75, //KEY_PAGE_UP
         34: 78, //KEY_PAGE_DOWN
         35: 77, //KEY_END
@@ -20,7 +24,10 @@ function keycodeToKeyboard(key) { // This function transform keycodes from javas
         38: 82, //KEY_UP_ARROW
         39: 79, //KEY_RIGHT_ARROW
         40: 81, //KEY_DOWN_ARROW
-        44: 70, //KEY_PRINT-------------------------
+        41: 119, //SELECT
+        42: 70, //PRINT
+        43: 116, //EXECUTE
+        44: 70, //KEY_PRINT
         45: 73, //KEY_INSERT
         46: 76, //KEY_DELETE
         48: 39, //KEY_0
@@ -33,6 +40,34 @@ function keycodeToKeyboard(key) { // This function transform keycodes from javas
         55: 36, //KEY_7
         56: 37, //KEY_8
         57: 38, //KEY_9
+        58: 55, //KEY_COLON(203) // KEY_PERIOD(55) in french keyboard
+        59: 54, //KEY_SEMICOLON (51) //KEY_COMMA (54) in french keyboard
+        65: 20, //KEY_A(4) //KEY_Q(20) in french keyboard
+        66: 5, //KEY_B
+        67: 6, //KEY_C
+        68: 7, //KEY_D
+        69: 8, //KEY_E
+        70: 9, //KEY_F
+        71: 10, //KEY_G
+        72: 11, //KEY_H
+        73: 12, //KEY_I
+        74: 13, //KEY_J
+        75: 14, //KEY_K
+        76: 15, //KEY_L
+        77: 51, //KEY_M(16) //KEY_SEMICOLON(51) in french keyboard
+        78: 17, //KEY_N
+        79: 18, //KEY_O
+        80: 19, //KEY_P
+        81: 4, //KEY_Q(20) //KEY_A(4) in french keyboard
+        82: 21, //KEY_R
+        83: 22, //KEY_S
+        84: 23, //KEY_T
+        85: 24, //KEY_U
+        86: 25, //KEY_V
+        87: 29, //KEY_W(26) //KEY_Z(29) in french keyboard
+        88: 27, //KEY_X
+        89: 28, //KEY_Y
+        90: 26, //KEY_Z(29) //KEY_W(26) in french keyboard
         91: 227, //KEY_LEFT_WINDOWS
         93: 01, //KEY_MENU
         96: 98, //KEYPAD_0
@@ -67,9 +102,9 @@ function keycodeToKeyboard(key) { // This function transform keycodes from javas
         186: 48, //KEY_RIGHT_BRACE ($)
         187: 46, //KEY_EQUAL
         188: 16, //KEY_M (,?)
-        190: 54, //KEY_COMMA
+        190: 16, //KEY_COMMA(54) //KEY_M(16) in french keyboard
         191: 55, //KEY_PERIOD
-        192: 52, //KEY_QUOTE
+        192: 52, //KEY_QUOTE (ù)
         219: 45, //KEY_MINUS (")" °)
         220: 49, //KEY_BACKSLASH
         221: 47, //KEY_LEFT_BRACE (^)
@@ -86,7 +121,7 @@ function keycodeToKeyboard(key) { // This function transform keycodes from javas
 
     }
     if (toArduinoCode[key]) {
-        return toArduinoCode[key] + 100;
+        return toArduinoCode[key];
     } else {
         return key;
     }
