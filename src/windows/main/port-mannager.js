@@ -66,6 +66,8 @@ function updateGUIPortList(availablePorts) {
 }
 
 
+var encoderAnimationRunning = false;
+
 async function responsesFromPort(data) {
     // console.log("From MacroPad: " + data);
 
@@ -99,7 +101,7 @@ async function responsesFromPort(data) {
             });
             macropadInterval = setInterval(async function() {
                 try {
-                    var result = await sendWithACK("P");
+                    if (!configIsSending) { var result = await sendWithACK("P"); }
                 } catch (result) {
                     macropadConnectionStatus = false;
                     clearInterval(macropadInterval);
@@ -172,22 +174,30 @@ async function responsesFromPort(data) {
                 var icon = document.getElementById("encoderIcon" + encoderId);
                 var iconClass = icon.className;
 
-                if (encoderDirection == "U")
-                    icon.className = "mdi mdi-rotate-right";
-                if (encoderDirection == "D")
-                    icon.className = "mdi mdi-rotate-left";
+                if (encoderAnimationRunning == false) {
+                    encoderAnimationRunning = true;
 
-                button.style.transform = "scale(.9)"; //animate the button
+                    if (encoderDirection == "U")
+                        icon.className = "mdi mdi-rotate-right";
+                    if (encoderDirection == "D")
+                        icon.className = "mdi mdi-rotate-left";
+
+                    button.style.transform = "scale(.9)"; //animate the button
 
 
-                setTimeout(function() { //wait 0.3s and stop the animation
-                    button.style.transform = "scale(1)";
-                    updateOverviewIconInKeys();
-                    if (icon.classList.contains("mdi-rotate-right"))
-                        icon.classList.remove("mdi-rotate-right");
-                    if (icon.classList.contains("mdi-rotate-left"))
-                        icon.classList.remove("mdi-rotate-left");
-                }, 500);
+                    setTimeout(function() { //wait 0.3s and stop the animation
+                        button.style.transform = "scale(1)";
+                        // updateOverviewIconInKeys();
+                        if (icon.classList.contains("mdi-rotate-right"))
+                            icon.classList.remove("mdi-rotate-right");
+                        if (icon.classList.contains("mdi-rotate-left"))
+                            icon.classList.remove("mdi-rotate-left");
+                        icon.className = iconClass;
+                        encoderAnimationRunning = false;
+                    }, 500);
+                }
+
+
             } catch (e) {}
 
 
@@ -399,7 +409,7 @@ async function sendConfig() {
 }
 
 function setCurrentProfile(profileNumber) { // send the profile number to the macropad to set it as current profile
-    if (macropadConnectionStatus) { //if connected
+    if (macropadConnectionStatus && !configIsSending) { //if connected and not sending config
         sendWithACK("A " + profileNumber); //wait for the acknowledgement from the macropad
     }
 }
@@ -410,6 +420,7 @@ function sendWithACK(text) { //send a command to the macropad and wait for the a
         var ntry = 0;
 
         function send() {
+            configIsSending = true;
             ack = false; //acknowledgement not received
             // console.log("Sending: " + text);
             serialPortConnection.write(text); //send the command to the macropad
@@ -434,6 +445,7 @@ function sendWithACK(text) { //send a command to the macropad and wait for the a
                 window.clearTimeout(ackTimeout); //stop the timeout
                 clearInterval(checkInterval); //stop the check
                 resolve(0); //resolve the promise
+                configIsSending = false;
             }
             if (ntry > 3) {
                 window.clearTimeout(ackTimeout); //stop the timeout
@@ -453,6 +465,7 @@ async function setTextMusic(software) { //set the music name
         musicName = name;
         // document.getElementById("macropad-display").innerHTML = "" + data;
         name.replace(/[\n\r]/g, '');
+        name = name.normalize("NFD").replace(/\p{Diacritic}/gu, ""); //convert to ascii
         document.getElementById("macropad-text").innerHTML = name;
         if (name.length >= 15) {
             document.getElementById("macropad-text").classList.add("scroll");
@@ -547,6 +560,29 @@ class sendToMacopad {
             if (keyValues == null) keyValues = [0, 0, 0];
             // console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
             await sendWithACK("K " + profileID + " " + keyNumber + " " + keyType + " " + tempValues[0] + " " + tempValues[1] + " " + tempValues[2]); //send the key to the macropad
+        }
+    }
+
+    static async encoder(profileID, nEncoder, encoderType, encoderValues) {
+        if (macropadConnectionStatus) {
+            var tempValues = [...encoderValues];
+            if (encoderType == null) encoderType = -1;
+            if (encoderType == 1) {
+                //software volume
+                tempValues = [0, 0, 0];
+            } else {
+                console.log(tempValues);
+                if (encoderType == 2) { // key combination
+                    for (var nValue = 0; nValue < 3; nValue++) {
+                        tempValues[nValue] = keycodeToKeyboard(tempValues[nValue]);
+                    }
+                }
+                console.log(tempValues);
+            }
+            if (encoderType == null) keyType = 0;
+            if (encoderValues == null) tempValues = [0, 0, 0];
+            // console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
+            await sendWithACK("E " + profileID + " " + nEncoder + " " + encoderType + " " + tempValues[0] + " " + tempValues[1] + " " + tempValues[2]); //wait for the acknowledgement from the macropad
         }
     }
 

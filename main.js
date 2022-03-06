@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, remote, Menu, nativeImage, Tray, dialog } = require('electron')
+const { app, BrowserWindow, ipcMain, remote, Menu, nativeImage, Tray, dialog, autoUpdater } = require('electron')
 const path = require('path')
 const shell = require('electron').shell;
 const { exec } = require("child_process");
@@ -15,6 +15,7 @@ var backgroundMode = false;
 
 app.allowRendererProcessReuse = false //for Serial port
 
+const macropadSoftareCurrentVersion = app.getVersion();
 
 const schema = {
     "profiles": {
@@ -182,9 +183,9 @@ function createTray() {
     tray.setToolTip('MacroPad Software');
     tray.setContextMenu(contextMenu)
     tray.on('click', function(event) {
-        if (readBounds(4)) { // if maximized from the last session
-            mainWindow.maximize(); // maximize the window
-        }
+        // if (readBounds(4)) { // if maximized from the last session
+        //     mainWindow.maximize(); // maximize the window
+        // }
         mainWindow.show();
         backgroundMode = false;
     });
@@ -243,9 +244,9 @@ function createWindow() {
 
         console.log(app.commandLine.hasSwitch('hidden'));
         if (!app.commandLine.hasSwitch('hidden')) { // if the app is not hidden
-            if (readBounds(4)) { // if maximized from the last session
-                mainWindow.maximize(); // maximize the window
-            }
+            // if (readBounds(4)) { // if maximized from the last session
+            //     mainWindow.maximize(); // maximize the window
+            // }
             mainWindow.show();
             backgroundMode = false;
         }
@@ -402,6 +403,10 @@ var autoLaunch = new autoStart({
 });
 
 app.whenReady().then(() => {
+    console.log("---------------------");
+    console.log(" MacroPad Software");
+    console.log("        V" + macropadSoftareCurrentVersion);
+    console.log("---------------------");
     createLoadingScreen();
 
     setTimeout(() => {
@@ -416,8 +421,6 @@ app.whenReady().then(() => {
     })
 
     updateAutoStart();
-
-
 
 })
 
@@ -444,3 +447,20 @@ function updateAutoStart() {
     }
 
 }
+
+//----------------update -----------------
+autoUpdater.on('update-available', () => {
+    global.updating = true;
+    global.mainWindow.webContents.send(
+        'updateUpdateNotification',
+        'update-available'
+    );
+});
+
+autoUpdater.on('update-downloaded', () => {
+    global.updating = false;
+    global.mainWindow.webContents.send(
+        'updateUpdateNotification',
+        'update-downloaded'
+    );
+});
