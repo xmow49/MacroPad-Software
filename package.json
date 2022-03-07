@@ -1,7 +1,7 @@
 {
     "name": "MacroPad",
     "productName": "MacroPad",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "Macropad Configurator",
     "main": "main.js",
     "scripts": {
@@ -36,6 +36,7 @@
         "@mdi/font": "^6.5.95",
         "electron": "^13.5.2",
         "electron-builder": "^22.14.13",
+        "electron-log": "^4.4.6",
         "electron-rebuild": "^3.2.7"
     },
     "dependencies": {
@@ -44,8 +45,8 @@
         "auto-launch": "^5.0.5",
         "electron-squirrel-startup": "^1.0.0",
         "electron-store": "^8.0.1",
+        "electron-updater": "^4.6.5",
         "serialport": "^9.2.4",
-        "update-electron-app": "^2.0.1",
         "usb-detection": "^4.13.0"
     }
 }

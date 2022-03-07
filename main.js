@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, remote, Menu, nativeImage, Tray, dialog, autoUpdater } = require('electron')
+const { app, BrowserWindow, ipcMain, remote, Menu, nativeImage, Tray, dialog } = require('electron')
 const path = require('path')
 const shell = require('electron').shell;
 const { exec } = require("child_process");
@@ -7,8 +7,10 @@ const Store = require('electron-store');
 const autoStart = require('auto-launch');
 const fs = require('fs');
 const console = require('console');
+const { autoUpdater } = require("electron-updater")
 
-require('update-electron-app')()
+autoUpdater.logger = require("electron-log")
+autoUpdater.logger.transports.file.level = "info"
 
 let tray = null //background tray icon
 let mainWindow; //main window 
