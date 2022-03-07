@@ -139,6 +139,10 @@ if (!gotTheLock) {
     })
 }
 
+function devMode() {
+    return process.argv[2] == '--dev';
+}
+
 
 function createTray() {
     const icon = path.join(__dirname, 'src/imgs/icon.png') // required.
@@ -240,7 +244,10 @@ function createWindow() {
         if (loadingScreen) {
             loadingScreen.close();
         }
-        mainWindow.webContents.openDevTools();
+
+        if (devMode()) {
+            mainWindow.webContents.openDevTools();
+        }
 
         console.log(app.commandLine.hasSwitch('hidden'));
         if (!app.commandLine.hasSwitch('hidden')) { // if the app is not hidden
