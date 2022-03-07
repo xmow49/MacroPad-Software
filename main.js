@@ -8,6 +8,8 @@ const autoStart = require('auto-launch');
 const fs = require('fs');
 const console = require('console');
 
+require('update-electron-app')()
+
 let tray = null //background tray icon
 let mainWindow; //main window 
 let loadingScreen;
@@ -136,8 +138,6 @@ if (!gotTheLock) {
         }
     })
 }
-
-
 
 
 function createTray() {
@@ -358,6 +358,12 @@ function createWindow() {
         updateAutoStart();
     });
 
+
+    ipcMain.on('software-version', function(event) {
+        event.returnValue = macropadSoftareCurrentVersion;
+    });
+
+
     if (!tray) { // if tray hasn't been created already.
         createTray()
     }
@@ -447,20 +453,3 @@ function updateAutoStart() {
     }
 
 }
-
-//----------------update -----------------
-autoUpdater.on('update-available', () => {
-    global.updating = true;
-    global.mainWindow.webContents.send(
-        'updateUpdateNotification',
-        'update-available'
-    );
-});
-
-autoUpdater.on('update-downloaded', () => {
-    global.updating = false;
-    global.mainWindow.webContents.send(
-        'updateUpdateNotification',
-        'update-downloaded'
-    );
-});

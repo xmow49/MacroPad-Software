@@ -14,6 +14,7 @@
     <!--  materialdesignicons 6.4.95  -->
     <link rel="stylesheet" href="downloaded_contents/materialdesignicons.css" />
     <link rel="stylesheet" href="downloaded_contents/colorPicker.css" />
+    <script src="main.js"></script>
 
 </head>
 
@@ -492,7 +493,11 @@
                 <div class="content">
                     <div>
                         <h3>Logiciel MacroPad</h3>
-                        <h4>Version Actuelle: 1.0</h4>
+                        <h4>Version Actuelle:
+                            <script>
+                                document.write(IPC.sendSync("software-version"));
+                            </script>
+                        </h4>
                         <h4>Dernière Version: 1.0</h4>
 
                         <button onclick="">Vérifier les Mises à Jours</button>
@@ -537,7 +542,11 @@
                     <img src="../../imgs/icon.png" alt="logo" style="width: 100px">
                     <h3>MacroPad Software</h3>
 
-                    <h4>Version: 1.0</h4>
+                    <h4>Version:
+                        <script>
+                            document.write(IPC.sendSync("software-version"));
+                        </script>
+                    </h4>
                     <h4>Développé par: <a href="#" onclick="openLink('github.com/xmow49/')">Dorian Benech</a> & Noah Justeau</h4>
                     <h4>Copyright ©
                         <script>
@@ -557,7 +566,7 @@
 <script src="downloaded_contents/colorPicker.js"></script>
 <script src="downloaded_contents/localizer.js"></script>
 
-<script src="main.js"></script>
+
 <script src="port-mannager.js"></script>
 <script src="settings.js"></script>
 

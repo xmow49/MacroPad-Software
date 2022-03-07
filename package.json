@@ -40,9 +40,8 @@
         "@electron-forge/maker-zip": "^6.0.0-beta.63",
         "@mdi/font": "^6.5.95",
         "electron": "^13.5.2",
-        "electron-rebuild": "^3.2.7",
-        "electron-builder": "^22.14.13"
-
+        "electron-builder": "^22.14.13",
+        "electron-rebuild": "^3.2.7"
     },
     "dependencies": {
         "@electron/remote": "^2.0.1",
@@ -51,12 +50,14 @@
         "electron-squirrel-startup": "^1.0.0",
         "electron-store": "^8.0.1",
         "serialport": "^9.2.4",
+        "update-electron-app": "^2.0.1",
         "usb-detection": "^4.13.0"
     },
     "config": {
         "forge": {
             "packagerConfig": {},
-            "makers": [{
+            "makers": [
+                {
                     "name": "@electron-forge/maker-squirrel",
                     "config": {
                         "name": "Macropad"
@@ -75,6 +76,17 @@
                 {
                     "name": "@electron-forge/maker-rpm",
                     "config": {}
+                }
+            ],
+            "publishers": [
+                {
+                    "name": "@electron-forge/publisher-github",
+                    "config": {
+                        "repo": "xmow49/MacroPad-Software",
+                        "owner": "xmow49",
+                        "draft": false,
+                        "prerelease": false
+                    }
                 }
             ]
         }
