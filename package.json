@@ -36,7 +36,6 @@
         "@mdi/font": "^6.5.95",
         "electron": "^13.5.2",
         "electron-builder": "^22.14.13",
-        "electron-log": "^4.4.6",
         "electron-rebuild": "^3.2.7"
     },
     "dependencies": {
@@ -47,6 +46,7 @@
         "electron-store": "^8.0.1",
         "electron-updater": "^4.6.5",
         "serialport": "^9.2.4",
-        "usb-detection": "^4.13.0"
+        "usb-detection": "^4.13.0",
+        "electron-log": "^4.4.6"
     }
 }

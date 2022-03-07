@@ -396,9 +396,7 @@ const createLoadingScreen = () => {
     );
 
 
-    loadingScreen.loadURL(
-        'file://' + __dirname + './src/windows/loading/loading.html'
-    );
+    loadingScreen.loadFile('./src/windows/loading/loading.html');
     loadingScreen.on('closed', () => (loadingScreen = null));
     loadingScreen.webContents.on('did-finish-load', () => {
         // loadingScreen.webContents.openDevTools();
@@ -436,6 +434,7 @@ app.whenReady().then(() => {
     })
 
     updateAutoStart();
+    autoUpdater.checkForUpdatesAndNotify();
 
 })
 
