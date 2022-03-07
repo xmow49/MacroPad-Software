@@ -103,6 +103,13 @@ input:checked+.slider:before {
 
 .settings-title {
     font-weight: bold;
+    cursor: pointer;
+    transition-property: text-decoration;
+    transition-duration: 0.2s;
+}
+
+.settings-title:hover {
+    text-decoration: underline;
 }
 
 .settings-head {
