@@ -129,6 +129,7 @@ async function responsesFromPort(data) {
     if (stringFromSerial.charAt(0) == "A") { //if the firt char is A, its a profile number
         ack = true;
         var profileNumber = stringFromSerial.charAt(1); //get the profile number
+        console.log("Profile number: " + profileNumber);
         profileNumber = parseInt(profileNumber); //convert to int
         onChangeProfile(profileNumber); //call the function to change the profile in the main window
     }

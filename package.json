@@ -1,7 +1,7 @@
 {
     "name": "MacroPad",
     "productName": "MacroPad",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "Macropad Configurator",
     "main": "main.js",
     "scripts": {

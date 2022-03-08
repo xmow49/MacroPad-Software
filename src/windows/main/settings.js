@@ -9,6 +9,7 @@ function settingItemClicked(item) {
     } else if (item.id == "do-update") {
         toggleSettings();
         document.getElementById("do-update-settings").style.display = "block";
+        update.displayOnSettings();
     } else if (item.id == "language") {
 
     } else if (item.className == "settings-title") { //if item is a title --> back to settings

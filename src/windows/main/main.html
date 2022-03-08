@@ -493,14 +493,14 @@
                 <div class="content">
                     <div>
                         <h3>Logiciel MacroPad</h3>
-                        <h4>Version Actuelle:
-                            <script>
-                                document.write(IPC.sendSync("software-version"));
-                            </script>
-                        </h4>
-                        <h4>Dernière Version: 1.0</h4>
+                        <h4>Version Actuelle: <span id="current-software-version"></span></h4>
+                        <h4>Dernière Version: <span id="release-software-version"></span></h4>
+                        <div id="update-available-settings" style="display: none;">
+                            <h4 style="font-weight: bold;">Mise à jour disponible !</h4>
+                            <button onclick="IPC.send('close-all-app');">Mettre à Jour</button>
+                        </div>
 
-                        <button onclick="">Vérifier les Mises à Jours</button>
+                        <button onclick="update.check(); update.displayOnSettings();">Vérifier les Mises à Jours</button>
                     </div>
                     <hr class="ligne">
                     <div>
@@ -572,5 +572,6 @@
 
 <script src="editProfile.js"></script>
 <script src="keyboard.js"></script>
+<script src="./js/update.js"></script>
 
 </html>

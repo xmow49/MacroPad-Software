@@ -7,7 +7,8 @@ const Store = require('electron-store');
 const autoStart = require('auto-launch');
 const fs = require('fs');
 const console = require('console');
-const { autoUpdater } = require("electron-updater")
+const { autoUpdater } = require("electron-updater");
+const { info } = require('console');
 
 
 
@@ -372,6 +373,25 @@ function createWindow() {
         event.returnValue = macropadSoftareCurrentVersion;
     });
 
+    ipcMain.on('update-available', function(event) {
+        event.returnValue = updateAvailable;
+    });
+
+    ipcMain.on('update-info', function(event) {
+        event.returnValue = updateInfo;
+    });
+
+    ipcMain.on('check-update', function(event) {
+        autoUpdater.checkForUpdates();
+        event.returnValue = true;
+    });
+
+    ipcMain.on('close-all-app', function(event) {
+        app.quit();
+    });
+
+
+
 
     if (!tray) { // if tray hasn't been created already.
         createTray()
@@ -436,6 +456,11 @@ app.whenReady().then(() => {
     updateAutoStart();
 
     autoUpdater.checkForUpdates();
+
+    const log = require("electron-log")
+    log.transports.file.level = "debug"
+    autoUpdater.logger = log
+
 })
 
 // explicitly with Cmd + Q.
@@ -463,27 +488,41 @@ function updateAutoStart() {
 }
 
 
-let updater;
 
+
+
+
+var updateAvailable = false;
+var updateInfo = null;
 
 autoUpdater.on('error', (error) => {
     dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
 })
 
-autoUpdater.on('update-available', () => {
-    dialog.showMessageBox({
-        type: 'info',
-        title: 'Found Updates',
-        message: 'Found updates, do you want update now?',
-        buttons: ['Sure', 'No']
-    }).then((buttonIndex) => {
-        if (buttonIndex === 0) {
-            autoUpdater.downloadUpdate()
-        } else {
-            updater.enabled = true
-            updater = null
-        }
-    })
+
+
+autoUpdater.on('update-available', (info) => {
+    updateAvailable = true;
+    updateInfo = info;
+    mainWindow.webContents.send('update-available', updateAvailable, updateInfo);
+
+    console.log(info);
+
+    // dialog.showMessageBox({
+    //     type: 'info',
+    //     title: 'Found Updates',
+    //     message: 'Found updates, do you want update now?\n' + info.releaseName + '\n' + info.releaseNotes +
+    //         '\n' + info.releaseDate + '\n' + info.releaseDownload + '\n' + info.releaseNotes + '\n' +
+    //         info.version,
+    //     buttons: ['Sure', 'No']
+    // }).then((buttonIndex) => {
+    //     if (buttonIndex === 0) {
+    //         autoUpdater.downloadUpdate()
+    //     } else {
+
+    //     }
+    // })
+
 })
 
 autoUpdater.on('update-not-available', () => {
@@ -491,15 +530,14 @@ autoUpdater.on('update-not-available', () => {
         title: 'No Updates',
         message: 'Current version is up-to-date.'
     })
-    updater.enabled = true
-    updater = null
 })
 
-autoUpdater.on('update-downloaded', () => {
-    dialog.showMessageBox({
-        title: 'Install Updates',
-        message: 'Updates downloaded, application will be quit for update...'
-    }).then(() => {
-        setImmediate(() => autoUpdater.quitAndInstall())
-    })
-})
+
+// autoUpdater.on('update-downloaded', () => {
+//     dialog.showMessageBox({
+//         title: 'Install Updates',
+//         message: 'Updates downloaded, application will be quit for update...'
+//     }).then(() => {
+//         setImmediate(() => autoUpdater.quitAndInstall())
+//     })
+// })
