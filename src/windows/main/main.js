@@ -75,10 +75,15 @@ function selectMacropad(id) {
 
 //------------------ /Select Macroad Popup -------------------
 
+var popups;
+
+window.addEventListener('load', function() {
+    popups = [...document.getElementsByClassName("popup")];
+})
 
 
 
-var popups = [...document.getElementsByClassName("popup")];
+
 
 function updatePopupBackground() {
     var popupBackground = false
