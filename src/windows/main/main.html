@@ -496,11 +496,29 @@
                         <h4>Version Actuelle: <span id="current-software-version"></span></h4>
                         <h4>Dernière Version: <span id="release-software-version"></span></h4>
                         <div id="update-available-settings" style="display: none;">
-                            <h4 style="font-weight: bold;">Mise à jour disponible !</h4>
-                            <button onclick="IPC.send('close-all-app');">Mettre à Jour</button>
+                            <h4 class="bold">Mise à jour disponible !</h4>
+                            <button onclick="update.download();">Télécharger</button>
+                        </div>
+                        <div id="check-update-button">
+                            <button onclick="update.check(); update.displayOnSettings();">Vérifier les Mises à Jours</button>
+                        </div>
+                        <div id="download-progress-info" style="display: none;">
+                            <h4 class="bold">Téléchargement en cours...</h4>
+                            <h4 id="download-speed">0 MB/s</h4>
+                            <h4 id="download-size"> 0 / ? MB</h4>
+                            <div style="display: flex;align-items: center;justify-content: space-evenly;">
+                                <progress id="download-progress" class="progress" max="100" value="0"></progress>
+                                <h4 id="download-percent-text">0%</h4>
+                            </div>
+
+
+
+                        </div>
+                        <div id="update-downloaded" style="display: none;">
+                            <h4 class="bold">Mise à Jour Téléchargée !</h4>
+                            <button onclick="update.doUpdate();">Mettre à Jour</button>
                         </div>
 
-                        <button onclick="update.check(); update.displayOnSettings();">Vérifier les Mises à Jours</button>
                     </div>
                     <hr class="ligne">
                     <div>

@@ -263,3 +263,7 @@
         transform: translateX(-105%);
     }
 }
+
+.bold {
+    font-weight: bold;
+}

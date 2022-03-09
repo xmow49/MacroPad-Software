@@ -390,6 +390,11 @@ function createWindow() {
         app.quit();
     });
 
+    ipcMain.on('start-download', function(event) {
+        autoUpdater.downloadUpdate();
+        event.returnValue = true;
+    });
+
 
 
 
@@ -435,6 +440,12 @@ var autoLaunch = new autoStart({
     isHidden: true
 });
 
+
+
+var updateAvailable = false;
+var updateInfo = null;
+
+
 app.whenReady().then(() => {
     console.log("---------------------");
     console.log(" MacroPad Software");
@@ -445,6 +456,72 @@ app.whenReady().then(() => {
     setTimeout(() => {
         createWindow();
         console.log("App ready!");
+
+        autoUpdater.checkForUpdates();
+
+        const log = require("electron-log")
+        log.transports.file.level = "debug"
+        autoUpdater.logger = log
+
+
+        autoUpdater.on('error', (error) => {
+            dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
+        })
+
+        autoUpdater.on('update-available', (info) => {
+            updateAvailable = true;
+            updateInfo = info;
+            mainWindow.webContents.send('update-available', updateAvailable, updateInfo);
+
+            console.log(info);
+
+            // dialog.showMessageBox({
+            //     type: 'info',
+            //     title: 'Found Updates',
+            //     message: 'Found updates, do you want update now?\n' + info.releaseName + '\n' + info.releaseNotes +
+            //         '\n' + info.releaseDate + '\n' + info.releaseDownload + '\n' + info.releaseNotes + '\n' +
+            //         info.version,
+            //     buttons: ['Sure', 'No']
+            // }).then((buttonIndex) => {
+            //     if (buttonIndex === 0) {
+            //         autoUpdater.downloadUpdate()
+            //     } else {
+
+            //     }
+            // })
+
+        })
+
+        autoUpdater.on('update-not-available', () => {
+            // dialog.showMessageBox({
+            //     title: 'No Updates',
+            //     message: 'Current version is up-to-date.'
+            // })
+        })
+
+
+        autoUpdater.on('download-progress', (progressObj) => {
+            // let log_message = "Download speed: " + progressObj.bytesPerSecond;
+            // log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+            // log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+            mainWindow.webContents.send('download-progress', progressObj);
+        })
+
+
+        autoUpdater.on('update-downloaded', (info) => {
+            // dialog.showMessageBox({
+            //     title: 'Install Updates',
+            //     message: 'Updates downloaded, application will be quit for update...'
+            // }).then(() => {
+            //     setImmediate(() => autoUpdater.quitAndInstall())
+            // })
+            mainWindow.webContents.send('update-downloaded', info);
+        })
+
+        autoUpdater.autoDownload = false;
+
+
+
     }, 1000);
 
     app.on('activate', function() {
@@ -455,11 +532,7 @@ app.whenReady().then(() => {
 
     updateAutoStart();
 
-    autoUpdater.checkForUpdates();
 
-    const log = require("electron-log")
-    log.transports.file.level = "debug"
-    autoUpdater.logger = log
 
 })
 
@@ -486,58 +559,3 @@ function updateAutoStart() {
     }
 
 }
-
-
-
-
-
-
-var updateAvailable = false;
-var updateInfo = null;
-
-autoUpdater.on('error', (error) => {
-    dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
-})
-
-
-
-autoUpdater.on('update-available', (info) => {
-    updateAvailable = true;
-    updateInfo = info;
-    mainWindow.webContents.send('update-available', updateAvailable, updateInfo);
-
-    console.log(info);
-
-    // dialog.showMessageBox({
-    //     type: 'info',
-    //     title: 'Found Updates',
-    //     message: 'Found updates, do you want update now?\n' + info.releaseName + '\n' + info.releaseNotes +
-    //         '\n' + info.releaseDate + '\n' + info.releaseDownload + '\n' + info.releaseNotes + '\n' +
-    //         info.version,
-    //     buttons: ['Sure', 'No']
-    // }).then((buttonIndex) => {
-    //     if (buttonIndex === 0) {
-    //         autoUpdater.downloadUpdate()
-    //     } else {
-
-    //     }
-    // })
-
-})
-
-autoUpdater.on('update-not-available', () => {
-    // dialog.showMessageBox({
-    //     title: 'No Updates',
-    //     message: 'Current version is up-to-date.'
-    // })
-})
-
-
-// autoUpdater.on('update-downloaded', () => {
-//     dialog.showMessageBox({
-//         title: 'Install Updates',
-//         message: 'Updates downloaded, application will be quit for update...'
-//     }).then(() => {
-//         setImmediate(() => autoUpdater.quitAndInstall())
-//     })
-// })
