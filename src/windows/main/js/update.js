@@ -16,7 +16,7 @@ IPC.on('download-progress', function(event, download) {
     // console.log(download.delta / 1024 / 2024 + "/" + download.total / 1024 / 1024 + " MB");
 
 
-    document.getElementById("download-progress-info").style.display = "block";
+    document.getElementById("download-progress-info").style.display = "flex";
     document.getElementById("update-available-settings").style.display = "none";
     document.getElementById("update-downloaded").style.display = "none";
     document.getElementById("download-speed").innerHTML = (download.bytesPerSecond / 1024 / 1024).toFixed(2) + " MB/s";
@@ -36,7 +36,7 @@ IPC.on('update-downloaded', function(event, info) {
     console.log(info);
 
     document.getElementById("download-progress-info").style.display = "none";
-    document.getElementById("update-downloaded").style.display = "block";
+    document.getElementById("update-downloaded").style.display = "flex";
     document.getElementById("update-available-settings").style.display = "none";
 
 
@@ -52,8 +52,15 @@ class update {
 
 
     static check() {
-        IPC.sendSync("check-update")
+        console.log(IPC.sendSync("check-update"));
         return true;
+    }
+
+    static GUICheck() {
+        document.getElementById("check-update-text").innerHTML = "Verification ...";
+        setTimeout(function() {
+            update.displayOnSettings();
+        }, 1000);
     }
 
     static available() {
@@ -79,7 +86,7 @@ class update {
 
     static download() {
         IPC.send("start-download");
-        document.getElementById("download-progress-info").style.display = "block";
+        document.getElementById("download-progress-info").style.display = "flex";
         document.getElementById("update-available-settings").style.display = "none";
         document.getElementById("update-downloaded").style.display = "none";
     }
@@ -95,17 +102,18 @@ class update {
         document.getElementById("current-software-version").innerHTML = update.currentVersion();
         document.getElementById("release-software-version").innerHTML = update.releaseVersion();
 
-        if (document.getElementById("update-downloaded").style.display == "block" ||
-            document.getElementById("download-progress-info").style.display == "block") {
+        if (document.getElementById("update-downloaded").style.display == "flex" ||
+            document.getElementById("download-progress-info").style.display == "flex") {
             //update downloaded or downloading
 
         } else if (update.available()) {
-            document.getElementById("update-available-settings").style.display = "block";
+            document.getElementById("update-available-settings").style.display = "flex";
             document.getElementById("check-update-button").style.display = "none";
 
         } else {
             document.getElementById("update-available-settings").style.display = "none";
-            document.getElementById("check-update-button").style.display = "block";
+            document.getElementById("check-update-button").style.display = "flex";
+            document.getElementById("check-update-text").innerHTML = "Aucune mise à jour disponible";
 
         }
     }

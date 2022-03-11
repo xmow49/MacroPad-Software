@@ -5,7 +5,8 @@
     "description": "Macropad Configurator",
     "main": "main.js",
     "scripts": {
-        "start": "electron . --dev",
+        "start-dev": "electron . --dev",
+        "start-prod": "electron-builder && .\\dist\\win-unpacked\\MacroPad.exe . --dev",
         "build": "electron-builder",
         "publish": "electron-builder --publish always"
     },
