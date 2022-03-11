@@ -70,6 +70,7 @@
 
                 </div>
                 <div class="settings">
+
                     <button onclick="toggleSettings();"><span class="mdi mdi-cog-outline"></span></button>
                 </div>
 
@@ -381,7 +382,8 @@
             <div id="settings" class="popup" style="display: none;">
                 <div class="settings-head">
                     <h2 class="settings-title">Paramètres</h2>
-                    <button onclick="toggleSettings();">X</button>
+
+                    <button class="close-settings" onclick="toggleSettings();"><span class="mdi mdi-close"></span></button>
                 </div>
 
                 <div class="settings-list">
@@ -462,10 +464,12 @@
             <div id="export-import-settings" class="popup" style="display: none;">
                 <div class="settings-head">
                     <div class="settings-header-title">
-                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres > </h2>
+                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres</h2>
+                        <h2 class="settings-title-separator">></h2>
                         <h2 class="settings-window">Exporter/Importer Configuration</h2>
                     </div>
-                    <button onclick="closeAllSettingsPopups();">X</button>
+
+                    <button class="close-settings" onclick="closeAllSettingsPopups();"><span class="mdi mdi-close"></span></button>
                 </div>
 
                 <div class="content">
@@ -484,10 +488,12 @@
             <div id="do-update-settings" class="popup" style="display: none;">
                 <div class="settings-head">
                     <div class="settings-header-title">
-                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres > </h2>
+                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres</h2>
+                        <h2 class="settings-title-separator">></h2>
                         <h2 class="settings-window">Mises à Jours</h2>
                     </div>
-                    <button onclick="closeAllSettingsPopups();">X</button>
+
+                    <button class="close-settings" onclick="closeAllSettingsPopups();"><span class="mdi mdi-close"></span></button>
                 </div>
 
                 <div class="content">
@@ -533,10 +539,12 @@
             <div id="hard-reset-settings" class="popup" style="display: none;">
                 <div class="settings-head">
                     <div class="settings-header-title">
-                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres > </h2>
+                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres</h2>
+                        <h2 class="settings-title-separator">></h2>
                         <h2 class="settings-window">Réinitialiser le MacroPad</h2>
                     </div>
-                    <button onclick="closeAllSettingsPopups();">X</button>
+
+                    <button class="close-settings" onclick="closeAllSettingsPopups();"><span class="mdi mdi-close"></span></button>
                 </div>
 
                 <div class="content">
@@ -550,10 +558,11 @@
             <div id="about-settings" class="popup" style="display: none;">
                 <div class="settings-head">
                     <div class="settings-header-title">
-                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres > </h2>
+                        <h2 class="settings-title" onclick="settingItemClicked(this)">Paramètres</h2>
+                        <h2 class="settings-title-separator">></h2>
                         <h2 class="settings-window">À Propos</h2>
                     </div>
-                    <button onclick="closeAllSettingsPopups();">X</button>
+                    <button class="close-settings" onclick="closeAllSettingsPopups();"><span class="mdi mdi-close"></span></button>
                 </div>
 
                 <div class="content">

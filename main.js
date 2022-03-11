@@ -334,7 +334,10 @@ function createWindow() {
         });
     });
 
+
+
     ipcMain.on('export-settings', function(event) {
+        //ask for the path
         var dest = dialog.showSaveDialogSync({
             title: "Export settings",
             defaultPath: "./MacroPad-Config.json",
@@ -343,10 +346,17 @@ function createWindow() {
                 extensions: ['json']
             }]
         });
-        fs.copyFile(path.join(app.getPath('userData'), "config.json"), dest, (err) => {
-            if (err) throw err;
-            console.log('Config exported!');
-        });
+
+        if (dest != undefined) { // if the user didn't cancel the dialog
+            fs.copyFile(path.join(app.getPath('userData'), "config.json"), dest, (err) => {
+                if (err) console.log('Config Error!');
+                console.log('Config exported!');
+            });
+        } else {
+            //cancel
+            // console.log("No destination selected");
+        }
+
     });
 
     ipcMain.on('import-settings', function(event) {
@@ -358,11 +368,18 @@ function createWindow() {
                 extensions: ['json']
             }]
         });
-        fs.copyFile(src[0], path.join(app.getPath('userData'), "config.json"), (err) => {
-            if (err) throw err;
-            console.log('Config imported!');
-        });
+
+        if (src != undefined) {
+            fs.copyFile(src[0], path.join(app.getPath('userData'), "config.json"), (err) => {
+                if (err) throw err;
+                console.log('Config imported!');
+            });
+        } else {
+            //cancel
+            // console.log("No destination selected");
+        }
     });
+
 
     ipcMain.on('toggle-background-start', function(event) {
         updateAutoStart();
