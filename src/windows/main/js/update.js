@@ -23,10 +23,6 @@ IPC.on('download-progress', function(event, download) {
     document.getElementById("download-size").innerHTML = (download.transferred / 1024 / 1024).toFixed(2) + "/" + (download.total / 1024 / 1024).toFixed(2) + " MB";
     document.getElementById("download-progress").value = download.percent;
     document.getElementById("download-percent-text").innerHTML = download.percent.toFixed(1) + "%";
-
-
-
-
 });
 
 IPC.on('update-downloaded', function(event, info) {
@@ -38,9 +34,16 @@ IPC.on('update-downloaded', function(event, info) {
     document.getElementById("download-progress-info").style.display = "none";
     document.getElementById("update-downloaded").style.display = "flex";
     document.getElementById("update-available-settings").style.display = "none";
-
-
 });
+
+
+IPC.on('update-error', function(event, error) {
+    console.log("update-error");
+    console.log(error);
+    document.getElementById("update-error-text").innerHTML = error;
+    document.getElementById("retry-update").style.display = "flex";
+});
+
 
 var downloadUpdateInfo = {
     downloadedInProgress: false,
@@ -52,12 +55,16 @@ class update {
 
 
     static check() {
-        console.log(IPC.sendSync("check-update"));
-        return true;
+        update.clearError();
+        var result = IPC.sendSync("check-update");
+        console.log(result);
+        return result;
     }
 
     static GUICheck() {
-        document.getElementById("check-update-text").innerHTML = "Verification ...";
+        update.clearError();
+
+        document.getElementById("check-update-button").getElementsByTagName("h4")[0].innerHTML = "Verification ...";
         setTimeout(function() {
             update.displayOnSettings();
         }, 1000);
@@ -103,8 +110,10 @@ class update {
         document.getElementById("release-software-version").innerHTML = update.releaseVersion();
 
         if (document.getElementById("update-downloaded").style.display == "flex" ||
-            document.getElementById("download-progress-info").style.display == "flex") {
-            //update downloaded or downloading
+            document.getElementById("download-progress-info").style.display == "flex")
+        //update downloaded or downloading
+        {
+
 
         } else if (update.available()) {
             document.getElementById("update-available-settings").style.display = "flex";
@@ -113,10 +122,19 @@ class update {
         } else {
             document.getElementById("update-available-settings").style.display = "none";
             document.getElementById("check-update-button").style.display = "flex";
-            document.getElementById("check-update-text").innerHTML = "Aucune mise à jour disponible";
+            document.getElementById("check-update-button").getElementsByTagName("h4")[0].innerHTML = "Aucune mise à jour disponible";
 
         }
     }
 
+    static clearError() {
+        document.getElementById("update-error-text").innerHTML = "";
+        document.getElementById("retry-update").style.display = "none";
+    }
+
+    static retry() {
+        update.check();
+        update.download();
+    }
 
 }

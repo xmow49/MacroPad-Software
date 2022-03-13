@@ -502,13 +502,14 @@
                         <h4>Version Actuelle: <span id="current-software-version"></span></h4>
                         <h4>Dernière Version: <span id="release-software-version"></span></h4>
 
+
                         <div class="update-info-item" id="update-available-settings" style="display: none;">
                             <h4 class="bold">Mise à jour disponible !</h4>
                             <button onclick="update.download();">Télécharger</button>
                         </div>
 
                         <div class="update-info-item" id="check-update-button">
-                            <h4 class="bold" id="check-update-text"></h4>
+                            <h4 class="bold"></h4>
                             <button onclick="update.GUICheck();">Vérifier les Mises à Jours</button>
                         </div>
 
@@ -520,6 +521,7 @@
                                 <progress id="download-progress" class="progress" max="100" value="0"></progress>
                                 <h4 id="download-percent-text">0%</h4>
                             </div>
+                            <button class="" onclick="update.retry();" id="retry-update" style="display: none;">Réessayer</button>
                         </div>
 
 
@@ -527,6 +529,10 @@
                             <h4 class="bold">Mise à Jour Téléchargée !</h4>
                             <button onclick="update.doUpdate();">Mettre à Jour</button>
                         </div>
+
+                        <h4 class="bold" id="update-error-text"></h4>
+
+
 
 
                     </div>

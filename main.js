@@ -398,21 +398,19 @@ function createWindow() {
         event.returnValue = updateInfo;
     });
 
-    ipcMain.on('check-update', function(event) {
+    ipcMain.on('check-update', async function(event) {
         var value;
-        autoUpdater.checkForUpdates().catch(err => {
+        await autoUpdater.checkForUpdates().catch(err => {
             value = err;
-            console.log("----e----");
-            console.log(value);
-            console.log("--------");
-
+            // console.log("----e----");
+            // console.log(value);
+            // console.log("--------");
         });
         if (value == undefined) {
             event.returnValue = true; // no error
         } else {
-            event.returnValue = value; //error
+            event.returnValue = false; //error
         }
-
     });
 
     ipcMain.on('close-all-app', function(event) {
@@ -493,9 +491,10 @@ app.whenReady().then(() => {
         autoUpdater.logger = log
 
 
-        // autoUpdater.on('error', (error) => {
-        //     dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
-        // })
+        autoUpdater.on('error', (error) => {
+            mainWindow.webContents.send('update-error', error);
+            // dialog.showErrorBox('Error: ', error == null ? "unknown" : (error.stack || error).toString())
+        })
 
         autoUpdater.on('update-available', (info) => {
             updateAvailable = true;
