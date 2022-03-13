@@ -10,8 +10,11 @@ const console = require('console');
 const { autoUpdater } = require("electron-updater");
 const { info } = require('console');
 
+const resourcePath = app.getAppPath().replace("app.asar", "");
+const volumeControlPath = path.join("\"" + resourcePath, "volume_control", "VolumeMixerControl.exe\"");
 
 
+app.geta
 
 let tray = null //background tray icon
 let mainWindow; //main window 
@@ -250,9 +253,10 @@ function createWindow() {
 
         if (devMode()) {
             mainWindow.webContents.openDevTools();
+            console.log(app.commandLine.hasSwitch('hidden'));
         }
 
-        console.log(app.commandLine.hasSwitch('hidden'));
+
         if (!app.commandLine.hasSwitch('hidden')) { // if the app is not hidden
             // if (readBounds(4)) { // if maximized from the last session
             //     mainWindow.maximize(); // maximize the window
@@ -265,13 +269,15 @@ function createWindow() {
 
 
     ipcMain.on("close", () => {
-        console.log("Saving values...");
-        config.set("windows.main.width", mainWindow.getBounds().width);
-        config.set("windows.main.height", mainWindow.getBounds().height);
-        config.set("windows.main.x", mainWindow.getBounds().x);
-        config.set("windows.main.y", mainWindow.getBounds().y);
-        config.set("windows.main.maximized", mainWindow.isMaximized());
-        console.log("OK");
+        if (devMode()) {
+            console.log("Saving values...");
+            config.set("windows.main.width", mainWindow.getBounds().width);
+            config.set("windows.main.height", mainWindow.getBounds().height);
+            config.set("windows.main.x", mainWindow.getBounds().x);
+            config.set("windows.main.y", mainWindow.getBounds().y);
+            config.set("windows.main.maximized", mainWindow.isMaximized());
+            console.log("OK");
+        }
         mainWindow.hide();
         backgroundMode = true;
     });
@@ -294,41 +300,43 @@ function createWindow() {
     });
 
     ipcMain.on('save-config', function(event, key, data) {
-        console.log("Saving: " + key + " : " + data);
+        if (devMode())
+            console.log("Saving: " + key + " : " + data);
         config.set(key, data);
     });
 
     ipcMain.on('get-config', function(event, key) {
         var value = config.get(key);
-        console.log("Getting " + key + " : " + value);
+        if (devMode())
+            console.log("Getting " + key + " : " + value);
         event.returnValue = value;
     });
 
     ipcMain.on('getCurrentMedia', function(event, software) {
-        var path = app.getAppPath();
-        exec("\"" + path + "\\volume_control\\VolumeMixerControl.exe\" getCurrentMedia ", (error, data, getter) => {
-            //console.log(error);
-            console.log(data);
+        exec(volumeControlPath + " getCurrentMedia", (error, data, getter) => {
+            // console.log(error);
+            if (devMode())
+                console.log(data);
             //console.log(getter);
             event.returnValue = data;
         });
     });
 
     ipcMain.on('set-music-software', function(event, software, value) {
-        var path = app.getAppPath();
-        exec("\"" + path + "\\volume_control\\VolumeMixerControl.exe\" changeVolume " + software + " " + value, (error, data, getter) => {
+        exec(volumeControlPath + " changeVolume " + software + " " + value, (error, data, getter) => {
             //console.log(error);
-            console.log(data);
+            if (devMode())
+                console.log(data);
             //console.log(getter);
             event.returnValue = data;
         });
     });
 
     ipcMain.on('get-softwares-names', function(event) {
-        var path = app.getAppPath();
-        exec("\"" + path + "\\volume_control\\VolumeMixerControl.exe\" getSoftwaresNames", (error, data, getter) => {
+        exec(volumeControlPath + " getSoftwaresNames", (error, data, getter) => {
             //console.log(error);
-            console.log(data);
+            if (devMode())
+                console.log(data);
             //console.log(getter);
             event.returnValue = data;
         });
@@ -349,8 +357,11 @@ function createWindow() {
 
         if (dest != undefined) { // if the user didn't cancel the dialog
             fs.copyFile(path.join(app.getPath('userData'), "config.json"), dest, (err) => {
-                if (err) console.log('Config Error!');
-                console.log('Config exported!');
+                if (devMode()) {
+                    if (err) console.log('Config Error!');
+                    console.log('Config exported!');
+                }
+
             });
         } else {
             //cancel
@@ -372,7 +383,8 @@ function createWindow() {
         if (src != undefined) {
             fs.copyFile(src[0], path.join(app.getPath('userData'), "config.json"), (err) => {
                 if (err) throw err;
-                console.log('Config imported!');
+                if (devMode())
+                    console.log('Config imported!');
             });
         } else {
             //cancel
@@ -474,22 +486,23 @@ var updateInfo = null;
 
 
 app.whenReady().then(() => {
-    console.log("---------------------");
-    console.log(" MacroPad Software");
-    console.log("        V" + macropadSoftareCurrentVersion);
-    console.log("---------------------");
+    if (devMode()) {
+        console.log("---------------------");
+        console.log(" MacroPad Software");
+        console.log("        V" + macropadSoftareCurrentVersion);
+        console.log("---------------------");
+    }
     createLoadingScreen();
 
     setTimeout(() => {
         createWindow();
-        console.log("App ready!");
-
+        if (devMode()) {
+            console.log("App ready!");
+            const log = require("electron-log")
+            log.transports.file.level = "debug"
+            autoUpdater.logger = log
+        }
         autoUpdater.checkForUpdates();
-
-        const log = require("electron-log")
-        log.transports.file.level = "debug"
-        autoUpdater.logger = log
-
 
         autoUpdater.on('error', (error) => {
             mainWindow.webContents.send('update-error', error);
@@ -501,7 +514,8 @@ app.whenReady().then(() => {
             updateInfo = info;
             mainWindow.webContents.send('update-available', updateAvailable, updateInfo);
 
-            console.log(info);
+            if (devMode())
+                console.log(info);
 
             // dialog.showMessageBox({
             //     type: 'info',
@@ -546,9 +560,9 @@ app.whenReady().then(() => {
             mainWindow.webContents.send('update-downloaded', info);
         })
 
-        autoUpdater.autoDownload = false;
-
-
+        var autoUpdate = readFromConfig("settings.auto-update");
+        if (autoUpdate == null) autoUpdate = false; //default auto update
+        autoUpdater.autoDownload = autoUpdate;
 
     }, 1000);
 
@@ -559,8 +573,6 @@ app.whenReady().then(() => {
     })
 
     updateAutoStart();
-
-
 
 })
 

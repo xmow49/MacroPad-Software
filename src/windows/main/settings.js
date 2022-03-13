@@ -9,7 +9,10 @@ function settingItemClicked(item) {
     } else if (item.id == "do-update") {
         toggleSettings();
         document.getElementById("do-update-settings").style.display = "block";
-        update.displayOnSettings();
+        setTimeout(function() {
+            update.displayOnSettings();
+        }, 1000);
+
     } else if (item.id == "language") {
 
     } else if (item.className == "settings-title") { //if item is a title --> back to settings
@@ -58,6 +61,9 @@ function toggleSettings() {
         if (backgroundStart == null) backgroundStart = false; //default background start
         document.getElementById("background-start").querySelectorAll("input")[0].checked = backgroundStart;
 
+        var autoUpdate = readFromConfig("settings.auto-update");
+        if (autoUpdate == null) autoUpdate = false; //default auto update
+        document.getElementById("auto-update").checked = autoUpdate;
     }
     updatePopupBackground();
 }
@@ -68,4 +74,8 @@ function closeAllSettingsPopups() {
     document.getElementById("hard-reset-settings").style.display = "none";
     document.getElementById("about-settings").style.display = "none";
     updatePopupBackground();
+}
+
+function autoUpdate(checkbox) {
+    saveToConfig("settings.auto-update", checkbox.checked);
 }

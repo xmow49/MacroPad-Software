@@ -31,7 +31,11 @@
             "license": "license.txt",
             "oneClick": false,
             "allowToChangeInstallationDirectory": true
-        }
+        },
+        "extraResources": [{
+            "from": "volume_control",
+            "to": "volume_control"
+        }]
     },
     "devDependencies": {
         "@mdi/font": "^6.5.95",
