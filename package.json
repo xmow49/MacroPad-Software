@@ -32,10 +32,12 @@
             "oneClick": false,
             "allowToChangeInstallationDirectory": true
         },
-        "extraResources": [{
-            "from": "volume_control",
-            "to": "volume_control"
-        }]
+        "extraResources": [
+            {
+                "from": "volume_control",
+                "to": "volume_control"
+            }
+        ]
     },
     "devDependencies": {
         "@mdi/font": "^6.5.95",
@@ -47,11 +49,12 @@
         "@electron/remote": "^2.0.1",
         "@simonwep/pickr": "^1.8.2",
         "auto-launch": "^5.0.5",
+        "electron-log": "^4.4.6",
         "electron-squirrel-startup": "^1.0.0",
         "electron-store": "^8.0.1",
         "electron-updater": "^4.6.5",
+        "i18next": "^21.6.14",
         "serialport": "^9.2.4",
-        "usb-detection": "^4.13.0",
-        "electron-log": "^4.4.6"
+        "usb-detection": "^4.13.0"
     }
 }
