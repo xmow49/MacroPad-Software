@@ -326,17 +326,23 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     margin: 5px;
 }
 
+.display-radio label {
+    background: none;
+}
+
 #system-action {
     display: flex;
     flex-direction: column;
 }
 
 .key1 {
-    height: 300px;
+    margin-top: 20px;
+    height: 330px;
     overflow-y: scroll;
-    border: 3px solid #3C3C3C;
+    border: 2px solid var(--color-macropad-border);
     border-radius: 10px;
     padding: 5px;
+    background-color: var(--color-connect-button);
 }
 
 .editor-title {

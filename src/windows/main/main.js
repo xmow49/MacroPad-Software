@@ -79,6 +79,16 @@ var popups;
 
 window.addEventListener('load', function() {
     popups = [...document.getElementsByClassName("popup")];
+
+
+    var toggle = readFromConfig("settings.dark-mode");
+    if (toggle == null) toggle = false;
+
+    if (toggle) {
+        document.body.className = "dark-mode";
+    } else {
+        document.body.className = "light-mode";
+    }
 })
 
 

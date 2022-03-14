@@ -1,13 +1,37 @@
 :root {
     --font-master: 'Poppins';
-    --font-master-color: #3C3C3C;
-    --button-color: #EAEAEA;
-    --button-color-hover: #c0c0c0;
-    --font-master-invert-color: #FFFFFF;
     --header-size: 28px;
     --font-size-small: 12px;
     --font-size-medium: 20px;
     --font-size-icon: 30px;
+}
+
+:root .light-mode {
+    --color-background: #FFFFFF;
+    --font-master-color: #3C3C3C;
+    --button-color: #EAEAEA;
+    --button-color-hover: #c0c0c0;
+    --font-master-invert-color: #FFFFFF;
+    --color-header: rgb(230, 230, 230);
+    --color-header-hover: rgb(206, 206, 206);
+    --color-buttons: black;
+    --color-connect-button: #F0F0F0;
+    --color-macropad-border: #3C3C3C;
+    --background-url: url("../images/background.svg");
+}
+
+:root .dark-mode {
+    --color-background: #3C3C3C;
+    --font-master-color: #FFFFFF;
+    --button-color: #3C3C3C;
+    --button-color-hover: #757575;
+    --font-master-invert-color: #000000;
+    --color-header: rgb(37, 35, 35);
+    --color-header-hover: rgb(66, 62, 62);
+    --color-buttons: white;
+    --color-connect-button: #2f2f2f;
+    --color-macropad-border: #FFFFFF;
+    --background-url: url("../images/background-dark.svg");
 }
 
 input,
@@ -16,6 +40,11 @@ textarea,
  :focus {
     outline: none;
     cursor: pointer;
+    color: var(--font-master-color);
+}
+
+select {
+    background-color: var(--color-background);
 }
 
 *,
@@ -32,7 +61,7 @@ button:disabled>*::before,
 button[disabled],
 button[disabled]>*,
 button[disabled]>*::before {
-    color: black;
+    color: var(--color-buttons);
     background-color: var(--button-color);
     border-color: var(--font-master-color);
     cursor: default;
@@ -40,8 +69,10 @@ button[disabled]>*::before {
 
 button,
 input,
-label {
-    cursor: pointer
+label,
+select {
+    cursor: pointer;
+    background-color: var(--color-connect-button);
 }
 
 button>*,
@@ -55,8 +86,8 @@ button>span::before {
 }
 
 @font-face {
-    font-family: Poppins;
-    src: url(../../fonts/poppins/Poppins-Regular.ttf);
+    font-family: 'Poppins';
+    src: url(../../../fonts/poppins/Poppins-Regular.ttf);
 }
 
 h1,
@@ -69,6 +100,7 @@ label {
     font-family: var(--font-master);
     font-style: normal;
     font-weight: normal;
+    color: var(--font-master-color);
 }
 
 h1 {
@@ -104,7 +136,7 @@ header {
     height: var(--header-size);
     justify-content: space-between;
     align-items: center;
-    background-color: rgb(230, 230, 230);
+    background-color: var(--color-header);
     z-index: 999999999;
 }
 
@@ -120,20 +152,23 @@ header {
     -webkit-app-region: no-drag;
     border: none;
     background: none;
-    color: white;
 }
 
 .navbarButton:hover {
-    background: rgb(206, 206, 206);
+    background: var(--color-header-hover);
 }
 
 .closeBtn:hover {
     background: rgb(255, 0, 0);
 }
 
+.navbarButton svg path {
+    fill: var(--font-master-color);
+}
+
 body {
     margin: 0px;
-    background: #FFFFFF;
+    background-color: var(--color-background);
     overflow: hidden;
 }
 
@@ -145,7 +180,7 @@ span {
     /* width: 1280px;
     height: 720px; */
     z-index: -1;
-    background-image: url("images/background.svg");
+    background-image: var(--background-url);
     width: 100%;
     height: 400px;
     position: absolute;
@@ -186,7 +221,7 @@ span {
     width: 60%;
     /* overflow: hidden; */
     /* Fallback color */
-    background: #FFFFFF;
+    background: var(--color-background);
     border: 3px solid var(--font-master-color);
     border-radius: var(--border-radius-popup);
     margin: 0px;
@@ -196,7 +231,7 @@ span {
 
 .popup h2 {
     display: flex;
-    color: #3C3C3C;
+    color: var(--font-master-color);
     border-bottom: 1px solid var(--font-master-color);
     margin-top: 0px;
     margin-bottom: 5px;
@@ -298,4 +333,38 @@ span {
     flex-direction: row;
     justify-content: center;
     align-items: center;
+}
+
+
+/* custom scrollbar */
+
+
+/* width */
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+/* Track */
+
+ ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 50px;
+}
+
+
+/* Handle */
+
+ ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 50px;
+}
+
+
+/* Handle on hover */
+
+ ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+    border-radius: 50px;
 }

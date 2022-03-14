@@ -14,7 +14,7 @@
 }
 
 .connect {
-    background: #F0F0F0;
+    background: var(--color-connect-button);
     border: 1px solid var(--font-master-color);
     box-sizing: border-box;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -67,7 +67,7 @@
     width: var(--macropad-button-size);
     height: var(--macropad-button-size);
     transition: transform 0.5s;
-    border: var(--macropad-button-border) solid #3C3C3C;
+    border: var(--macropad-button-border) solid var(--color-macropad-border);
     box-sizing: border-box;
     margin: var(--macropad-button-margin);
     padding: var(--macropad-button-padding);
@@ -101,7 +101,7 @@
 }
 
 #macropad-border {
-    border: 3px solid #3C3C3C;
+    border: 3px solid var(--color-macropad-border);
     border-radius: 23px;
     width: fit-content;
 }
@@ -214,13 +214,19 @@
 }
 
 #edit button {
-    width: var(--action-button-size);
-    height: var(--action-button-size);
+    /* width: var(--action-button-size); */
+    /* height: var(--action-button-size); */
     font-size: var(--action-button-icon-size);
     border: 1px solid var(--font-master-color);
     box-sizing: border-box;
     border-radius: 12px;
     cursor: pointer;
+}
+
+#edit button h2 {
+    font-size: 25px;
+    margin: 0;
+    padding: 0;
 }
 
 #edit button:hover {
@@ -238,7 +244,13 @@
     bottom: 30px;
 }
 
-.settings button {
+.send {
+    position: absolute;
+    right: 30px;
+    bottom: 30px;
+}
+
+.ui-corner-button button {
     width: var(--action-button-size);
     height: var(--action-button-size);
     font-size: var(--action-button-icon-size);

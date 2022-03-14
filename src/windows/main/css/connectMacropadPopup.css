@@ -30,7 +30,7 @@ select.decorated {
 .port-list {
     display: flex;
     flex-direction: column;
-    border: var(--select-port-border) solid #3C3C3C;
+    border: var(--select-port-border) solid var(--color-macropad-border);
     box-sizing: border-box;
     border-radius: var(--border-radius-button);
     width: var(--select-port-width);

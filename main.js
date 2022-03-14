@@ -560,7 +560,7 @@ app.whenReady().then(() => {
             mainWindow.webContents.send('update-downloaded', info);
         })
 
-        var autoUpdate = readFromConfig("settings.auto-update");
+        var autoUpdate = config.get('settings.auto-update');
         if (autoUpdate == null) autoUpdate = false; //default auto update
         autoUpdater.autoDownload = autoUpdate;
 

@@ -3,6 +3,17 @@ function settingItemClicked(item) {
     if (item.classList.contains("switch-item")) { //if item is a switch
         item.querySelectorAll("input")[0].checked = !item.querySelectorAll("input")[0].checked; //toggle switch
         saveToConfig("settings." + item.id, item.querySelectorAll("input")[0].checked);
+
+        if (item.id == "dark-mode") {
+            if (item.querySelectorAll("input")[0].checked) {
+                document.body.classList.add("dark-mode");
+                document.body.classList.remove("light-mode");
+            } else {
+                document.body.classList.remove("dark-mode");
+                document.body.classList.add("light-mode");
+            }
+        }
+
     } else if (item.id == "export-import-config") {
         toggleSettings();
         document.getElementById("export-import-settings").style.display = "block";

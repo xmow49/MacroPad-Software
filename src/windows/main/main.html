@@ -3,13 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <link href="main.css" rel="stylesheet">
-    <link href="connectMacropadPopup.css" rel="stylesheet">
-    <link href="selectMacropadPopup.css" rel="stylesheet">
-    <link href="profileEditor.css" rel="stylesheet">
-    <link href="overview.css" rel="stylesheet">
-    <link href="settings.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/loader.css">
+    <link href="css/main.css" rel="stylesheet">
+    <link href="css/connectMacropadPopup.css" rel="stylesheet">
+    <link href="css/selectMacropadPopup.css" rel="stylesheet">
+    <link href="css/profileEditor.css" rel="stylesheet">
+    <link href="css/overview.css" rel="stylesheet">
+    <link href="css/settings.css" rel="stylesheet">
+    <link href="css/loader.css" rel="stylesheet">
 
     <!--  materialdesignicons 6.4.95  -->
     <link rel="stylesheet" href="downloaded_contents/materialdesignicons.css" />
@@ -18,7 +18,7 @@
 
 </head>
 
-<body>
+<body class="dark-mode">
     <header>
 
         <div class="title-container">
@@ -64,16 +64,21 @@
 
 
                     <div id="edit">
-                        <button onclick="editProfilePopup();"><span class="mdi mdi-pencil"></span></button>
-                        <button onclick="sendConfig();"><span class="mdi mdi-send"></span></button>
+                        <button onclick="editProfilePopup();">
+                            <div class="horizontal-flex">
+                                <span class="mdi mdi-pencil"></span><h2>Modifier</h2>
+                            </div>
+                        </button>
                     </div>
 
                 </div>
-                <div class="settings">
-
+                <div class="settings ui-corner-button">
                     <button onclick="toggleSettings();"><span class="mdi mdi-cog-outline"></span></button>
                 </div>
 
+                <div class="send ui-corner-button">
+                    <button onclick="sendConfig();"><span class="mdi mdi-send"></span></button>
+                </div>
             </div>
 
 
@@ -256,7 +261,7 @@
 
                         <div class="action-selector" id="key-action-selector" onchange="updateEditGUI('key', -1);">
                             <label class="action-selector-1"><input type="radio" name="key-action-type" value="-1"><span class="mdi mdi-cancel"></span><span>Désactivé</span></label>
-                            <label class="action-selector0"><input type="radio" name="key-action-type" value="0"><span class="mdi mdi-keyboard"></span><span>Combinaison</span></label>
+                            <label class="action-selector0"><input type="radio" name="key-action-type" value="0"><span class="mdi mdi-keyboard"></span><span>Clavier</span></label>
                             <label class="action-selector1"><input type="radio" name="key-action-type" value="1"><span class="mdi mdi-microsoft-windows"></span><span>Système</span></label>
                             <label class="action-selector2"><input type="radio" name="key-action-type" value="2"><span class="mdi mdi-midi"></span><span>Midi</span></label>
                             <div class="action-help">
@@ -300,7 +305,7 @@
                                 <label for="calculator"><input type="radio" id="calculator" name="select-system-action" value="402" onclick="onChangeSystemAction(this)">Calculatrice</label>
                                 <label for="explorer"><input type="radio" id="explorer" name="select-system-action" value="404" onclick="onChangeSystemAction(this)">Explorateur de Fichiers</label>
 
-                                <h3>Controle du Navigateur WEB:</h3>
+                                <h3>Controle du Navigateur</h3>
                                 <label for="browser"><input type="radio" id="browser" name="select-system-action" value="547" onclick="onChangeSystemAction(this)">Ouvrir le navigateur par défaut</label>
                                 <label for="browser-refresh"><input type="radio" id="browser-refresh" name="select-system-action" value="551" onclick="onChangeSystemAction(this)">Actualiser</label>
                                 <label for="browser-back"> <input type="radio" id="browser-back" name="select-system-action" value="248" onclick="onChangeSystemAction(this)">Page Précédente</label>
