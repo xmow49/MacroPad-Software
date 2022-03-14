@@ -1,7 +1,7 @@
 {
     "name": "MacroPad",
     "productName": "MacroPad",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "description": "Macropad Configurator",
     "main": "main.js",
     "scripts": {
@@ -32,12 +32,10 @@
             "oneClick": false,
             "allowToChangeInstallationDirectory": true
         },
-        "extraResources": [
-            {
-                "from": "volume_control",
-                "to": "volume_control"
-            }
-        ]
+        "extraResources": [{
+            "from": "volume_control",
+            "to": "volume_control"
+        }]
     },
     "devDependencies": {
         "@mdi/font": "^6.5.95",
