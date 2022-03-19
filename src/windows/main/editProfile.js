@@ -163,6 +163,10 @@ function editProfilePopup() { //when edit profile button is clicked
         //disable the profile editor
         profileEditorEnabled = false;
 
+        document.getElementById("profile-editor-toggle").innerHTML = "Modifier";
+        document.getElementById("profile-editor-toggle-icon").className = "mdi mdi-pencil";
+
+
         document.getElementsByClassName("profile-editor")[0].className = "profile-editor disable"; //disable left editor menu
         document.getElementsByClassName("profile-editor")[1].className = "profile-editor disable"; //disable right editor menu
 
@@ -171,18 +175,22 @@ function editProfilePopup() { //when edit profile button is clicked
         clearEditButton();
         disableMacropadButtons(true);
         updateProfileOverviewIcon();
-        updateOverviewIconInKeys();
+        updateOverviewIconInKeys(true);
 
         storeConfig(); //save the config in the file
     } else {
         //enable the profile editor
         updateProfileGui();
         profileEditorEnabled = true;
+
+        document.getElementById("profile-editor-toggle").innerHTML = "Retour";
+        document.getElementById("profile-editor-toggle-icon").className = "mdi mdi-close";
+
         //document.getElementById("normal-view").className = "disable";
         //document.getElementById("profil-list").className = "disable";
         document.getElementsByClassName("profile-editor")[0].className = "profile-editor";
         document.getElementsByClassName("profile-editor")[1].className = "profile-editor";
-        document.getElementById("edit").className = "active-button";
+        // document.getElementById("edit").className = "active-button";
         document.getElementById("macropad").className = "editor";
 
         //enable edit mode for all encoders/keys buttons
@@ -251,7 +259,7 @@ function changeProfile() {
 }
 
 
-function updateOverviewIconInKeys() {
+function updateOverviewIconInKeys(clearSelect = false) {
     for (var i = 0; i < 3; i++) {
         if (macropadConfig.profiles[currentProfile].encoders[i].type == 0) { //master volume
             document.getElementById("encoderIcon" + i).className = "mdi mdi-volume-source";
@@ -262,7 +270,8 @@ function updateOverviewIconInKeys() {
         } else {
             document.getElementById("encoderIcon" + i).className = "mdi";
         }
-        document.getElementById("encoder" + i).style.background = "";
+        if (clearSelect)
+            document.getElementById("encoder" + i).style.background = "";
     }
     for (var i = 0; i < 6; i++) { //for all keys
         if (macropadConfig.profiles[currentProfile].keys[i].type == 1) { //system action
@@ -280,9 +289,9 @@ function updateOverviewIconInKeys() {
             // document.getElementById("keyIcon" + i).style.fontSize = "20px";
         } else {
             document.getElementById("keyIcon" + i).className = "mdi ";
-
         }
-        document.getElementById("key" + i).style.background = "";
+        if (clearSelect)
+            document.getElementById("key" + i).style.background = "";
     }
 
 }
@@ -331,7 +340,7 @@ function updateProfileGui() {
         macropadConfig.profiles[currentProfile].display.type = displayType; //set default display type in config
     }
     var displayValue = macropadConfig.profiles[currentProfile].display.value; //get profile display value from config
-    if (displayValue == "") {
+    if (displayValue == "" || displayValue == undefined || displayValue == null) { //if profile display value is not set
         displayValue = "MacroPad"; //set default display value
         macropadConfig.profiles[currentProfile].display.value = displayValue;
     }
@@ -367,13 +376,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
 
     } else {
         actionType = document.getElementsByName(currentType + "-action-type"); // get all input elements
-        if (document.getElementById(currentType + "Icon" + currentEdit).classList.contains(editButtonIcon))
-            document.getElementById(currentType + "Icon" + currentEdit).classList.remove(editButtonIcon); //remove edit button icon from the key
-        //save old values in the config
-
         //------------save action type ------------
-
-
         for (var i = 0; i < actionType.length; i++) { //check all radio and save the checked one
             if (actionType[i].checked) {
                 currentActionType = actionType[i].value;
@@ -457,7 +460,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
             sendToMacopad.encoder(currentProfile, currentEdit, macropadConfig.profiles[currentProfile].encoders[currentEdit].type, macropadConfig.profiles[currentProfile].encoders[currentEdit].values);
         }
     }
-
+    updateOverviewIconInKeys(true);
     //---------------------------------------------Load values from the config -------------------------------------------------
     currentEdit = newId; //store the new encoder id
     currentType = type; //store the new encoder type
@@ -504,12 +507,23 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                 lastSelectedSystemActionValue = newValue[0];
                 document.getElementsByName("select-system-action")[systemActionValuesToRadioId(newValue[0])].checked = true; //select the value from the config
             }
+        } else if (newActionType == 0) {
+            console.log("key combination load");
+            var keys = macropadConfig.profiles[currentProfile].keys[currentEdit].values;
+            var GUIKey = keycodesToStr[keys[0]];
+            for (var i = 1; i < 3; i++) {
+                var temp = keycodesToStr[keys[i]];
+                if (temp != null && temp != "" && temp != -1) {
+                    GUIKey += " + " + temp;
+                }
+            }
+            document.getElementById("key-edit-combination").innerHTML = GUIKey;
         }
     }
 
     clearEditButton();
     updateOverviewIconInKeys();
-    document.getElementById(type + "Icon" + newId).className = "mdi " + editButtonIcon; //dispplay the edit icon (pen) on the new encoder
+    // document.getElementById(type + "Icon" + newId).className = "mdi " + editButtonIcon; //dispplay the edit icon (pen) on the new encoder
     document.getElementById(type + newId).style.background = "var(--button-color-hover)"
         // console.log(type + "Icon" + newId);
         //display the gui
@@ -540,6 +554,13 @@ function updateActionSelectorGUI(Newvalue, type) { //update the action selector 
 
 }
 
+
+function saveAudioSoftware() { //save the audio software in the config
+    var software = document.getElementById("software-volume-selector").value;
+    macropadConfig.profiles[currentProfile].encoders[currentEdit].values = [software];
+}
+
+
 function updateEditGUI(type, id) { //update the gui when an encoder or key changes action, value ....
     if (type == "encoder") {
         document.getElementById("edit-encoder").className = ""; //enable the edit encoder menu
@@ -547,6 +568,11 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
 
         var value = getActionValue("encoder");
         updateActionSelectorGUI(parseInt(value), 0); //select on the gui
+
+        if (id == -1) { //user change mode of the encoder
+            macropadConfig.profiles[currentProfile].encoders[currentEdit].values = [-1, -1, -1];
+        }
+
         if (value == "-1") {
             document.getElementById('help-text').innerHTML = "L'encoder est désactivé, il ne fera rien.";
 
@@ -555,9 +581,17 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
 
         } else if (value == "1") {
             document.getElementById('help-text').innerHTML = "L'encoder va controler le volume du logiciel choisi ci-dessous. Lors d'un appuis, le son se mute.";
+            if (id == -1) {
+                saveAudioSoftware();
+            }
 
         } else if (value == "2") {
             document.getElementById('help-text').innerHTML = "Choisisez manuellement les actions de l'encoder";
+            if (id == -1) {
+                document.getElementById("encoder-edit-key-0").innerHTML = "Choisir";
+                document.getElementById("encoder-edit-key-1").innerHTML = "Choisir";
+                document.getElementById("encoder-edit-key-2").innerHTML = "Choisir";
+            }
 
         } else {
 
@@ -577,25 +611,25 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
         var value = getActionValue("key"); //get the value of the radio
 
         updateActionSelectorGUI(parseInt(value), 1); //select on the gui
+        if (id == -1) {
+            macropadConfig.profiles[currentProfile].keys[currentEdit].values = [-1, -1, -1]; //reset the config
+        }
 
         if (value == "-1") {
             document.getElementById('help-key-text').innerHTML = "La touche est désactivée, elle ne fera rien.";
         } else if (value == "0") { //key combination
             document.getElementById('help-key-text').innerHTML = "Choisisez une combinaison de touches.";
-            console.log("key combination");
-            // var keys = document.getElementById("key-edit-combination-values").innerHTML;
-            var keys = macropadConfig.profiles[currentProfile].keys[currentEdit].values;
-            var GUIKey = keycodesToStr[keys[0]];
-            for (var i = 1; i < 3; i++) {
-                var temp = keycodesToStr[keys[i]];
-                if (temp != null) {
-                    GUIKey += " + " + temp;
-                }
+            if (id == -1) {
+                document.getElementById("key-edit-combination").innerHTML = "Cliquez ici pour choisir une combinaison de touches";
             }
-            document.getElementById("key-edit-combination").innerHTML = GUIKey;
 
         } else if (value == "1") { //system action
+
             document.getElementById('help-key-text').innerHTML = "Choisisez une action système parmi la liste ci-dessous.";
+            if (id == -1) {
+                document.getElementById('play-pause').checked = true;
+                macropadConfig.profiles[currentProfile].keys[currentEdit].values[0] = 205; //default value
+            }
         } else if (value == "2") { //MIDI
             document.getElementById('help-key-text').innerHTML = "WIP, ne fonctionne pas";
         } else if (type == "empty") {
@@ -606,8 +640,7 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
         }
         macropadConfig.profiles[currentProfile].keys[currentEdit].type = parseInt(value); //update the config
     }
-
-
+    updateOverviewIconInKeys();
 }
 
 function displayAllSoundSoftwaresInSelector() {
@@ -726,6 +759,13 @@ var lastSelectedSystemActionValue = -1;
 function onChangeSystemAction(radio) {
     var selected = radio.value; //get the selected value
     lastSelectedSystemActionValue = selected;
+
+    if (currentType == "key") {
+        macropadConfig.profiles[currentProfile].keys[currentEdit].type = 1 //set the type to system action
+        macropadConfig.profiles[currentProfile].keys[currentEdit].values[0] = parseInt(lastSelectedSystemActionValue); //set the value to the selected value
+    }
+
+    updateOverviewIconInKeys();
 }
 
 function systemActionValuesToRadioId(value) { // This function transform system action values from arduino to radio id

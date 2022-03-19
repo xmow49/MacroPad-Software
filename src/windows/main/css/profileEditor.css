@@ -213,10 +213,6 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     margin: 5px;
 }
 
-#edit-encoder {
-    margin: 5px;
-}
-
 .action-selector {
     display: flex;
     flex-direction: row;

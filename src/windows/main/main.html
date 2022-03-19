@@ -18,7 +18,7 @@
 
 </head>
 
-<body class="dark-mode">
+<body class="light-mode">
     <header>
 
         <div class="title-container">
@@ -66,7 +66,7 @@
                     <div id="edit">
                         <button onclick="editProfilePopup();">
                             <div class="horizontal-flex">
-                                <span class="mdi mdi-pencil"></span><h2>Modifier</h2>
+                                <span id="profile-editor-toggle-icon" class="mdi mdi-pencil"></span><h2 id="profile-editor-toggle">Modifier</h2>
                             </div>
                         </button>
                     </div>
@@ -136,7 +136,7 @@
                             <input type="radio" name="display-text-selector" id="display-text-3" value="3" onchange="displayTypeSelected()">
                             <div id="display-div-custom">
                                 <label for="display-text-3">Custom</label>
-                                <input type="text" id="display-text-custom" placeholder="Texte custom" maxlength="100" onfocus="document.getElementsByName('display-text-selector')[3].checked = true;" onfocusout="displayTypeSelected();">
+                                <input type="text" id="display-text-custom" placeholder="Votre text ici" maxlength="100" onfocus="document.getElementsByName('display-text-selector')[3].checked = true;" onfocusout="displayTypeSelected();">
                             </div>
 
                         </div>
@@ -224,10 +224,10 @@
                             <h4 class="encoder-action-info-text">Cet encoder contrôle le volume principal du PC.</h4>
                         </div>
 
-                        <div class="encoder1" style="margin-top: 50px;">
+                        <div class="encoder1" style="margin-top: 20px;">
                             <h4 style="text-align: center;">Choisir un logiciel</h4>
                             <div id="software-div-selector">
-                                <select id="software-volume-selector"></select>
+                                <select id="software-volume-selector" oninput="saveAudioSoftware()"></select>
                                 <button onclick="displayAllSoundSoftwaresInSelector();">Actualiser</button>
                             </div>
                         </div>
