@@ -4,6 +4,8 @@
     --font-size-small: 12px;
     --font-size-medium: 20px;
     --font-size-icon: 30px;
+    --macopad-color-1: #FE7100;
+    --macopad-color-2: #0082FE;
 }
 
 :root .light-mode {
@@ -17,6 +19,8 @@
     --color-buttons: black;
     --color-connect-button: #F0F0F0;
     --color-macropad-border: #3C3C3C;
+    --color-key-selector: var(--macopad-color-2);
+    --color-macropad-background: #FFFFFF;
     --background-url: url("../images/background.svg");
 }
 
@@ -31,6 +35,8 @@
     --color-buttons: white;
     --color-connect-button: #2f2f2f;
     --color-macropad-border: #FFFFFF;
+    --color-key-selector: var(--macopad-color-2);
+    --color-macropad-background: #3C3C3C;
     --background-url: url("../images/background-dark.svg");
 }
 

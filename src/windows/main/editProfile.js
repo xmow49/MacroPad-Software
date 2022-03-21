@@ -517,6 +517,7 @@ function onEditButton(type, newId) { //when a edit encoder or key button is clic
                     GUIKey += " + " + temp;
                 }
             }
+            if (GUIKey == "" || GUIKey == undefined) GUIKey = "Choisir";
             document.getElementById("key-edit-combination").innerHTML = GUIKey;
         }
     }
@@ -620,7 +621,7 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
         } else if (value == "0") { //key combination
             document.getElementById('help-key-text').innerHTML = "Choisisez une combinaison de touches.";
             if (id == -1) {
-                document.getElementById("key-edit-combination").innerHTML = "Cliquez ici pour choisir une combinaison de touches";
+                document.getElementById("key-edit-combination").innerHTML = "Choisir";
             }
 
         } else if (value == "1") { //system action
@@ -675,20 +676,32 @@ var captureKey = [-1, -1, -1]; //store the captured key
 var captureCount = 0; //count the number of key pressed 
 var maxCaptureCount = 0; //max number of key pressed
 
-function startKeyCombinationCapture(type, action, maxCount) {
+function startKeyCombinationCapture(type, action, maxCount, label) {
     document.addEventListener("keydown", keyCombinationCapture);
     captureType = [type, action];
     captureKey = [-1, -1, -1];
     maxCaptureCount = maxCount;
     captureCount = 0;
+    label.classList.add("selected");
+    document.addEventListener("mouseup", stopKeyCombinationCapture);
 }
 
 function stopKeyCombinationCapture() {
     document.removeEventListener('keydown', keyCombinationCapture);
-    sendToMacopad.key(currentProfile, currentEdit, captureType[1], captureKey);
+
+    if (currentType == "key") {
+        sendToMacopad.key(currentProfile, currentEdit, captureType[1], captureKey);
+    } else if (currentType == "encoder") {
+        sendToMacopad.encoder(currentProfile, currentEdit, captureType[1], macropadConfig.profiles[currentProfile].encoders[currentEdit].values);
+    }
+    try {
+        document.getElementById("encoder-edit-key-0").classList.remove("selected");
+        document.getElementById("encoder-edit-key-1").classList.remove("selected");
+        document.getElementById("encoder-edit-key-2").classList.remove("selected");
+        document.getElementById("key-edit-combination").classList.remove("selected");
+        document.removeEventListener('click', stopKeyCombinationCapture);
+    } catch (e) {}
 }
-
-
 
 function keyCombinationCapture(oEvent) {
     if (captureCount < maxCaptureCount) { //if the number of key pressed is less than the max number of key pressed
@@ -717,6 +730,9 @@ function keyCombinationCapture(oEvent) {
             document.getElementById("key-edit-combination").innerHTML = GUIKey; //display the key
         }
     } else {
+        stopKeyCombinationCapture();
+    }
+    if (captureCount >= maxCaptureCount) {
         stopKeyCombinationCapture();
     }
 

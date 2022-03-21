@@ -104,6 +104,7 @@
     border: 3px solid var(--color-macropad-border);
     border-radius: 23px;
     width: fit-content;
+    background: var(--color-macropad-background);
 }
 
 #macropad-display {
