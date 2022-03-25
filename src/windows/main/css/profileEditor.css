@@ -41,16 +41,15 @@ input[type="color"]::-webkit-color-swatch-wrapper {
 }
 
 .profile-editor {
-    /* position: absolute;
-    background: none;
-    border: none;
-    box-shadow: none;
-    margin: 0px;
-    padding: 5px;
-    border-radius: 0px;
-    width: 380px;
-    height: 80%;
-    top: 50px; */
+    opacity: 0;
+    transition: visibility 0.2s, opacity 0.2s linear;
+    visibility: hidden;
+}
+
+.profile-editor.visible {
+    opacity: 1;
+    transition: visibility 0.2s, opacity 0.2s linear;
+    visibility: visible;
 }
 
 .profile-editor#left {
@@ -372,4 +371,9 @@ input[type="color"]::-webkit-color-swatch-wrapper {
     display: flex;
     align-items: center;
     flex-direction: column;
+}
+
+.color-picker-cutom {
+    left: 10% !important;
+    top: 320px !important
 }
