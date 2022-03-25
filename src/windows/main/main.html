@@ -64,9 +64,15 @@
 
 
                     <div id="edit">
-                        <button onclick="editProfilePopup();">
-                            <div class="horizontal-flex">
-                                <span id="profile-editor-toggle-icon" class="mdi mdi-pencil"></span><h2 id="profile-editor-toggle">Modifier</h2>
+                        <button onclick="editProfilePopup();" style="height: 50px;">
+                            <div>
+                                <div id="edit-button" class="horizontal-flex">
+                                    <span class="mdi mdi-pencil"></span><h2 id="profile-editor-toggle">Modifier</h2>
+                                </div>
+                                <div id="back-button" class="horizontal-flex">
+                                    <span class="mdi mdi-close"></span><h2 id="profile-editor-toggle">Retour</h2>
+                                </div>
+                                
                             </div>
                         </button>
                     </div>
@@ -83,7 +89,7 @@
 
 
             <div class="editor-menu">
-                <div id="left" class="profile-editor disable">
+                <div id="left" class="profile-editor">
                     <div id="profile-editor-actions">
                         <h3 class="editor-title">Profil</h3>
                         <!-- <select onchange="changeProfile();" name="" id="profile-editor-selector">
@@ -185,7 +191,7 @@
 
                 </div>
 
-                <div id="right" class="profile-editor disable">
+                <div id="right" class="profile-editor">
                     <h3 class="editor-title">Action</h3>
 
                     <!-- WIP -->
@@ -616,6 +622,7 @@
     </div>
     <!-- <localized-text key="hello_world"></localized-text>
     <localized-text key="hello_world" lang="ja"></localized-text> -->
+    <MdiIconPicker v-model="icon" :icons="icons" @select="onSelect"></MdiIconPicker>
 </body>
 <script src="downloaded_contents/colorPicker.js"></script>
 <script src="downloaded_contents/localizer.js"></script>
@@ -627,5 +634,8 @@
 <script src="editProfile.js"></script>
 <script src="keyboard.js"></script>
 <script src="./js/update.js"></script>
+<!-- <script type="module">
+    import MdiIconPicker from '../../../node_modules/vue-mdi-icon-picker/src/index.js'
+</script> -->
 
 </html>

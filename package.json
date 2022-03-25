@@ -1,7 +1,7 @@
 {
     "name": "MacroPad",
     "productName": "MacroPad",
-    "version": "1.0.10",
+    "version": "1.0.12",
     "description": "Macropad Configurator",
     "main": "main.js",
     "scripts": {
@@ -39,9 +39,10 @@
     },
     "devDependencies": {
         "@mdi/font": "^6.5.95",
-        "electron": "^13.5.2",
+        "electron": "^13.6.9",
         "electron-builder": "^22.14.13",
-        "electron-rebuild": "^3.2.7"
+        "electron-rebuild": "^3.2.7",
+        "vue-mdi-icon-picker": "^1.1.0"
     },
     "dependencies": {
         "@electron/remote": "^2.0.1",
@@ -53,6 +54,7 @@
         "electron-updater": "^4.6.5",
         "i18next": "^21.6.14",
         "serialport": "^9.2.4",
+        "typescript": "^4.6.2",
         "usb-detection": "^4.13.0"
     }
 }

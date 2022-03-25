@@ -163,12 +163,16 @@ function editProfilePopup() { //when edit profile button is clicked
         //disable the profile editor
         profileEditorEnabled = false;
 
-        document.getElementById("profile-editor-toggle").innerHTML = "Modifier";
-        document.getElementById("profile-editor-toggle-icon").className = "mdi mdi-pencil";
+        document.getElementById("edit-button").style.visibility = "visible"; //hide the edit button
+        document.getElementById("edit-button").style.opacity = 1;
+
+        document.getElementById("back-button").style.visibility = "hidden"; //show the back button
+        document.getElementById("back-button").style.opacity = 0;
 
 
-        document.getElementsByClassName("profile-editor")[0].className = "profile-editor disable"; //disable left editor menu
-        document.getElementsByClassName("profile-editor")[1].className = "profile-editor disable"; //disable right editor menu
+
+        document.getElementsByClassName("profile-editor")[0].className = "profile-editor"; //disable left editor menu
+        document.getElementsByClassName("profile-editor")[1].className = "profile-editor"; //disable right editor menu
 
         document.getElementById("edit").className = ""; //edit button --> remove active-button class
         document.getElementById("macropad").className = "connectPopup"; //remove macropad button hover action
@@ -183,15 +187,21 @@ function editProfilePopup() { //when edit profile button is clicked
         updateProfileGui();
         profileEditorEnabled = true;
 
-        document.getElementById("profile-editor-toggle").innerHTML = "Retour";
-        document.getElementById("profile-editor-toggle-icon").className = "mdi mdi-close";
+        document.getElementById("edit-button").style.visibility = "hidden"; //hide the edit button
+        document.getElementById("edit-button").style.opacity = 0; //hide the edit button
+
+
+        document.getElementById("back-button").style.visibility = "visible"; //show the back button
+        document.getElementById("back-button").style.opacity = 1;
+
 
         //document.getElementById("normal-view").className = "disable";
         //document.getElementById("profil-list").className = "disable";
-        document.getElementsByClassName("profile-editor")[0].className = "profile-editor";
-        document.getElementsByClassName("profile-editor")[1].className = "profile-editor";
+        document.getElementsByClassName("profile-editor")[0].className = "profile-editor visible";
+        document.getElementsByClassName("profile-editor")[1].className = "profile-editor visible";
         // document.getElementById("edit").className = "active-button";
         document.getElementById("macropad").className = "editor";
+        document.getElementById("current-edition").style.display = "block";
 
         //enable edit mode for all encoders/keys buttons
         disableMacropadButtons(false);
@@ -303,7 +313,7 @@ function updateProfileGui() {
     stopKeyCombinationCapture();
     var input = document.getElementById("profile-name"); //profile name input
     var profileName = macropadConfig.profiles[currentProfile].name;
-    document.getElementById("current-edition").style.display = "block";
+
     // --------------------- Profile Name ------------------------------
     if (profileName == "") { //if profile name is not set
         profileName = "Profil " + (parseInt(currentProfile) + 1); //set default name

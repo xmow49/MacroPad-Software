@@ -219,11 +219,23 @@ function readBounds(i) {
 
 function createWindow() {
     // Create the browser window.
+
+    if (devMode()) {
+        var maxHeight = 1080;
+        var maxWidth = 1920;
+    } else {
+        var maxHeight = 720;
+        var maxWidth = 1280;
+    }
     mainWindow = new BrowserWindow({
         width: 1280,
         height: 720,
         minHeight: 720,
         minWidth: 1280,
+
+        maxHeight: maxHeight,
+        maxWidth: maxWidth,
+
         icon: path.join(__dirname, 'src/imgs/icon.png'),
         fullscreenable: false,
         maximizable: false,

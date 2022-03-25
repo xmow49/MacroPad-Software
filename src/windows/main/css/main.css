@@ -6,6 +6,7 @@
     --font-size-icon: 30px;
     --macopad-color-1: #FE7100;
     --macopad-color-2: #0082FE;
+    --button-transition-speed: 0.2s;
 }
 
 :root .light-mode {

@@ -7,10 +7,12 @@
     font-size: 16px;
     line-height: 24px;
     cursor: pointer;
+    transition: 0.2s;
 }
 
 .connect:hover {
     background: var(--button-color-hover);
+    transition: 0.2s;
 }
 
 .connect {
@@ -222,6 +224,7 @@
     box-sizing: border-box;
     border-radius: 12px;
     cursor: pointer;
+    transition: var(--button-transition-speed);
 }
 
 #edit button h2 {
@@ -232,7 +235,7 @@
 
 #edit button:hover {
     background: var(--button-color-hover);
-    transition: 0.2s;
+    transition: var(--button-transition-speed);
 }
 
 .active-button button {
@@ -258,6 +261,12 @@
     border: 1px solid var(--font-master-color);
     box-sizing: border-box;
     border-radius: 12px;
+    transition: var(--button-transition-speed)
+}
+
+.ui-corner-button button:hover {
+    background: var(--button-color-hover);
+    transition: var(--button-transition-speed)
 }
 
 
@@ -279,4 +288,23 @@
 
 .bold {
     font-weight: bold;
+}
+
+#profile-editor-toggle {
+    transition: all 0.3s;
+}
+
+#edit-button {
+    opacity: 1;
+}
+
+#back-button {
+    position: relative;
+    top: -46px;
+    opacity: 0;
+}
+
+#edit-button,
+#back-button {
+    transition: opacity 0.2s linear;
 }
