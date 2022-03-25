@@ -308,3 +308,41 @@
 #back-button {
     transition: opacity 0.2s linear;
 }
+
+.visible {
+    visibility: visible !important;
+    opacity: 1 !important;
+    transition: visibility 0.2s, opacity 0.2s linear !important;
+}
+
+#send-loading {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.2s, opacity 0.2s linear;
+}
+
+#send-button {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.2s, opacity 0.2s linear;
+}
+
+.send button span {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.2s, opacity 0.2s linear;
+}
+
+#send-ok {
+    position: relative;
+    top: -46px;
+    left: 0px;
+    color: green;
+}
+
+#send-error {
+    position: relative;
+    top: -93px;
+    left: 0px;
+    color: red;
+}

@@ -320,91 +320,146 @@ function connectPopupSave() {
 
 var configIsSending = false;
 
+function setSendIcon(icon) {
+    //0 = send
+    //1 = loading
+    //2 = ok
+    //3 = error
+    try {
+        document.getElementById("send-button").classList.remove("visible");
+        document.getElementById("send-loading").classList.remove("visible");
+        document.getElementById("send-ok").classList.remove("visible");
+        document.getElementById("send-error").classList.remove("visible");
+    } catch (e) {}
+
+
+    switch (icon) {
+        case 0:
+            document.getElementById("send-button").classList.add("visible");
+            document.getElementById("send").style.background = "";
+
+            break;
+        case 1:
+            document.getElementById("send-loading").classList.add("visible");
+            document.getElementById("send").style.background = "var(--color-header-hover)";
+            break;
+        case 2:
+            document.getElementById("send-ok").classList.add("visible");
+            window.setTimeout(function() {
+                setSendIcon(0); //show send
+            }, 2000);
+            break;
+        case 3:
+            document.getElementById("send-error").classList.add("visible");
+            window.setTimeout(function() {
+                setSendIcon(0); //show send
+            }, 2000);
+            break;
+
+    }
+}
+
+
 async function sendConfig() {
-    if (macropadConnectionStatus) { //if connected
+    if (macropadConnectionStatus && !configIsSending) { //if connected
         configIsSending = true;
+        setSendIcon(1); //show loading
         musicName = "none"; //reset the music name
         console.log("---------------------------SENDING CONFIG---------------------------");
-        for (var profileNumber = 0; profileNumber < 6; profileNumber++) { //for each profile
-            if (readFromConfig("profiles." + profileNumber) != null) { //if profile is not empty
-                var profileName = readFromConfig("profiles." + profileNumber + ".name"); //get the profile name
-                var profileColor = readFromConfig("profiles." + profileNumber + ".color"); //get the profile color
-                var profileEncoders = readFromConfig("profiles." + profileNumber + ".encoders"); //get the profile encoders
-                var profileKeys = readFromConfig("profiles." + profileNumber + ".keys"); //get the profile keys 
-                var profileDisplay = readFromConfig("profiles." + profileNumber + ".display"); //get the profile display
+        try {
+
+
+            for (var profileNumber = 0; profileNumber < 6; profileNumber++) { //for each profile
+                if (readFromConfig("profiles." + profileNumber) != null) { //if profile is not empty
+                    var profileName = readFromConfig("profiles." + profileNumber + ".name"); //get the profile name
+                    var profileColor = readFromConfig("profiles." + profileNumber + ".color"); //get the profile color
+                    var profileEncoders = readFromConfig("profiles." + profileNumber + ".encoders"); //get the profile encoders
+                    var profileKeys = readFromConfig("profiles." + profileNumber + ".keys"); //get the profile keys 
+                    var profileDisplay = readFromConfig("profiles." + profileNumber + ".display"); //get the profile display
 
 
 
-                //---------------------------------SEND PROFILE NAME---------------------------------
-                if (profileName != null) { //if profile name is not empty
-                    // console.log("B " + profileNumber + " " + profileName);
-                    await sendWithACK("B " + profileNumber + " " + profileName); //send the name to the macropad
+                    //---------------------------------SEND PROFILE NAME---------------------------------
+                    if (profileName != null) { //if profile name is not empty
+                        // console.log("B " + profileNumber + " " + profileName);
+                        await sendWithACK("B " + profileNumber + " " + profileName); //send the name to the macropad
 
-                }
-
-                //---------------------------------SEND PROFILE COLOR---------------------------------
-                if (profileColor != null) { //if profile color is not empty
-                    var colorString = "";
-                    for (var i = 0; i < profileColor.length; i++) {
-                        if (profileColor[i] == null) profileColor[i] = 0;
-                        colorString += profileColor[i] + " ";
                     }
-                    // console.log("C " + profileNumber + " " + colorString);
-                    await sendWithACK("C " + profileNumber + " " + colorString); //send the color to the macropad
-                }
 
-                //---------------------------------SEND ENCODERS---------------------------------
-                if (profileEncoders != null) { //if profile encoders is not empty
-                    for (var nEncoder = 0; nEncoder < 3; nEncoder++) { //for each encoder
-                        var encoderType = readFromConfig("profiles." + profileNumber + ".encoders." + nEncoder + ".type"); //get the encoder type
-                        var encoderValues = readFromConfig("profiles." + profileNumber + ".encoders." + nEncoder + ".values"); //get the encoder values
-                        if (encoderType == null) encoderType = 0;
-                        if (encoderType == 1) {
-                            //software
-                        } else {
-                            if (encoderValues != null) {
-                                for (var nValue = 0; nValue < 3; nValue++) { //for each value
-                                    if (encoderValues[nValue] == null) encoderValues[nValue] = ""; //if value is empty, set it to empty string
+                    //---------------------------------SEND PROFILE COLOR---------------------------------
+                    if (profileColor != null) { //if profile color is not empty
+                        var colorString = "";
+                        for (var i = 0; i < profileColor.length; i++) {
+                            if (profileColor[i] == null) profileColor[i] = 0;
+                            colorString += profileColor[i] + " ";
+                        }
+                        // console.log("C " + profileNumber + " " + colorString);
+                        await sendWithACK("C " + profileNumber + " " + colorString); //send the color to the macropad
+                    }
+
+                    //---------------------------------SEND ENCODERS---------------------------------
+                    if (profileEncoders != null) { //if profile encoders is not empty
+                        for (var nEncoder = 0; nEncoder < 3; nEncoder++) { //for each encoder
+                            var encoderType = readFromConfig("profiles." + profileNumber + ".encoders." + nEncoder + ".type"); //get the encoder type
+                            var encoderValues = readFromConfig("profiles." + profileNumber + ".encoders." + nEncoder + ".values"); //get the encoder values
+                            if (encoderType == null) encoderType = 0;
+                            if (encoderType == 1) {
+                                //software
+                            } else {
+                                if (encoderValues != null) {
+                                    for (var nValue = 0; nValue < 3; nValue++) { //for each value
+                                        if (encoderValues[nValue] == null) encoderValues[nValue] = ""; //if value is empty, set it to empty string
+                                    }
+                                }
+
+                                // console.log("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]);
+                                await sendWithACK("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]); //wait for the acknowledgement from the macropad
+                            }
+                        }
+                    }
+
+
+                    //---------------------------------SEND KEYS---------------------------------
+                    if (profileKeys != null) { //if profile keys is not empty
+                        for (var nKey = 0; nKey < 6; nKey++) { //for each key
+                            var keyType = readFromConfig("profiles." + profileNumber + ".keys." + nKey + ".type"); //get the key type
+                            var keyValues = readFromConfig("profiles." + profileNumber + ".keys." + nKey + ".values"); //get the key values
+                            if (keyType == 0) { // key combination
+                                for (var nValue = 0; nValue < 3; nValue++) {
+                                    keyValues[nValue] = keycodeToKeyboard(keyValues[nValue]);
                                 }
                             }
 
-                            // console.log("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]);
-                            await sendWithACK("E " + profileNumber + " " + nEncoder + " " + encoderType + " " + encoderValues[0] + " " + encoderValues[1] + " " + encoderValues[2]); //wait for the acknowledgement from the macropad
+                            if (keyType == null) keyType = 0;
+                            if (keyValues == null) keyValues = [0, 0, 0];
+                            // console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
+                            await sendWithACK("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]); //send the key to the macropad
+
                         }
                     }
+                    //---------------------------------SEND Display---------------------------------
+                    if (profileDisplay != null) { //if profile display is not empty
+                        var displayType = readFromConfig("profiles." + profileNumber + ".display.type"); //get the display type
+                        if (displayType == null) displayType = 1;
+                        await sendWithACK("D " + profileNumber + " " + displayType); //send the display to the macropad
+                    } else {}
+                    await sendWithACK("S"); //send to the eeprom
                 }
-
-
-                //---------------------------------SEND KEYS---------------------------------
-                if (profileKeys != null) { //if profile keys is not empty
-                    for (var nKey = 0; nKey < 6; nKey++) { //for each key
-                        var keyType = readFromConfig("profiles." + profileNumber + ".keys." + nKey + ".type"); //get the key type
-                        var keyValues = readFromConfig("profiles." + profileNumber + ".keys." + nKey + ".values"); //get the key values
-                        if (keyType == 0) { // key combination
-                            for (var nValue = 0; nValue < 3; nValue++) {
-                                keyValues[nValue] = keycodeToKeyboard(keyValues[nValue]);
-                            }
-                        }
-
-                        if (keyType == null) keyType = 0;
-                        if (keyValues == null) keyValues = [0, 0, 0];
-                        // console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
-                        await sendWithACK("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]); //send the key to the macropad
-
-                    }
-                }
-                //---------------------------------SEND Display---------------------------------
-                if (profileDisplay != null) { //if profile display is not empty
-                    var displayType = readFromConfig("profiles." + profileNumber + ".display.type"); //get the display type
-                    if (displayType == null) displayType = 1;
-                    await sendWithACK("D " + profileNumber + " " + displayType); //send the display to the macropad
-                } else {}
-                await sendWithACK("S"); //send to the eeprom
+                console.log("Profile " + profileNumber + " sent");
             }
-            console.log("Profile " + profileNumber + " sent");
+        } catch (e) {
+            configIsSending = false;
+            setSendIcon(3); //show error
+            window.setTimeout(function() {
+                setSendIcon(0); //show send
+            }, 2000);
         }
         configIsSending = false;
         checkBeforeDisplay();
+        setSendIcon(2); //show ok
+
+    } else if (macropadConnectionStatus == false) {
+        setSendIcon(3); //show error
     }
 
 }
@@ -519,22 +574,35 @@ class sendToMacopad {
 
     static async profileName(profileID, profileName) {
         if (macropadConnectionStatus) {
-            await sendWithACK("B " + profileID + " " + profileName); //send the name to the macropad
+            setSendIcon(1);
+            try {
+                await sendWithACK("B " + profileID + " " + profileName); //send the name to the macropad
+            } catch (e) {
+                setSendIcon(3);
+            }
+
             return 1;
         } else {
             return 0;
         }
+        setSendIcon(2);
     }
 
     static async profileColor(profileID, color) {
         if (macropadConnectionStatus) {
+            setSendIcon(1);
             var colorString = "";
             for (var i = 0; i < color.length; i++) {
                 if (color[i] == null) color[i] = 0;
                 colorString += color[i] + " ";
             }
             // console.log("C " + profileNumber + " " + colorString);
-            await sendWithACK("C " + profileID + " " + colorString); //send the color to the macropad
+            try {
+                await sendWithACK("C " + profileID + " " + colorString); //send the color to the macropad
+            } catch (e) {
+                setSendIcon(3);
+            }
+            setSendIcon(2);
             return 1;
         } else {
             return 0;
@@ -544,13 +612,20 @@ class sendToMacopad {
 
     static async display(profileID, displayType, displayValues) {
         if (macropadConnectionStatus) {
+            setSendIcon(1);
             if (displayType == null) displayType = 1;
-            await sendWithACK("D " + profileID + " " + displayType); //send the display to the macropad
+            try {
+                await sendWithACK("D " + profileID + " " + displayType); //send the display to the macropad
+            } catch (e) {
+                setSendIcon(3);
+            }
+            setSendIcon(2);
         }
     }
 
     static async key(profileID, keyNumber, keyType, keyValues) {
         if (macropadConnectionStatus) {
+            setSendIcon(1);
             var tempValues = [...keyValues];
             if (keyType == 0) { // key combination
                 for (var nValue = 0; nValue < 3; nValue++) {
@@ -560,12 +635,18 @@ class sendToMacopad {
             if (keyType == null) keyType = 0;
             if (keyValues == null) keyValues = [0, 0, 0];
             // console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
-            await sendWithACK("K " + profileID + " " + keyNumber + " " + keyType + " " + tempValues[0] + " " + tempValues[1] + " " + tempValues[2]); //send the key to the macropad
+            try {
+                await sendWithACK("K " + profileID + " " + keyNumber + " " + keyType + " " + tempValues[0] + " " + tempValues[1] + " " + tempValues[2]); //send the key to the macropad
+            } catch (e) {
+                setSendIcon(3);
+            }
+            setSendIcon(2);
         }
     }
 
     static async encoder(profileID, nEncoder, encoderType, encoderValues) {
         if (macropadConnectionStatus) {
+            setSendIcon(1);
             var tempValues = [...encoderValues];
             if (encoderType == null) encoderType = -1;
             if (encoderType == 1) {
@@ -583,11 +664,13 @@ class sendToMacopad {
             if (encoderType == null) keyType = 0;
             if (encoderValues == null) tempValues = [0, 0, 0];
             // console.log("K " + profileNumber + " " + nKey + " " + keyType + " " + keyValues[0] + " " + keyValues[1] + " " + keyValues[2]);
-            await sendWithACK("E " + profileID + " " + nEncoder + " " + encoderType + " " + tempValues[0] + " " + tempValues[1] + " " + tempValues[2]); //wait for the acknowledgement from the macropad
+            try {
+                await sendWithACK("E " + profileID + " " + nEncoder + " " + encoderType + " " + tempValues[0] + " " + tempValues[1] + " " + tempValues[2]); //wait for the acknowledgement from the macropad
+            } catch (e) {
+                setSendIcon(3);
+            }
+            setSendIcon(2);
         }
     }
-
-
-
 
 }

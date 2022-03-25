@@ -83,7 +83,15 @@
                 </div>
 
                 <div class="send ui-corner-button">
-                    <button onclick="sendConfig();"><span class="mdi mdi-send"></span></button>
+                    <svg id="send-loading" class="circular" viewBox="25 25 50 50">
+                        <circle class="path" cx="50" cy="50" r="15" fill="none" stroke-width="2" stroke-miterlimit="10"></circle>
+                    </svg>
+                    <button id="send" onclick="sendConfig();">
+                        <span id="send-button" class="visible mdi mdi-send"></span>
+                        <span id="send-ok" class="mdi mdi-check"></span>
+                        <span id="send-error" class="mdi mdi-alert-circle"></span>
+
+                    </button>
                 </div>
             </div>
 
