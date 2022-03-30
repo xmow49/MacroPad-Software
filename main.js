@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, ipcMain, remote, Menu, nativeImage, Tray, dialog } = require('electron')
+const { app, BrowserWindow, ipcMain, remote, Menu, nativeImage, Tray, dialog, screen } = require('electron')
 const path = require('path')
 const shell = require('electron').shell;
 const { exec } = require("child_process");
@@ -14,12 +14,16 @@ const resourcePath = app.getAppPath().replace("app.asar", "");
 const volumeControlPath = path.join("\"" + resourcePath, "volume_control", "VolumeMixerControl.exe\"");
 
 
-app.geta
+//app.geta
 
 let tray = null //background tray icon
 let mainWindow; //main window 
+let hoverlayWindow; //main window 
 let loadingScreen;
 var backgroundMode = false;
+
+var hoverlayShow = false;
+
 
 app.allowRendererProcessReuse = false //for Serial port
 
@@ -216,6 +220,34 @@ function readBounds(i) {
     return bounds[i];
 }
 
+function createHoverlay() {
+    var mainScreen = screen.getPrimaryDisplay();
+    var dimensions = mainScreen.size;
+    var x = dimensions.width / 2 - 75;
+    var y = dimensions.height - 300;
+    hoverlayWindow = new BrowserWindow({
+        width: 800,
+        height: 800,
+        frame: false,
+        transparent: true,
+        alwaysOnTop: true,
+        resizable: false,
+        movable: false,
+        show: false,
+        x: x,
+        y: y,
+        skipTaskbar: true,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    });
+    hoverlayWindow.setIgnoreMouseEvents(true);
+    hoverlayWindow.loadFile('./src/windows/hoverlay/hoverlay.html');
+    // hoverlayWindow.openDevTools();
+    // hoverlayWindow.setBackgroundColor('#000000');
+};
+
 
 function createWindow() {
     // Create the browser window.
@@ -328,20 +360,41 @@ function createWindow() {
         exec(volumeControlPath + " getCurrentMedia", (error, data, getter) => {
             // console.log(error);
             if (devMode())
-                console.log(data);
+                console.log("data: ", data);
             //console.log(getter);
             event.returnValue = data;
         });
     });
-
+    var hoverlayTimout;
     ipcMain.on('set-music-software', function(event, software, value) {
         exec(volumeControlPath + " changeVolume " + software + " " + value, (error, data, getter) => {
             //console.log(error);
             if (devMode())
                 console.log(data);
-            //console.log(getter);
+            // console.log(getter);
+            // console.log(error);
+
+            hoverlayWindow.webContents.send('volume-hoverlay', software, data);
+
+
+            function hideHoverlay() {
+                hoverlayWindow.hide();
+                hoverlayShow = false;
+                console.log("Hiding hoverlay");
+            }
+            if (hoverlayShow) {
+                clearTimeout(hoverlayTimout);
+                hoverlayTimout = setTimeout(hideHoverlay, 2000);
+            } else {
+                hoverlayShow = true;
+                hoverlayWindow.show();
+                clearTimeout(hoverlayTimout);
+                hoverlayTimout = setTimeout(hideHoverlay, 2000);
+            }
             event.returnValue = data;
         });
+
+
     });
 
     ipcMain.on('get-softwares-names', function(event) {
@@ -446,9 +499,6 @@ function createWindow() {
         event.returnValue = true;
     });
 
-
-
-
     if (!tray) { // if tray hasn't been created already.
         createTray()
     }
@@ -498,13 +548,15 @@ var updateInfo = null;
 
 
 app.whenReady().then(() => {
+    createLoadingScreen();
     if (devMode()) {
         console.log("---------------------");
         console.log(" MacroPad Software");
         console.log("        V" + macropadSoftareCurrentVersion);
         console.log("---------------------");
     }
-    createLoadingScreen();
+
+    createHoverlay();
 
     setTimeout(() => {
         createWindow();

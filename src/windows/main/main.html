@@ -25,7 +25,7 @@
             <div class="logo">
                 <img src="../../imgs/icon.png" alt="logo" width="15px" style="cursor: unset;">
             </div>
-            <h1 class="software-title">MacroPad Configurator
+            <h1 class="software-title">MacroPad
                 <a id="macropad-id"></a>
             </h1>
         </div>
@@ -149,7 +149,7 @@
                         <div class="display-radio">
                             <input type="radio" name="display-text-selector" id="display-text-3" value="3" onchange="displayTypeSelected()">
                             <div id="display-div-custom">
-                                <label for="display-text-3">Custom</label>
+                                <label for="display-text-3">Text personnalisé</label>
                                 <input type="text" id="display-text-custom" placeholder="Votre text ici" maxlength="100" onfocus="document.getElementsByName('display-text-selector')[3].checked = true;" onfocusout="displayTypeSelected();">
                             </div>
 
@@ -384,19 +384,19 @@
                     <!-- JS -->
                 </div>
 
-                <div>
+                <!-- <div>
                     <h3>Nom du MacroPad</h3>
                     <div id="set-name">
                         <input type="text" id="macropad-name">
                     </div>
 
-                </div>
+                </div> -->
 
                 </select>
 
                 <div class="actions">
-                    <button onclick="connectPopupCancel();">Annuler</button>
-                    <button onclick="connectPopupSave();">Enregistrer</button>
+                    <!-- <button onclick="connectPopupCancel();">Annuler</button> -->
+                    <button onclick="connectPopupSave();">OK</button>
                 </div>
 
             </div>
@@ -414,12 +414,13 @@
                         <h3>Langue</h3>
                         <select id="select-language" onchange="saveLanguage(this);">
                             <option value="fr">Français</option>
-                            <option value="en">English</option>
+                            <!-- WIP -->
+                            <!-- <option value="en">English</option> -->
                         </select>
                     </div>
                     <!-- DarkMode -->
                     <div id="dark-mode" class="settings-item switch-item" onclick="settingItemClicked(this)">
-                        <h3>Mode sombre</h3>
+                        <h3>Mode sombre (BETA)</h3>
                         <label class="switch">
                             <input type="checkbox">
                             <span class="slider round"></span>
@@ -441,7 +442,7 @@
                     <div id="export-import-config" class="settings-item" onclick="settingItemClicked(this)">
                         <div class="settings-menu-text">
                             <h3>Exporter/Importer la Configuration</h3>
-                            <h4>Sauvgrader/Restaurer tous les données du logiciel</h4>
+                            <h4>Sauvegarder/Restaurer tous les données du logiciel</h4>
                         </div>
                         <h1 class="mdi mdi-chevron-right"></h1>
                     </div>
@@ -450,7 +451,7 @@
                     <div id="do-update" class="settings-item" onclick="settingItemClicked(this)">
                         <div class="settings-menu-text">
                             <h3>Mises à Jours</h3>
-                            <h4>Obtenez la dernière version du MacroPad et du logiciel</h4>
+                            <h4>Obtenez la dernière version du Firmware et du logiciel</h4>
                         </div>
                         <h1 class="mdi mdi-chevron-right"></h1>
                     </div>
@@ -561,9 +562,11 @@
                     <hr class="ligne">
                     <div>
                         <h3>Firmware MacroPad</h3>
+                        <h4 class="bold">Fonctionalité non implémenté</h4>
+
                         <h4>Version Actuelle: 1.0</h4>
                         <h4>Dernière Version: 1.0</h4>
-                        <button onclick="">Vérifier les Mises à Jours</button>
+                        <!-- <button onclick="">Vérifier les Mises à Jours</button> -->
                     </div>
                     <hr class="ligne">
                     <div>
@@ -589,8 +592,8 @@
                 </div>
 
                 <div class="content">
-                    <h3 style="width: 600px;">Etes vous sur de vouloir effacer la configuration du MacroPad et du logiciel ?</h3>
-                    <h3 style="color: red;">Cette action est iréversible.</h3>
+                    <h3 style="width: 600px;">Êtes vous sûrs de vouloir effacer la configuration du MacroPad et du logiciel ?</h3>
+                    <h3 style="color: red;">Cette action est irréversible.</h3>
                     <button id="hard-reset-button" onclick="hardReset();">Effacer la configuration</button>
                 </div>
             </div>
