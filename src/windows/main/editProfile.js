@@ -776,8 +776,18 @@ function displayTypeSelected() {
     var value = document.getElementById("display-text-custom").value;
 
     macropadConfig.profiles[currentProfile].display.type = parseInt(type);
+    if (value == "" || value == null || value == undefined) {
+        value = "MacroPad";
+        document.getElementById("display-text-custom").value = value;
+
+    }
     macropadConfig.profiles[currentProfile].display.value = value;
     sendToMacopad.display(currentProfile, type, value);
+
+    if (macropadConnectionStatus) {
+        updateScreenText();
+    }
+
 }
 
 var lastSelectedSystemActionValue = -1;

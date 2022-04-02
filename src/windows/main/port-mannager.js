@@ -25,9 +25,9 @@ usbDetect.on('add', function(device) {
     }
 });
 
+var availablePorts = [];
 
 function scanPorts() { //List all serial port and store into availablePorts
-    var availablePorts = [];
     SerialPort.list().then(function(ports) {
         var i = 0;
         ports.forEach(function(port) {
@@ -113,6 +113,8 @@ async function responsesFromPort(data) {
             await sendWithACK("A"); //get the current profile from the macropad
 
             updateScreenText(); //start the screen text update
+            saveToConfig("settings.last-port", availablePorts[currentTestingPort]); //save the last port used
+
         }
 
         clearInterval(checkInterval); //stop all check
@@ -140,7 +142,7 @@ async function responsesFromPort(data) {
         //     console.log(stringFromSerial.charCodeAt(i));
         // }
 
-        if (stringFromSerial.includes("K")) { //a key is pressed
+        if (stringFromSerial.charAt(0) == "K") { //a key is pressed
             var msg = stringFromSerial.replace("K", ""); //keep only the key code
             var keyCode = parseInt(msg);
             msg = "key" + keyCode;
@@ -149,6 +151,8 @@ async function responsesFromPort(data) {
                 button.style.transform = "scale(.9)"; //animate the button
                 setTimeout(function() { //wait 0.3s and stop the animation
                     button.style.transform = "scale(1)";
+                    updateScreenText(); //update the screen text: potentially music changed
+
                 }, 300);
             } catch (e) {}
         }
@@ -260,7 +264,7 @@ function scanSerialsPorts() {
         document.getElementById("scan-loading").style.display = "block"; //show the loading animation
         scanInProgress = true; //Scan in progress
         document.getElementById("connect-button").innerHTML = "Scan en cours ..."
-        var availablePorts = scanPorts(); //Get all ports
+        availablePorts = scanPorts(); //Get all ports
         setTimeout(function() {
             updateGUIPortList(availablePorts) //update the list after 100ms
             testToDoCount = availablePorts.length - 1;
@@ -269,8 +273,16 @@ function scanSerialsPorts() {
         //Start autocheck
         currentTestingPort = -1; //start to the first port
 
+
         checkInterval = window.setInterval(function() {
-            currentTestingPort++;
+            // ------------ TEST with previous port ------------
+            var lastUsedPort = readFromConfig("settings.last-port"); //get the last used port
+            if (lastUsedPort.includes("COM") && currentTestingPort == -1) { //if the last used port is a serial port
+                availablePorts[currentTestingPort] = lastUsedPort; //get the port number
+            } else {
+                currentTestingPort++;
+            }
+            //-----------------------------------------------
             if (currentTestingPort > testToDoCount) {
                 clearInterval(checkInterval);
                 document.getElementById("scan-loading").style.display = "none"; //hide the loading animation
@@ -512,8 +524,10 @@ function sendWithACK(text) { //send a command to the macropad and wait for the a
     });
 }
 
+
+
 var musicName = "none";
-async function setTextMusic(software) { //set the music name
+async function setTextMusic() { //set the music name
 
     var name = IPC.sendSync('getCurrentMedia'); //get the music name
     // name.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -522,41 +536,112 @@ async function setTextMusic(software) { //set the music name
         // document.getElementById("macropad-display").innerHTML = "" + data;
         name.replace(/[\n\r]/g, '');
         name = name.normalize("NFD").replace(/\p{Diacritic}/gu, ""); //convert to ascii
-        document.getElementById("macropad-text").innerHTML = name;
-        if (name.length >= 15) {
-            document.getElementById("macropad-text").classList.add("scroll");
-        } else {
-            document.getElementById("macropad-text").classList.remove("scroll");
-        }
+        currentTextOnScreen = name;
         await sendWithACK("T " + name); //send the music name to the macropad
     }
 }
 
+async function setTimeDisplay() {
+    var date = new Date();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    var hourString = hour.toString();
+    var minuteString = minute.toString();
+    var secondString = second.toString();
+    if (hour < 10) hourString = "0" + hourString;
+    if (minute < 10) minuteString = "0" + minuteString;
+    if (second < 10) secondString = "0" + secondString;
+    currentTextOnScreen = hourString + ":" + minuteString;
+    await sendWithACK("T " + hourString + ":" + minuteString);
+}
+
+async function setCustomDisplay() {
+    var text = macropadConfig.profiles[currentProfile].display.value;
+    currentTextOnScreen = text;
+    await sendWithACK("T " + text);
+}
+
 var screenTextInterval;
+var scrollTextInterval;
+var currentScrollPosition = 0;
+
+function textWidth(text, fontProp) {
+    var tag = document.createElement('div')
+    tag.style.position = 'absolute'
+    tag.style.left = '-99in'
+    tag.style.whiteSpace = 'nowrap'
+    tag.style.font = fontProp
+    tag.innerHTML = text
+
+    document.body.appendChild(tag)
+    var result = tag.clientWidth
+    document.body.removeChild(tag)
+    return result;
+}
+
+function scrollText() {
+    document.getElementById("macropad-text").style.right = `${currentScrollPosition}px`;
+    currentScrollPosition++;
+    if (textWidth(currentTextOnScreen, '18px Poppins') < currentScrollPosition) {
+        currentScrollPosition = -176;
+    }
+}
+
+//445 --> 300
+
+var currentTextOnScreen = "";
 
 function checkBeforeDisplay() {
     if (!configIsSending) {
+        var oldScreenText = currentTextOnScreen;
         var displayType = macropadConfig.profiles[currentProfile].display.type; //get the display type
+        console.log("Display type: " + displayType);
         if (displayType == null) return;
         if (displayType == 0) {
-            setTextMusic("spotify"); //-----------------------------------------------------------------------------TODO
+            setTextMusic();
+        } else if (displayType == 1) {
+            currentTextOnScreen = macropadConfig.profiles[currentProfile].name;
+
+        } else if (displayType == 2) {
+            //send the hour to the macropad
+            setTimeDisplay();
+        } else if (displayType == 3) {
+            setCustomDisplay();
+        }
+
+        if (oldScreenText != currentTextOnScreen) {
+            //--------- update the display in the software ----------
+            document.getElementById("macropad-text").innerHTML = currentTextOnScreen;
+            if (currentTextOnScreen.length >= 15) {
+                document.getElementById("macropad-text").classList.add("scroll");
+                clearInterval(scrollTextInterval);
+                scrollTextInterval = window.setInterval(scrollText, 20);
+            } else {
+                document.getElementById("macropad-text").classList.remove("scroll");
+            }
         }
     }
 
 }
 
 function updateScreenText() {
+    console.log("updateScreenText");
     musicName = "none";
+
     window.clearInterval(screenTextInterval);
     macropadConfig.profiles[currentProfile].display.type
     var displayType = macropadConfig.profiles[currentProfile].display.type; //get the display type
-    if (displayType == 0 || displayType == 2 || displayType == 3) { //need text on the macropad screen
-        var displayValues = macropadConfig.profiles[currentProfile].display.values; //get the display values
-        if (displayValues != null) {
+
+    //if (displayType == 0 || displayType == 2 || displayType == 3) { //need text on the macropad screen
+    var displayValues = macropadConfig.profiles[currentProfile].display.values; //get the display values
+    if (displayValues != null) {
+        window.setTimeout(function() {
             checkBeforeDisplay();
-            screenTextInterval = setInterval(checkBeforeDisplay, 10000);
-        }
+        }, 100);
+        screenTextInterval = setInterval(checkBeforeDisplay, 10000);
     }
+    //}
 }
 
 async function hardReset() {
@@ -580,12 +665,12 @@ class sendToMacopad {
             } catch (e) {
                 setSendIcon(3);
             }
-
+            setSendIcon(2);
             return 1;
         } else {
             return 0;
         }
-        setSendIcon(2);
+
     }
 
     static async profileColor(profileID, color) {

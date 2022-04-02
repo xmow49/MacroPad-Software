@@ -14,6 +14,7 @@
     <!--  materialdesignicons 6.4.95  -->
     <link rel="stylesheet" href="downloaded_contents/materialdesignicons.css" />
     <link rel="stylesheet" href="downloaded_contents/colorPicker.css" />
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@2.4.9/dist/vuetify.min.css"> -->
     <script src="main.js"></script>
 
 </head>
@@ -150,7 +151,7 @@
                             <input type="radio" name="display-text-selector" id="display-text-3" value="3" onchange="displayTypeSelected()">
                             <div id="display-div-custom">
                                 <label for="display-text-3">Text personnalisé</label>
-                                <input type="text" id="display-text-custom" placeholder="Votre text ici" maxlength="100" onfocus="document.getElementsByName('display-text-selector')[3].checked = true;" onfocusout="displayTypeSelected();">
+                                <input type="text" id="display-text-custom" placeholder="Votre texte ici" maxlength="68" onfocus="document.getElementsByName('display-text-selector')[3].checked = true;" onfocusout="displayTypeSelected();">
                             </div>
 
                         </div>
@@ -633,7 +634,45 @@
     </div>
     <!-- <localized-text key="hello_world"></localized-text>
     <localized-text key="hello_world" lang="ja"></localized-text> -->
-    <MdiIconPicker v-model="icon" :icons="icons" @select="onSelect"></MdiIconPicker>
+    <!-- <MdiIconPicker v-model="icon" :icons="icons" @select="onSelect"> -->
+
+
+    <!-- <div id="icon-picker">
+        <v-app id="inspire">
+            <v-container>
+
+                <v-dialog v-model="showDialog" :close-on-content-click="false" :nudge-right="40" transition="scale-transition" offset-y max-width="700px" max-height="850px">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-text-field
+                        v-model="icon"
+                        :prepend-inner-icon="selectedIcon"
+                        label="Choisir un icon"
+                        v-bind="attrs"
+                        v-on="on"
+                        color="deep-purple"            
+                        readonly
+                        >
+                        </v-text-field>
+    
+                    </template>
+                    <v-card>
+                        <v-app-bar color="white" scroll-target="#scrolling-techniques-7" elevation="0">
+                            <v-text-field v-model="searchIcon" placeholder="Search icon" prepend-icon="mdi-magnify" type="text" onautocomplete="off" dense />
+                        </v-app-bar>
+                        <v-sheet id="scrolling-techniques-7" class="overflow-y-auto" max-height="600">
+                            <v-col cols="12">
+                                <v-btn v-for="(item, i) in allIcons" :key="i" @click="saveIcon(item)" color="white" class="mr-2 mb-2 " fab small depressed>
+                                    <v-icon color="grey darken-3"> mdi-{{ item }} </v-icon>
+                                </v-btn>
+                            </v-col>
+
+                        </v-sheet>
+                    </v-card>
+                </v-dialog>
+
+            </v-container>
+        </v-app>
+    </div> -->
 </body>
 <script src="downloaded_contents/colorPicker.js"></script>
 <script src="downloaded_contents/localizer.js"></script>
@@ -645,8 +684,14 @@
 <script src="editProfile.js"></script>
 <script src="keyboard.js"></script>
 <script src="./js/update.js"></script>
+
+
+<!-- <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.4.9/dist/vuetify.min.js"></script>
+<script src="./js/mdi-picker.js"></script> -->
+
 <!-- <script type="module">
-    import MdiIconPicker from '../../../node_modules/vue-mdi-icon-picker/src/index.js'
+    import MdiIconPicker from 'vue-mdi-icon-picker'
 </script> -->
 
 </html>

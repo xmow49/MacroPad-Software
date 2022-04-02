@@ -68,8 +68,8 @@ button:disabled>*::before,
 button[disabled],
 button[disabled]>*,
 button[disabled]>*::before {
-    color: var(--color-buttons);
-    background-color: var(--button-color);
+    color: var(--font-master-color);
+    /* background-color: var(--button-color); */
     border-color: var(--font-master-color);
     cursor: default;
 }

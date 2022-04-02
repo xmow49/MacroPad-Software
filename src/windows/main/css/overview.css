@@ -77,12 +77,12 @@
 
 #macropad-grid .key {
     border-radius: 15px;
-    font-size: 50px;
+    font-size: 57px;
 }
 
 #macropad-grid .encoder {
     border-radius: 100px;
-    font-size: 50px;
+    font-size: 57px;
 }
 
 #macropad button:hover {
@@ -135,7 +135,8 @@
 }
 
 #macropad-display h4.scroll {
-    animation: slide-left 5s linear infinite;
+    position: relative;
+    justify-content: normal;
 }
 
 .profile-selector {
