@@ -277,6 +277,9 @@ function scanSerialsPorts() {
         checkInterval = window.setInterval(function() {
             // ------------ TEST with previous port ------------
             var lastUsedPort = readFromConfig("settings.last-port"); //get the last used port
+            if (lastUsedPort == null || lastUsedPort == "" || lastUsedPort == undefined) {
+                lastUsedPort = "";
+            }
             if (lastUsedPort.includes("COM") && currentTestingPort == -1) { //if the last used port is a serial port
                 availablePorts[currentTestingPort] = lastUsedPort; //get the port number
             } else {
