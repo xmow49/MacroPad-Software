@@ -12,6 +12,9 @@ const { info } = require('console');
 
 const resourcePath = app.getAppPath().replace("app.asar", "");
 const volumeControlPath = path.join("\"" + resourcePath, "volume_control", "VolumeMixerControl.exe\"");
+const sendFirmwarePath = path.join(resourcePath, "firmware_updater", "win32");
+const firmwarePath = path.join("\"" + resourcePath, "firmware_updater", "firmware.elf\"");
+
 
 
 //app.geta
@@ -407,6 +410,18 @@ function createWindow() {
         });
     });
 
+    ipcMain.on('send-firmware', function(event, port) {
+        console.log(sendFirmwarePath);
+        exec("leonardoUploader.exe " + port + " firmware.elf", {
+            cwd: sendFirmwarePath
+        }, (error, data, getter) => {
+            console.log(error);
+            if (devMode())
+                console.log(data);
+            console.log(getter);
+            event.returnValue = data;
+        });
+    });
 
 
     ipcMain.on('export-settings', function(event) {

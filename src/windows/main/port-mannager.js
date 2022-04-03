@@ -18,9 +18,11 @@ var macropadInterval;
 
 usbDetect.on('add', function(device) {
     if (device.vendorId == "9025" && device.productId == "32822") {
-        setTimeout(function() {
-            scanSerialsPorts();
-        }, 1000);
+        if (firmwareUpdateRunning == false) {
+            setTimeout(function() {
+                scanSerialsPorts();
+            }, 1000);
+        }
 
     }
 });
@@ -657,6 +659,7 @@ async function hardReset() {
 
 }
 
+var firmwareUpdateRunning = false;
 
 class sendToMacopad {
 
@@ -759,6 +762,34 @@ class sendToMacopad {
             }
             setSendIcon(2);
         }
+    }
+
+    static async firmware() {
+        //--------- disconnect the macropad ----------
+        if (macropadConnectionStatus) {
+            serialPortConnection.close();
+            macropadConnectionStatus = false;
+            document.getElementById("connect-button").innerHTML = "Rechercher un MacroPad";
+            updateOverviewConnectionStatus(false);
+            musicName = "none";
+            clearInterval(macropadInterval);
+            clearInterval(screenTextInterval);
+            console.log("Macropad disconnected");
+        }
+        //--------- disconnect the macropad ----------
+        if (firmwareUpdateRunning) return;
+        firmwareUpdateRunning = true;
+        window.setTimeout(function() {
+            var port = readFromConfig("settings.last-port");
+            if (port != null && port != "" && port != "undefined" && port.includes("COM")) { //if the port is a serial port
+                console.log(firmwareUpdateRunning);
+                IPC.sendSync("send-firmware", port); //send the port to the main process
+                firmwareUpdateRunning = false;
+                console.log(firmwareUpdateRunning);
+            }
+        }, 3000);
+
+
     }
 
 }
