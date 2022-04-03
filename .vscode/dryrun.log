@@ -1,0 +1,4 @@
+make.exe -f d:\MacroPad\3 - Logiciel\MacroPad-SoftwareV3\MacroPad-Software\utils\Makefile --dry-run --always-make --keep-going --print-directory
+'make.exe' is not recognized as an internal or external command,
+operable program or batch file.
+

@@ -138,3 +138,149 @@ class update {
     }
 
 }
+
+
+function versionCompare(v1, v2, options) {
+    var lexicographical = options && options.lexicographical,
+        zeroExtend = options && options.zeroExtend,
+        v1parts = v1.split('.'),
+        v2parts = v2.split('.');
+
+    function isValidPart(x) {
+        return (lexicographical ? /^\d+[A-Za-z]*$/ : /^\d+$/).test(x);
+    }
+
+    if (!v1parts.every(isValidPart) || !v2parts.every(isValidPart)) {
+        return NaN;
+    }
+
+    if (zeroExtend) {
+        while (v1parts.length < v2parts.length) v1parts.push("0");
+        while (v2parts.length < v1parts.length) v2parts.push("0");
+    }
+
+    if (!lexicographical) {
+        v1parts = v1parts.map(Number);
+        v2parts = v2parts.map(Number);
+    }
+
+    for (var i = 0; i < v1parts.length; ++i) {
+        if (v2parts.length == i) {
+            return 1;
+        }
+
+        if (v1parts[i] == v2parts[i]) {
+            continue;
+        } else if (v1parts[i] > v2parts[i]) {
+            return 1;
+        } else {
+            return -1;
+        }
+    }
+
+    if (v1parts.length != v2parts.length) {
+        return -1;
+    }
+
+    return 0;
+}
+
+
+const { Octokit } = require("@octokit/rest");
+const octokit = new Octokit();
+
+var currentFirmwareVersion = "";
+
+class firmware {
+    static async releaseVersion() {
+        var repo = await octokit.request('GET /repos/xmow49/MacroPad-Arduino/releases', {
+            owner: 'xmow49',
+            repo: 'MacroPad-Arduino'
+        });
+        console.log(repo.data[0].tag_name);
+        return repo.data[0].tag_name;
+    }
+
+    static async currentVersion() {
+        var promise = new Promise(function(resolve, reject) {
+            sendToMacopad.version();
+            window.setTimeout(function() {
+                resolve(currentFirmwareVersion);
+                console.log(currentFirmwareVersion);
+            }, 1000);
+        });
+        return promise;
+    }
+
+    static async available() {
+        var promise = new Promise(async function(resolve, reject) {
+            var releaseVersion = await firmware.releaseVersion();
+            var currentVersion = await firmware.currentVersion();
+            var updateAvailable = versionCompare(releaseVersion, currentVersion) > 0;
+            if (updateAvailable) {
+                console.log("update available");
+            }
+            resolve(updateAvailable);
+        });
+        return promise;
+    }
+
+    static clearError() {
+        document.getElementById("firmware-error-text").innerHTML = "";
+        document.getElementById("retry-firmware").style.display = "none";
+    }
+
+    static GUICheck() {
+        firmware.clearError();
+
+        document.getElementById("check-firmware-button").getElementsByTagName("h4")[0].innerHTML = "Verification ...";
+        setTimeout(function() {
+            firmware.displayOnSettings();
+        }, 1000);
+    }
+    static async displayOnSettings() {
+        var releaseVersion = await firmware.releaseVersion();
+        var currentVersion = await firmware.currentVersion();
+        var updateAvailable = versionCompare(releaseVersion, currentVersion) > 0;
+        document.getElementById("current-firmware-version").innerHTML = currentVersion;
+        document.getElementById("release-firmware-version").innerHTML = releaseVersion;
+
+        if (document.getElementById("firmware-downloaded").style.display == "flex" ||
+            document.getElementById("download-firmware-info").style.display == "flex")
+        //update downloaded or downloading
+        {
+
+
+        } else if (updateAvailable) {
+            document.getElementById("firmware-available-settings").style.display = "flex";
+            document.getElementById("check-firmware-button").style.display = "none";
+
+        } else {
+            document.getElementById("firmware-available-settings").style.display = "none";
+            document.getElementById("check-firmware-button").style.display = "flex";
+            document.getElementById("check-firmware-button").getElementsByTagName("h4")[0].innerHTML = "Aucune mise à jour disponible";
+
+        }
+    }
+
+    static async download() {
+        var repo = await octokit.request('GET /repos/xmow49/MacroPad-Arduino/releases', {
+            owner: 'xmow49',
+            repo: 'MacroPad-Arduino'
+        });
+        repo.data[0].assets.forEach(function(asset) {
+            if (asset.name.includes(".elf")) { //if it's an elf file
+                var url = asset.browser_download_url;
+                var fileName = asset.name;
+                var file = new File([], fileName, { type: "application/octet-stream" });
+                console.log(url);
+                console.log(fileName);
+                console.log(file);
+
+            }
+        });
+
+        console.log(repo.data[0].assets[0].browser_download_url);
+        return repo.data[0].tag_name;
+    }
+}

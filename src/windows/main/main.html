@@ -565,9 +565,41 @@
                         <h3>Firmware MacroPad</h3>
                         <h4 class="bold">Fonctionalité non implémenté</h4>
 
-                        <h4>Version Actuelle: 1.0</h4>
-                        <h4>Dernière Version: 1.0</h4>
-                        <button onclick="sendToMacopad.firmware();">Vérifier les Mises à Jours</button>
+                        <h4>Version Actuelle: <span id="current-firmware-version"></span></h4>
+                        <h4>Dernière Version: <span id="release-firmware-version"></span></h4>
+
+                        <div class="update-info-item" id="firmware-available-settings" style="display: none;">
+                            <h4 class="bold">Mise à jour disponible !</h4>
+                            <button onclick="firmware.download();">Télécharger</button>
+                        </div>
+
+                        <div class="update-info-item" id="check-firmware-button">
+                            <h4 class="bold"></h4>
+                            <button onclick="firmware.GUICheck();">Vérifier les Mises à Jours</button>
+                        </div>
+
+                        <div class="update-info-item" id="download-firmware-info" style="display: none;">
+                            <h4 class="bold">Téléchargement en cours...</h4>
+                            <h4 id="firmware-download-speed">0 MB/s</h4>
+                            <h4 id="firmware-download-size"> 0 / ? MB</h4>
+                            <div style="display: flex;align-items: center;justify-content: space-evenly;">
+                                <progress id="firmware-download-progress" class="progress" max="100" value="0"></progress>
+                                <h4 id="firmware-download-percent-text">0%</h4>
+                            </div>
+                            <button class="" onclick="firmware.retry();" id="retry-firmware" style="display: none;">Réessayer</button>
+                        </div>
+
+
+                        <div class="update-info-item" id="firmware-downloaded" style="display: none;">
+                            <h4 class="bold">Mise à Jour Téléchargée !</h4>
+                            <button onclick="firmware.doUpdate();">Mettre à Jour</button>
+                        </div>
+
+                        <h4 class="bold" id="firmware-error-text"></h4>
+
+
+
+
                     </div>
                     <hr class="ligne">
                     <div>

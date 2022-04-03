@@ -22,6 +22,7 @@ function settingItemClicked(item) {
         document.getElementById("do-update-settings").style.display = "block";
         setTimeout(function() {
             update.displayOnSettings();
+            firmware.displayOnSettings();
         }, 1000);
 
     } else if (item.id == "language") {

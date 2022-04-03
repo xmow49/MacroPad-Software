@@ -211,6 +211,10 @@ async function responsesFromPort(data) {
 
         }
 
+        if (stringFromSerial.charAt(0) == "V") { //macropad version
+            var msg = stringFromSerial.replace("V", ""); //keep only the version
+            currentFirmwareVersion = msg;
+        }
     }
 
 
@@ -790,6 +794,12 @@ class sendToMacopad {
         }, 3000);
 
 
+    }
+
+    static async version() {
+        if (macropadConnectionStatus) {
+            serialPortConnection.write("V"); //send the version to the macropad
+        }
     }
 
 }

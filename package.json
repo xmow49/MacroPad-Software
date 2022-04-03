@@ -19,7 +19,6 @@
             "target": [
                 "nsis"
             ],
-
             "publish": [
                 "github"
             ],
@@ -33,10 +32,12 @@
             "oneClick": false,
             "allowToChangeInstallationDirectory": true
         },
-        "extraResources": [{
-            "from": "volume_control",
-            "to": "volume_control"
-        }]
+        "extraResources": [
+            {
+                "from": "volume_control",
+                "to": "volume_control"
+            }
+        ]
     },
     "devDependencies": {
         "@mdi/font": "^6.5.95",
@@ -47,6 +48,7 @@
     },
     "dependencies": {
         "@electron/remote": "^2.0.1",
+        "@octokit/rest": "^18.12.0",
         "@simonwep/pickr": "^1.8.2",
         "auto-launch": "^5.0.5",
         "electron-log": "^4.4.6",
