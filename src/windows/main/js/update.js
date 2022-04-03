@@ -1,9 +1,4 @@
-// IPC.on('update-available', function(event, updateAvailable, updateInfo) {
-//     console.log("update-available");
-//     console.log(updateAvailable);
-//     console.log(updateInfo);
-// });
-
+//-------------------- Software Update --------------------
 IPC.on('download-progress', function(event, download) {
     downloadUpdateInfo.downloadedInProgress = true;
     downloadUpdateInfo.downloaded = false;
@@ -14,8 +9,6 @@ IPC.on('download-progress', function(event, download) {
     // console.log(download.bytesPerSecond / 1024 / 1024 + " MB/s");
     // console.log(download.percent + "%");
     // console.log(download.delta / 1024 / 2024 + "/" + download.total / 1024 / 1024 + " MB");
-
-
     document.getElementById("download-progress-info").style.display = "flex";
     document.getElementById("update-available-settings").style.display = "none";
     document.getElementById("update-downloaded").style.display = "none";
@@ -43,6 +36,8 @@ IPC.on('update-error', function(event, error) {
     document.getElementById("update-error-text").innerHTML = error;
     document.getElementById("retry-update").style.display = "flex";
 });
+
+
 
 
 var downloadUpdateInfo = {
@@ -185,11 +180,49 @@ function versionCompare(v1, v2, options) {
     return 0;
 }
 
+//-------------------------- Firmware update --------------------------
+
+
+IPC.on('firmware-progress', function(event, download) {
+    // downloadUpdateInfo.downloadedInProgress = true;
+    // downloadUpdateInfo.downloaded = false;
+
+    console.log("download-progress");
+    console.log(download);
+    // downloadUpdateInfo = download;
+    // console.log(download.bytesPerSecond / 1024 / 1024 + " MB/s");
+    // console.log(download.percent + "%");
+    // console.log(download.delta / 1024 / 2024 + "/" + download.total / 1024 / 1024 + " MB");
+    document.getElementById("download-firmware-info").style.display = "flex";
+    document.getElementById("firmware-available-settings").style.display = "none";
+    document.getElementById("firmware-downloaded").style.display = "none";
+    //document.getElementById("download-speed").innerHTML = (download.bytesPerSecond / 1024 / 1024).toFixed(2) + " MB/s";
+    document.getElementById("firmware-download-size").innerHTML = (download.transferred / 1024 / 1024).toFixed(2) + "/" + (download.total / 1024 / 1024).toFixed(2) + " MB";
+    document.getElementById("firmware-download-progress").value = download.percent;
+    document.getElementById("firmware-download-percent-text").innerHTML = download.percent + "%";
+});
+
+IPC.on('firmware-downloaded', function(event, info) {
+    // downloadUpdateInfo.downloadedInProgress = false;
+    // downloadUpdateInfo.downloaded = true;
+    console.log("firmware-downloaded");
+    console.log(info);
+
+    document.getElementById("download-firmware-info").style.display = "none";
+    document.getElementById("firmware-downloaded").style.display = "flex";
+    document.getElementById("firmware-available-settings").style.display = "none";
+});
+
 
 const { Octokit } = require("@octokit/rest");
 const octokit = new Octokit();
 
-var currentFirmwareVersion = "";
+var currentFirmwareVersion = {
+    cpu: "",
+    version: "",
+};
+
+
 
 class firmware {
     static async releaseVersion() {
@@ -205,8 +238,7 @@ class firmware {
         var promise = new Promise(function(resolve, reject) {
             sendToMacopad.version();
             window.setTimeout(function() {
-                resolve(currentFirmwareVersion);
-                console.log(currentFirmwareVersion);
+                resolve(currentFirmwareVersion.version);
             }, 1000);
         });
         return promise;
@@ -269,18 +301,27 @@ class firmware {
             repo: 'MacroPad-Arduino'
         });
         repo.data[0].assets.forEach(function(asset) {
-            if (asset.name.includes(".elf")) { //if it's an elf file
+            console.log(asset.name);
+            if (asset.name.includes(currentFirmwareVersion.cpu) && asset.name.includes(".elf")) { //if it's an elf file
                 var url = asset.browser_download_url;
-                var fileName = asset.name;
-                var file = new File([], fileName, { type: "application/octet-stream" });
                 console.log(url);
-                console.log(fileName);
-                console.log(file);
-
+                IPC.send("start-download-firmware", url);
             }
         });
-
-        console.log(repo.data[0].assets[0].browser_download_url);
         return repo.data[0].tag_name;
+    }
+
+    static async doUpdate() {
+        document.getElementById("firmware-downloaded").style.display = "none";
+        document.getElementById("firmware-installing").style.display = "flex";
+        await sendToMacopad.firmware();
+    }
+
+    static updated() {
+        window.setTimeout(function() {
+            document.getElementById("firmware-installing").style.display = "none";
+            document.getElementById("check-firmware-button").style.display = "flex";
+            firmware.GUICheck();
+        }, 5000);
     }
 }

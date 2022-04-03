@@ -9,11 +9,10 @@ const fs = require('fs');
 const console = require('console');
 const { autoUpdater } = require("electron-updater");
 const { info } = require('console');
-
+var request = require('request');
 const resourcePath = app.getAppPath().replace("app.asar", "");
 const volumeControlPath = path.join("\"" + resourcePath, "volume_control", "VolumeMixerControl.exe\"");
 const sendFirmwarePath = path.join(resourcePath, "firmware_updater", "win32");
-const firmwarePath = path.join("\"" + resourcePath, "firmware_updater", "firmware.elf\"");
 
 
 
@@ -156,6 +155,47 @@ function devMode() {
     return process.argv[2] == '--dev';
 }
 
+function downloadFile(file_url, targetPath) {
+    // Save variable to know progress
+    var received_bytes = 0;
+    var total_bytes = 0;
+
+    var req = request({
+        method: 'GET',
+        uri: file_url
+    });
+
+    var out = fs.createWriteStream(targetPath);
+    req.pipe(out);
+
+    req.on('response', function(data) {
+        // Change the total bytes value to get progress later.
+        total_bytes = parseInt(data.headers['content-length']);
+    });
+
+    req.on('data', function(chunk) {
+        // Update the received bytes
+        received_bytes += chunk.length;
+        var progressObj = {
+            total: total_bytes,
+            transferred: received_bytes,
+            percent: ((received_bytes / total_bytes) * 100).toFixed(2)
+        }
+        mainWindow.webContents.send('firmware-progress', progressObj);
+        showProgress(received_bytes, total_bytes);
+    });
+
+    req.on('end', function() {
+        //alert("File succesfully downloaded");
+        mainWindow.webContents.send('firmware-downloaded');
+
+    });
+}
+
+function showProgress(received, total) {
+    var percentage = (received * 100) / total;
+    console.log(percentage + "% | " + received + " bytes out of " + total + " bytes.");
+}
 
 function createTray() {
     const icon = path.join(__dirname, 'src/imgs/icon.png') // required.
@@ -511,6 +551,12 @@ function createWindow() {
 
     ipcMain.on('start-download', function(event) {
         autoUpdater.downloadUpdate();
+        event.returnValue = true;
+    });
+
+    ipcMain.on('start-download-firmware', function(event, url) {
+        console.log("Downloading firmware");
+        downloadFile(url, path.join(sendFirmwarePath, "firmware.elf"));
         event.returnValue = true;
     });
 

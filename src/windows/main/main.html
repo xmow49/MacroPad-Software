@@ -563,8 +563,6 @@
                     <hr class="ligne">
                     <div>
                         <h3>Firmware MacroPad</h3>
-                        <h4 class="bold">Fonctionalité non implémenté</h4>
-
                         <h4>Version Actuelle: <span id="current-firmware-version"></span></h4>
                         <h4>Dernière Version: <span id="release-firmware-version"></span></h4>
 
@@ -595,6 +593,15 @@
                             <button onclick="firmware.doUpdate();">Mettre à Jour</button>
                         </div>
 
+                        <div class="update-info-item" id="firmware-installing" style="display: none;">
+                            <h4 class="bold">Mise à jour en cours ...</h4>
+                            <div class="loader" id="scan-loading">
+                                <svg class="circular" viewBox="25 25 50 50">
+                                  <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"/>
+                                </svg>
+                            </div>
+                        </div>
+
                         <h4 class="bold" id="firmware-error-text"></h4>
 
 
@@ -606,7 +613,7 @@
                         <h3>Paramètres de Mises à Jours</h3>
                         <div class="horizontal-flex">
                             <input type="checkbox" id="auto-update" onclick="autoUpdate(this);">
-                            <label for="auto-update">Mettre à Jour Automatiquement</label>
+                            <label class="no-background" for="auto-update">Mettre à Jour Automatiquement</label>
                         </div>
 
                     </div>

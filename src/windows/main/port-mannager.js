@@ -213,7 +213,10 @@ async function responsesFromPort(data) {
 
         if (stringFromSerial.charAt(0) == "V") { //macropad version
             var msg = stringFromSerial.replace("V", ""); //keep only the version
-            currentFirmwareVersion = msg;
+            //1.0.0-atmega32u4
+            var infos = msg.split("-"); //split the version in 2 parts
+            currentFirmwareVersion.version = infos[0];
+            currentFirmwareVersion.cpu = infos[1];
         }
     }
 
@@ -771,6 +774,7 @@ class sendToMacopad {
     static async firmware() {
         //--------- disconnect the macropad ----------
         if (macropadConnectionStatus) {
+            await sendWithACK("T Updating ...");
             serialPortConnection.close();
             macropadConnectionStatus = false;
             document.getElementById("connect-button").innerHTML = "Rechercher un MacroPad";
@@ -783,13 +787,14 @@ class sendToMacopad {
         //--------- disconnect the macropad ----------
         if (firmwareUpdateRunning) return;
         firmwareUpdateRunning = true;
-        window.setTimeout(function() {
+        window.setTimeout(async function() {
             var port = readFromConfig("settings.last-port");
             if (port != null && port != "" && port != "undefined" && port.includes("COM")) { //if the port is a serial port
                 console.log(firmwareUpdateRunning);
-                IPC.sendSync("send-firmware", port); //send the port to the main process
+                var output = await IPC.sendSync("send-firmware", port); //send the port to the main process
                 firmwareUpdateRunning = false;
-                console.log(firmwareUpdateRunning);
+                console.log(output);
+                firmware.updated();
             }
         }, 3000);
 

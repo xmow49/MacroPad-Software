@@ -144,6 +144,8 @@ int main(int argc, char *argv[])
   printf("\n\n Trying with port COM%d\n", newPort[0]);
   makeAvrdudeCommand(newPort[0], argv[2]);
   retval = system(cmd);
+
+  printf("\nOK \n");
   printf("\n\n ==========================================\n");
   return retval;
 }

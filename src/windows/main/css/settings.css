@@ -208,3 +208,12 @@ input:checked+.slider:before {
     flex-direction: column;
     align-items: center;
 }
+
+#update-error-text {
+    height: 50px;
+    overflow-y: scroll;
+    padding: 0px;
+    /* border: solid 2px var(--font-master-color); */
+    border-radius: 10px;
+    -webkit-user-select: text;
+}

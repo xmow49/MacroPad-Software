@@ -355,7 +355,7 @@ span {
 
 /* Track */
 
- ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 50px;
 }
@@ -363,7 +363,7 @@ span {
 
 /* Handle */
 
- ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: #888;
     border-radius: 50px;
 }
@@ -371,7 +371,11 @@ span {
 
 /* Handle on hover */
 
- ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: #555;
     border-radius: 50px;
+}
+
+.no-background {
+    background: none;
 }
