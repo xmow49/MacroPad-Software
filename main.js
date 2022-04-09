@@ -286,6 +286,7 @@ function createHoverlay() {
         }
     });
     hoverlayWindow.setIgnoreMouseEvents(true);
+    hoverlayWindow.setAlwaysOnTop(true, 'normal');
     hoverlayWindow.loadFile('./src/windows/hoverlay/hoverlay.html');
     // hoverlayWindow.openDevTools();
     // hoverlayWindow.setBackgroundColor('#000000');
@@ -402,8 +403,8 @@ function createWindow() {
     ipcMain.on('getCurrentMedia', function(event, software) {
         exec(volumeControlPath + " getCurrentMedia", (error, data, getter) => {
             // console.log(error);
-            if (devMode())
-                console.log("data: ", data);
+            // if (devMode())
+            //     console.log("data: ", data);
             //console.log(getter);
             event.returnValue = data;
         });
@@ -412,8 +413,8 @@ function createWindow() {
     ipcMain.on('set-music-software', function(event, software, value) {
         exec(volumeControlPath + " changeVolume " + software + " " + value, (error, data, getter) => {
             //console.log(error);
-            if (devMode())
-                console.log(data);
+            // if (devMode())
+            //     console.log(data);
             // console.log(getter);
             // console.log(error);
 
@@ -423,7 +424,7 @@ function createWindow() {
             function hideHoverlay() {
                 hoverlayWindow.hide();
                 hoverlayShow = false;
-                console.log("Hiding hoverlay");
+                //console.log("Hiding hoverlay");
             }
             if (hoverlayShow) {
                 clearTimeout(hoverlayTimout);
@@ -431,6 +432,8 @@ function createWindow() {
             } else {
                 hoverlayShow = true;
                 hoverlayWindow.show();
+                //console.log("show hoverlay");
+
                 clearTimeout(hoverlayTimout);
                 hoverlayTimout = setTimeout(hideHoverlay, 2000);
             }

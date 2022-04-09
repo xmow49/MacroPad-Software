@@ -613,6 +613,7 @@ function updateEditGUI(type, id) { //update the gui when an encoder or key chang
         }
 
         macropadConfig.profiles[currentProfile].encoders[currentEdit].type = parseInt(value); //update the config
+        sendToMacopad.encoder(currentProfile, currentEdit, macropadConfig.profiles[currentProfile].encoders[currentEdit].type, macropadConfig.profiles[currentProfile].encoders[currentEdit].values); //send the new value to the encoder
 
     } else if (type == "key") {
         document.getElementById("edit-key").className = ""; //enable the edit key menu
